@@ -1,0 +1,664 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/common.schema.json",
+  "title": "Project Kernel v1 common definitions",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "seq": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "object_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "object_type": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "object_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "revision_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        }
+      },
+      "required": [
+        "project_id",
+        "object_type",
+        "object_id",
+        "revision_id"
+      ]
+    },
+    "shared_knowledge_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "store_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "object_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "revision_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "store_id",
+        "object_id",
+        "revision_id",
+        "digest"
+      ]
+    },
+    "cursor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commit_seq": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "event_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      },
+      "required": [
+        "commit_seq",
+        "event_index"
+      ]
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "workspace_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "session_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "attempt_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        }
+      },
+      "required": [
+        "project_id"
+      ]
+    },
+    "expected_head": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "pointer_name": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "current"
+          ]
+        },
+        "expected_head_version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "object_ref",
+        "pointer_name",
+        "expected_head_version"
+      ]
+    },
+    "source_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "host_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "origin_session_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "log_generation": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "source_seq": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "host_id",
+        "origin_session_id",
+        "log_generation",
+        "source_seq"
+      ]
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "size_bytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "sha256",
+        "size_bytes",
+        "media_type",
+        "required"
+      ]
+    },
+    "amount": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "USD",
+            "CNY",
+            "tokens",
+            "seconds"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ]
+    },
+    "acceptance_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "requirement_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "recipe_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "evidence_type": {
+          "type": "string",
+          "enum": [
+            "automated_test",
+            "human_review",
+            "artifact_check"
+          ]
+        },
+        "criterion": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "item_id",
+        "requirement_ref",
+        "recipe_ref",
+        "required",
+        "evidence_type",
+        "criterion"
+      ]
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "strategy_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hypothesis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "acceptance_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+          },
+          "minItems": 1
+        },
+        "environment_requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+          },
+          "minItems": 0
+        },
+        "budget_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "title",
+        "hypothesis",
+        "risks",
+        "acceptance_refs",
+        "environment_requirements",
+        "budget_ref"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "execution_root_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "read_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "write_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "network_policy_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "required_sandbox_level": {
+          "type": "string",
+          "enum": [
+            "none",
+            "directory_only",
+            "partial",
+            "os_enforced"
+          ]
+        }
+      },
+      "required": [
+        "execution_root_ref",
+        "read_paths",
+        "write_paths",
+        "network_policy_ref",
+        "required_sandbox_level"
+      ]
+    },
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recipe_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "recipe_ref",
+        "parameters"
+      ]
+    },
+    "block_error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "input",
+            "permission",
+            "conflict",
+            "business",
+            "infrastructure",
+            "unknown"
+          ]
+        },
+        "safe_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "key",
+              "value"
+            ]
+          },
+          "minItems": 0
+        },
+        "recovery_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "related_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable",
+        "category",
+        "safe_details",
+        "recovery_action",
+        "related_refs"
+      ]
+    },
+    "policy_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "when": {
+          "$ref": "#/$defs/condition"
+        },
+        "effect": {
+          "type": "string",
+          "enum": [
+            "deny",
+            "require_human",
+            "warn"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "rule_id",
+        "enabled",
+        "when",
+        "effect",
+        "reason"
+      ]
+    },
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "all"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "any"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "not"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "operator": {
+              "type": "string",
+              "enum": [
+                "eq",
+                "ne",
+                "in",
+                "not_in",
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "exists"
+              ]
+            },
+            "value": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 0
+                }
+              ]
+            }
+          },
+          "required": [
+            "path",
+            "operator",
+            "value"
+          ]
+        }
+      ]
+    },
+    "result_source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "session_event"
+            },
+            "source_key": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/source_key"
+            },
+            "payload_digest": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+            }
+          },
+          "required": [
+            "kind",
+            "source_key",
+            "payload_digest"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "provider_result"
+            },
+            "provider_id": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "run_id": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "result_id": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "epoch": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/seq"
+            },
+            "payload_digest": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+            }
+          },
+          "required": [
+            "kind",
+            "provider_id",
+            "run_id",
+            "result_id",
+            "epoch",
+            "payload_digest"
+          ]
+        }
+      ]
+    }
+  }
+}

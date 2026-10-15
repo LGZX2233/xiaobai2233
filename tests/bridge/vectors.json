@@ -1,0 +1,177 @@
+{
+  "version": "1.0.0",
+  "notice": "Cross-language golden for the command input_hash (design 04 sec.3): command + canonical selector IDs + expected_heads + strict payload, excluding the RPC id, the invocation_context_id handle and any clock. Python (project_kernel.interfaces.rpc.commands.compute_input_hash) and Node (bridge/protocol/client.mjs inputHash) must both reproduce these digests; the two handles must not change them.",
+  "handles": {
+    "a": "ctx-machine-0001",
+    "b": "ctx-machine-ffff"
+  },
+  "vectors": [
+    {
+      "id": "task-create-unicode",
+      "command": "task.create",
+      "selector": {
+        "project_id": "project-demo"
+      },
+      "expected_heads": [],
+      "payload": {
+        "title": "方案验证",
+        "goal": "在隔离测试目录比较两种方案",
+        "requirement_refs": [],
+        "mode": "test"
+      },
+      "handle_a": "ctx-machine-0001",
+      "handle_b": "ctx-machine-ffff",
+      "input_hash": "8ad01e6bc731ff3776f07c8ba30ec51d6a8210125da6902bdfc1debe706fbb35",
+      "reordered_expected_heads": null,
+      "reordered_hash": null
+    },
+    {
+      "id": "source-ingest-64bit-seq",
+      "command": "source.ingest",
+      "selector": {
+        "project_id": "project-demo",
+        "session_id": "session-1"
+      },
+      "expected_heads": [],
+      "payload": {
+        "source_stream": {
+          "host_id": "host-1",
+          "origin_session_id": "session-1",
+          "log_generation": "gen-1"
+        },
+        "events": [
+          {
+            "source_seq": "9007199254740993",
+            "payload_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "schema_version": "1.0.0",
+            "payload_artifact_ref": {
+              "artifact_id": "artifact-1",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "size_bytes": "128",
+              "media_type": "text/plain",
+              "required": true
+            },
+            "evidence_mode": "production"
+          },
+          {
+            "source_seq": "9007199254740994",
+            "payload_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "schema_version": "1.0.0",
+            "payload_artifact_ref": {
+              "artifact_id": "artifact-2",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "size_bytes": "128",
+              "media_type": "text/plain",
+              "required": true
+            },
+            "evidence_mode": "production",
+            "inherited_from": {
+              "host_id": "host-1",
+              "origin_session_id": "session-1",
+              "log_generation": "gen-0",
+              "source_seq": "7"
+            }
+          }
+        ],
+        "observed_range": {
+          "first": "9007199254740993",
+          "last": "9007199254740994",
+          "truncated": false
+        }
+      },
+      "handle_a": "ctx-machine-0001",
+      "handle_b": "ctx-machine-ffff",
+      "input_hash": "d13577337c41a869b5d3cbf8a4a7641f35bd3bd950386c7cd804f5dd418c649b",
+      "reordered_expected_heads": null,
+      "reordered_hash": null
+    },
+    {
+      "id": "attempt-settle-head-order",
+      "command": "attempt.settle",
+      "selector": {
+        "project_id": "project-demo",
+        "attempt_id": "attempt-1"
+      },
+      "expected_heads": [
+        {
+          "object_ref": {
+            "project_id": "project-demo",
+            "object_type": "attempt",
+            "object_id": "attempt-1",
+            "revision_id": "rev-1"
+          },
+          "pointer_name": "current",
+          "expected_head_version": "3"
+        },
+        {
+          "object_ref": {
+            "project_id": "project-demo",
+            "object_type": "verification",
+            "object_id": "verification-1",
+            "revision_id": "rev-1"
+          },
+          "pointer_name": "current",
+          "expected_head_version": "2"
+        }
+      ],
+      "payload": {
+        "execution_handle_id": "handle-1",
+        "source_result_ref": {
+          "project_id": "project-demo",
+          "object_type": "test_result",
+          "object_id": "t-1",
+          "revision_id": "rev-1"
+        }
+      },
+      "handle_a": "ctx-machine-0001",
+      "handle_b": "ctx-machine-ffff",
+      "input_hash": "087cfcb8c545d0d8c700aa7c08a324203c0a7851011ca68a0b75cab1a3b2fee1",
+      "reordered_expected_heads": [
+        {
+          "object_ref": {
+            "project_id": "project-demo",
+            "object_type": "verification",
+            "object_id": "verification-1",
+            "revision_id": "rev-1"
+          },
+          "pointer_name": "current",
+          "expected_head_version": "2"
+        },
+        {
+          "object_ref": {
+            "project_id": "project-demo",
+            "object_type": "attempt",
+            "object_id": "attempt-1",
+            "revision_id": "rev-1"
+          },
+          "pointer_name": "current",
+          "expected_head_version": "3"
+        }
+      ],
+      "reordered_hash": "edb83233e52b29411c01f7b31b4d3824f286d836140c94c571fc58ddeff841f1"
+    },
+    {
+      "id": "dispatch-confirm-baseline-digest",
+      "command": "dispatch.confirm",
+      "selector": {
+        "project_id": "project-demo",
+        "task_id": "task-1"
+      },
+      "expected_heads": [],
+      "payload": {
+        "draft_ref": {
+          "project_id": "project-demo",
+          "object_type": "execution_packet",
+          "object_id": "packet-1",
+          "revision_id": "rev-1"
+        },
+        "expected_baseline_digest": "4af1a43b11756852ca767cbb228b808d615e95b80d4d7db8a45c2bb2f42d081c"
+      },
+      "handle_a": "ctx-machine-0001",
+      "handle_b": "ctx-machine-ffff",
+      "input_hash": "5409f3a6260d51496c5afd7f00004c910e9613027fc2844ba69618ba16ec7da5",
+      "reordered_expected_heads": null,
+      "reordered_hash": null
+    }
+  ]
+}

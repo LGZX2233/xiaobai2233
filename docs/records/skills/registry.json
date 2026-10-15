@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-10-12",
+  "timezone": "Asia/Shanghai",
+  "skills": [
+    {
+      "skill_id": "kernel-maintain-records",
+      "path": ".agents/skills/kernel-maintain-records/SKILL.md",
+      "current_version": "2.0.0",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "status": "review_required",
+          "validation_status": "limited_evidence",
+          "source_revision": "0a619766162682606ad57a9aa4c1926d54c1b891",
+          "source_worktree": "previous uncommitted maintenance skill; version 1.0.0 is an assigned baseline label, not a historical file field",
+          "scope": {
+            "applies_to": ["Project Kernel module and ongoing record maintenance"],
+            "prerequisites": ["Access to owning project records and current task authorization"],
+            "exclusions": ["Runtime permission enforcement", "User ability scoring"]
+          },
+          "review_refs": ["docs/records/skills/2026-10-10-maintain-records-review.md"],
+          "evidence_refs": ["docs/records/tasks/2026-10-10-kernel-maintenance.md"]
+        },
+        {
+          "version": "2.0.0",
+          "status": "trial",
+          "validation_status": "not_validated",
+          "source_revision": "0a619766162682606ad57a9aa4c1926d54c1b891",
+          "source_worktree": "scope revision and one static RPC documentation maintenance use; no behavioral validation",
+          "scope": {
+            "applies_to": ["Changed project facts, module links or task/project and descriptive learning records", "Explicit requests for ongoing project record maintenance"],
+            "prerequisites": ["Read owning facts, relevant module and current task authorization", "Choose document structure for the actual reader goal"],
+            "exclusions": ["Default handoff template for every user-facing document", "One-off explanations without a record-maintenance need", "Runtime skill loading or user ability scoring"]
+          },
+          "review_refs": ["docs/records/skills/2026-10-10-maintain-records-review.md"],
+          "evidence_refs": ["docs/records/skills/2026-10-10-maintain-records-rpc-use.md", "docs/records/skills/2026-10-12-maintain-records-use.md"]
+        }
+      ]
+    },
+    {
+      "skill_id": "kernel-grow-skills",
+      "path": ".agents/skills/kernel-grow-skills/SKILL.md",
+      "current_version": "1.1.0",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "status": "trial",
+          "validation_status": "not_validated",
+          "source_revision": "0a619766162682606ad57a9aa4c1926d54c1b891",
+          "source_worktree": "uncommitted agent documentation workflow; no behavioral validation",
+          "scope": {
+            "applies_to": ["Extracting or revising a reusable technical or user-document method", "Assessing actual skill reuse or a material counterexample"],
+            "prerequisites": ["Concrete use case or actual feedback", "Traceable sources and current task authorization"],
+            "exclusions": ["Scoring user ability", "Turning every task into a skill", "Runtime knowledge scoring, external-operation authorization or automatic promotion"]
+          },
+          "review_refs": [],
+          "evidence_refs": []
+        },
+        {
+          "version": "1.1.0",
+          "status": "trial",
+          "validation_status": "not_validated",
+          "source_revision": "16410c9fbf4a8507445b4603e371e701614e4499",
+          "source_worktree": "uncommitted documentation revision; scope and failure analysis clarified, no behavioral observation",
+          "scope": {
+            "applies_to": [
+              "Extracting or revising a reusable technical or user-document method",
+              "Data-processing assessment of one actual skill-version use, including failed uses and associated tool failures"
+            ],
+            "prerequisites": [
+              "Concrete use case or actual feedback",
+              "Traceable versions, scope, evidence and current task authorization"
+            ],
+            "exclusions": [
+              "User ability scoring",
+              "Execution routing, approval, retry or automatic promotion",
+              "Treating static edits as actual-use evidence",
+              "Using knowledge feedback scores as skill quality or training rewards"
+            ]
+          },
+          "review_refs": [
+            "docs/records/skills/2026-10-12-grow-skills-revision.md"
+          ],
+          "evidence_refs": []
+        }
+      ]
+    }
+  ]
+}

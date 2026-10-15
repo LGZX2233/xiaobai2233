@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/query-envelope.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "jsonrpc": {
+      "const": "2.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "method": {
+      "const": "kernel.query"
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "invocation_context_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "selector": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/selector"
+        },
+        "query": {
+          "enum": [
+            "project.overview",
+            "project.timeline",
+            "project.trace",
+            "requirements.coverage",
+            "attempts.compare",
+            "approvals.queue",
+            "environment.report",
+            "archive.status",
+            "command.receipt",
+            "operation.status",
+            "events.read",
+            "context.resolve",
+            "knowledge.search",
+            "dataset.preview"
+          ]
+        },
+        "payload": {
+          "type": "object"
+        },
+        "as_of_seq": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "page_token": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "protocol_version",
+        "invocation_context_id",
+        "selector",
+        "query",
+        "payload"
+      ]
+    }
+  },
+  "required": [
+    "jsonrpc",
+    "id",
+    "method",
+    "params"
+  ]
+}

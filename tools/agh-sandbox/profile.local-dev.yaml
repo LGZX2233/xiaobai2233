@@ -1,0 +1,15 @@
+name: local-dev
+policy:
+  capabilityCeiling:
+    - tools
+    - hooks
+    - slots
+    - events
+    - resources
+    - ui
+    - services
+    - network
+    - network.publicRead
+    - tools.invoke
+    - artifacts
+    - subagent

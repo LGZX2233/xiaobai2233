@@ -1,0 +1,2414 @@
+{
+  "round": 4,
+  "gate": "G2",
+  "mode": "test",
+  "frozen_scope": "AC12-32, AC37-38, AC43, AC45",
+  "status": "accepted_g2",
+  "frozen_criteria": {
+    "AC12": "packet冻结，scope/验收/rules固定；确认只dispatch_ready",
+    "AC13": "非法fact path/表达式拒绝；unknown不通行、红线不可关",
+    "AC14": "未执行不completed/pass；正式freeze拒simulation",
+    "AC15": "A attempt不能挂B task，写方案独立root，隔离保证如实记录",
+    "AC16": "取消未确认继续pending/unknown；重试新attempt保留失败",
+    "AC17": "实测版本/要求/path/时间；缺失/过旧/未知分开，不安装缺库",
+    "AC18": "零必需项、skipped/unknown、旧candidate/旧验收不能passed",
+    "AC19": "passed后delivery_ready，明确申请后pending，不自动approve",
+    "AC20": "machine/模型伪actor/role不能批准；真实用户动作绑定当前digest",
+    "AC21": "关键输入变更supersede；无关名称/审计变化不误失效",
+    "AC22": "快照重算一致，审批/operation/归档新增不改变body_digest",
+    "AC23": "claim前后、apply-start、效果后回执前均可对账；不盲重放",
+    "AC24": "旧epoch不结算；无外部fence不自动接管；start后撤回不宣称无效果",
+    "AC25": "真实文件输出完整，既有目标异digest不覆盖，同digest幂等",
+    "AC26": "required artifact未ready/缺失/改内容不能freeze",
+    "AC27": "CAS只一次close；repair只补sink不再次执行任务",
+    "AC28": "DB/file/flush状态分别呈现，partial可修复，manifest不变",
+    "AC29": "已提交WAL在一致备份，integrity/FK/hash通过；恢复fence与历史保留",
+    "AC30": "零链接需求进分母，N/A明确；非空多跳同名异类型图正确",
+    "AC31": "as_of一致，投影落后显式；unknown usage不置0，重建读模型一致",
+    "AC32": "原源hash不变，重跑不多revision，孤儿quarantine，不补pass/批准/费用",
+    "AC37": "拆包/乱序应答/大frame/非法UTF8/重复key/日志通道正确",
+    "AC38": "timeout不等取消，原key补查receipt；未证实结果不成功",
+    "AC43": "隔离项目A/B，两方案含真实临时subprocess失败修复与重验，人工测试身份批准，真实bundle和归档/总览；标test模式非DSH",
+    "AC45": "测试DB/WAL/SHM/知识/产物全在显式temp，golden与失败留档不污染业务"
+  },
+  "overall_acceptance_approved": true,
+  "checks": [
+    {
+      "id": "AC12",
+      "expect": "packet冻结，scope/验收/rules固定；确认只dispatch_ready",
+      "conditions": [
+        {
+          "condition": "packet冻结",
+          "observed": "合法确认前后 exact packet revision、payload、digest 相同，错误 expected_baseline_digest 返回 SNAPSHOT_CHANGED。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac12_rpc_packet_freezes_baselines_and_confirm_only_dispatch_ready"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac12_rpc_packet_freezes_b0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac12_rpc_packet_freezes_baselines_and_confirm_only_dispatch_ready"
+            }
+          ]
+        },
+        {
+          "condition": "scope/验收/rules固定",
+          "observed": "scope、acceptance_refs、rule_refs 与 packet 原输入一致；同 rule 对象合法 CAS 新发布后旧 packet 保持原 rule revision。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac12_rpc_packet_freezes_baselines_and_confirm_only_dispatch_ready"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac12_rpc_packet_freezes_b0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac12_rpc_packet_freezes_baselines_and_confirm_only_dispatch_ready"
+            }
+          ]
+        },
+        {
+          "condition": "确认只dispatch_ready",
+          "observed": "正确 dispatch.confirm 仅将 task 发布为 dispatch_ready，无 attempt revision 或 provider 执行。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac12_rpc_packet_freezes_baselines_and_confirm_only_dispatch_ready"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac12_rpc_packet_freezes_b0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac12_rpc_packet_freezes_baselines_and_confirm_only_dispatch_ready"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Explicit test-mode host-owned configuration revisions; no DSH claim."
+      ],
+      "remediation": [],
+      "scenario": "版本派发",
+      "public_entries": [
+        "build_server: dispatch.draft/dispatch.confirm/rules.save/rules.preview/rules.publish"
+      ],
+      "initial_condition_review": "g2_execution",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/execution-review.md",
+        "reason": "Exact packet revision and digest remain frozen across confirmation and rule publication; legal RPC confirms dispatch_ready without provider execution."
+      }
+    },
+    {
+      "id": "AC13",
+      "expect": "非法fact path/表达式拒绝；unknown不通行、红线不可关",
+      "conditions": [
+        {
+          "condition": "非法fact path/表达式拒绝",
+          "observed": "未声明 environment.__class__ path、expression variant、eval operator 返回 INVALID_INPUT，未产生 rules draft。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac13_rpc_rejects_illegal_fact_path_and_expression[path]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac13_rpc_rejects_illegal_fact_path_and_expression[expression]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac13_rpc_rejects_illegal_fact_path_and_expression[operator]"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac13_rpc_rejects_illegal_0/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac13_rpc_rejects_illegal_1/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac13_rpc_rejects_illegal_2/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac13_rpc_rejects_illegal_fact_path_and_expression[path]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac13_rpc_rejects_illegal_fact_path_and_expression[expression]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac13_rpc_rejects_illegal_fact_path_and_expression[operator]"
+            }
+          ]
+        },
+        {
+          "condition": "unknown不通行",
+          "observed": "合法 provider.supported_sandbox_level 缺事实时 preview blocked/deny-unknown，confirm 返回 REQUIRED_FACT_UNKNOWN，无 current packet。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac13_rpc_unknown_deny_blocks_and_disabled_data_rules_cannot_disable_redlines"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac13_rpc_unknown_deny_blo0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac13_rpc_unknown_deny_blocks_and_disabled_data_rules_cannot_disable_redlines"
+            }
+          ]
+        },
+        {
+          "condition": "红线不可关",
+          "observed": "optional data rule enabled=false 后 machine approval.decide 仍 UNSUPPORTED_COMMAND，跨项目 dispatch task_ref 仍 SCOPE_MISMATCH；固有红线不由 data_rules 注册/禁用。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac13_rpc_unknown_deny_blocks_and_disabled_data_rules_cannot_disable_redlines"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac13_rpc_unknown_deny_blo0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac13_rpc_unknown_deny_blocks_and_disabled_data_rules_cannot_disable_redlines"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Optional user data rules can be disabled; kernel scope, capabilities, approval and evidence checks remain mandatory. Full human approval/evidence lifecycle is additionally verified by AC20-26."
+      ],
+      "remediation": [],
+      "scenario": "规则与未知",
+      "public_entries": [
+        "build_server: rules.save/rules.preview/rules.publish/dispatch.draft/dispatch.confirm/approval.decide"
+      ],
+      "initial_condition_review": "g2_execution",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/execution-review.md",
+        "reason": "Illegal paths/operators reject, missing facts deny, and optional rule disablement leaves project and human-approval checks mandatory."
+      }
+    },
+    {
+      "id": "AC14",
+      "expect": "未执行不completed/pass；正式freeze拒simulation",
+      "conditions": [
+        {
+          "condition": "未执行不completed",
+          "observed": "无 executor 时合法 attempt.start 返回 CAPABILITY_UNAVAILABLE，DB 没有 attempt revision；实际 subprocess 才有 completed。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac14_rpc_missing_execution_and_check_providers_do_not_complete_or_pass"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac14_rpc_missing_executio0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac14_rpc_missing_execution_and_check_providers_do_not_complete_or_pass"
+            }
+          ]
+        },
+        {
+          "condition": "未检查不pass",
+          "observed": "无 check provider 的公开 verification.run 保留 checks=[]、result=incomplete、passed=false。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac14_rpc_missing_execution_and_check_providers_do_not_complete_or_pass"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac14_rpc_missing_executio0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac14_rpc_missing_execution_and_check_providers_do_not_complete_or_pass"
+            }
+          ]
+        },
+        {
+          "condition": "正式freeze拒simulation",
+          "observed": "test pass check 在 production verification 报告为 incomplete；完整 artifact 的 delivery.request 返回 VERIFICATION_FAILED 且没有 snapshot。即使 checker 宣称 production pass、公开 attempt.select 成功，持久化 mode=test 的 attempt/packet 仍不能正式 freeze。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac14_rpc_production_verification_rejects_test_checks_and_freeze",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac14_rpc_production_cannot_relabel_test_attempt_for_formal_freeze"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac14_rpc_production_verif0/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac14_rpc_production_canno0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac14_rpc_production_verification_rejects_test_checks_and_freeze"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac14_rpc_production_cannot_relabel_test_attempt_for_formal_freeze"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Production-mode server is exercised only as a negative synthetic boundary test; it does not establish production execution or recovery."
+      ],
+      "remediation": [
+        "Delivery owner added persisted attempt and execution packet production-mode checks before formal snapshot freezing; execution reviewer independently reproduced and retested the public-entry counterexample."
+      ],
+      "scenario": "无provider/模拟",
+      "public_entries": [
+        "build_server: attempt.start/verification.run/attempt.select/delivery.request/operation.status"
+      ],
+      "initial_condition_review": "g2_execution",
+      "independent_review": {
+        "reviewer": "g2_execution",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/execution-review.md",
+        "reason": "Independent execution reviewer reproduced the production relabel counterexample and verified delivery owner's persisted attempt/packet mode rejection through public RPC."
+      }
+    },
+    {
+      "id": "AC15",
+      "expect": "A attempt不能挂B task，写方案独立root，隔离保证如实记录",
+      "conditions": [
+        {
+          "condition": "A attempt不能挂B task",
+          "observed": "foreign project packet_ref 返回 SCOPE_MISMATCH，wrong strategy root 返回 INVALID_INPUT；不同 task 同 strategy 不能共享物理目录。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_cross_project_and_strategy_root_rejected_real_writes_isolated",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_same_strategy_cross_task_cannot_reuse_directory"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_cross_project_an0/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_same_strategy_cr0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_cross_project_and_strategy_root_rejected_real_writes_isolated"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_same_strategy_cross_task_cannot_reuse_directory"
+            }
+          ]
+        },
+        {
+          "condition": "写方案独立root",
+          "observed": "两真实 subprocess 分别写 s1/output.txt、s2/output.txt；其他策略与 completed 方案目录相同/祖先/后代时拒绝。running/unknown 的目录在 root current 改版和 Store 重启后仍按历史引用拒绝别对象 alias，失败重放不调用 provider。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_cross_project_and_strategy_root_rejected_real_writes_isolated",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_refuses_different_strategy_aliasing_same_directory[same]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_refuses_different_strategy_aliasing_same_directory[ancestor]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_refuses_different_strategy_aliasing_same_directory[descendant]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[same-running]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[same-unknown]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[ancestor-running]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[ancestor-unknown]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[descendant-running]",
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[descendant-unknown]"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_cross_project_an0/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_refuses_differen0/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_refuses_differen1/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_refuses_differen2/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_live_directory_r0/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_live_directory_r1/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_live_directory_r2/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_live_directory_r3/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_live_directory_r4/execution-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_live_directory_r5/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_cross_project_and_strategy_root_rejected_real_writes_isolated"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_refuses_different_strategy_aliasing_same_directory[same]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_refuses_different_strategy_aliasing_same_directory[ancestor]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_refuses_different_strategy_aliasing_same_directory[descendant]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[same-running]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[same-unknown]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[ancestor-running]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[ancestor-unknown]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[descendant-running]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_live_directory_reservation_survives_root_revision_and_restart[descendant-unknown]"
+            }
+          ]
+        },
+        {
+          "condition": "隔离保证如实记录",
+          "observed": "operation.status 持久化 provider_capabilities.supported_sandbox_level=directory_only；test 实际 cwd 目录隔离，不宣称 OS sandbox。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac15_rpc_cross_project_and_strategy_root_rejected_real_writes_isolated"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac15_rpc_cross_project_an0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac15_rpc_cross_project_and_strategy_root_rejected_real_writes_isolated"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "The execution reviewer implemented this production code correction; a separate reviewer must confirm it before final acceptance.",
+        "Directory-only capability does not restrict subprocess reads/writes outside cwd at OS level."
+      ],
+      "remediation": [
+        "Compare resolved physical paths for equality and ancestry across historical attempt execution_root references; forbid different task/strategy overlaps and active/unknown same-strategy aliases."
+      ],
+      "scenario": "方案隔离",
+      "public_entries": [
+        "build_server: attempt.start/attempts.compare/operation.status"
+      ],
+      "initial_condition_review": "g2_execution",
+      "independent_review": {
+        "reviewer": "g2_data_evidence",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/root-isolation-peer-review.md",
+        "reason": "Separate reviewer confirmed same/ancestor/descendant directory rejection, cross-task isolation, historical active/unknown reservation after restart, and actual directory_only writes."
+      }
+    },
+    {
+      "id": "AC16",
+      "expect": "取消未确认继续pending/unknown；重试新attempt保留失败",
+      "conditions": [
+        {
+          "condition": "取消未确认继续pending/unknown",
+          "observed": "显式 unknown provider 不提供 cancel 确认；cancel 及原 key replay 后仍 unknown/pending，provider.calls=1。同路径原 root 和换对象 alias retry 被拒。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac16_rpc_unconfirmed_cancel_stays_unknown_pending_without_replay"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac16_rpc_unconfirmed_canc0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac16_rpc_unconfirmed_cancel_stays_unknown_pending_without_replay"
+            }
+          ]
+        },
+        {
+          "condition": "重试新attempt",
+          "observed": "真实 exit 7 之后修复 argv，新 key 生成不同 attempt_id 并真实 completed。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac16_rpc_retry_is_new_attempt_and_keeps_real_failure_outputs"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac16_rpc_retry_is_new_att0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac16_rpc_retry_is_new_attempt_and_keeps_real_failure_outputs"
+            }
+          ]
+        },
+        {
+          "condition": "保留失败",
+          "observed": "原 failed revision、exit_code=7、stdout/stderr ArtifactRef 保持不变，stderr 实际字节含 error evidence；公开 compare 同时呈现旧失败和新成功。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac16_rpc_retry_is_new_attempt_and_keeps_real_failure_outputs"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac16_rpc_retry_is_new_att0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac16_rpc_retry_is_new_attempt_and_keeps_real_failure_outputs"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Unconfirmed cancellation is a test provider result; actual host cancellation belongs to G3."
+      ],
+      "remediation": [],
+      "scenario": "取消与重试",
+      "public_entries": [
+        "build_server: attempt.cancel/attempt.start/operation.status/attempts.compare"
+      ],
+      "initial_condition_review": "g2_execution",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/execution-review.md",
+        "reason": "Unconfirmed cancellation stays pending/unknown with one provider call; real exit-7 attempt and stderr are retained when a new repaired attempt succeeds."
+      }
+    },
+    {
+      "id": "AC17",
+      "expect": "实测版本/要求/path/时间；缺失/过旧/未知分开，不安装缺库",
+      "conditions": [
+        {
+          "condition": "实测版本/要求/path/时间",
+          "observed": "PythonEnvironmentProbe 实测 platform Python version、required_version、sys.executable 真实路径与 aware UTC checked_at；operation 与 report 保留实测字段。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac17_rpc_real_versions_paths_times_missing_old_unknown_and_no_install"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac17_rpc_real_versions_pa0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac17_rpc_real_versions_paths_times_missing_old_unknown_and_no_install"
+            }
+          ]
+        },
+        {
+          "condition": "缺失/过旧/未知分开",
+          "observed": "正常 Python、>=999、不存在发行包、非法 spec 在同一合法探测分别记录 satisfied/too_old/missing/unknown；公开 report 四类各一项，status=blocked。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac17_rpc_real_versions_paths_times_missing_old_unknown_and_no_install"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac17_rpc_real_versions_pa0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac17_rpc_real_versions_paths_times_missing_old_unknown_and_no_install"
+            }
+          ]
+        },
+        {
+          "condition": "不安装缺库",
+          "observed": "前后 installed distribution inventory 的 SHA256 相同；源码只查询 runtime/platform/importlib.metadata，不含 installer 或安装 subprocess。",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_execution_acceptance.py::test_ac17_rpc_real_versions_paths_times_missing_old_unknown_and_no_install"
+          ],
+          "evidence_detail": [
+            "execution-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac17_rpc_real_versions_pa0/execution-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_execution_acceptance",
+              "name": "test_ac17_rpc_real_versions_paths_times_missing_old_unknown_and_no_install"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Only the configured local Python provider is measured; platforms are adaptable and no host provider matrix is claimed."
+      ],
+      "remediation": [],
+      "scenario": "环境真实结果",
+      "public_entries": [
+        "build_server: environment.probe/environment.report/operation.status"
+      ],
+      "initial_condition_review": "g2_execution",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/execution-review.md",
+        "reason": "Actual Python version, requirement, executable and UTC time are recorded; missing/old/unknown remain distinct and installed distribution inventory is unchanged."
+      }
+    },
+    {
+      "id": "AC18",
+      "expect": "零必需项、skipped/unknown、旧candidate/旧验收不能passed",
+      "conditions": [
+        {
+          "condition": "zero required cannot pass",
+          "observed": "optional-only host-injected acceptance yields incomplete, passed=false",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac18_public_verification_never_passes_incomplete_or_old_evidence[zero_required]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac18_public_verification_0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac18_public_verification_never_passes_incomplete_or_old_evidence[zero_required]"
+            }
+          ]
+        },
+        {
+          "condition": "skipped cannot pass",
+          "observed": "pinned real candidate with skipped check is incomplete, passed=false",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac18_public_verification_never_passes_incomplete_or_old_evidence[skipped]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac18_public_verification_1/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac18_public_verification_never_passes_incomplete_or_old_evidence[skipped]"
+            }
+          ]
+        },
+        {
+          "condition": "unknown cannot pass",
+          "observed": "pinned real candidate with unknown check is incomplete, passed=false",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac18_public_verification_never_passes_incomplete_or_old_evidence[unknown]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac18_public_verification_2/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac18_public_verification_never_passes_incomplete_or_old_evidence[unknown]"
+            }
+          ]
+        },
+        {
+          "condition": "old candidate cannot pass",
+          "observed": "old candidate revision retained, newer current digest yields stale/incomplete report",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac18_public_verification_never_passes_incomplete_or_old_evidence[old_candidate]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac18_public_verification_3/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac18_public_verification_never_passes_incomplete_or_old_evidence[old_candidate]"
+            }
+          ]
+        },
+        {
+          "condition": "old acceptance cannot pass",
+          "observed": "public requirement.confirm publishes changed acceptance; verification pinned to predecessor cannot pass",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac18_public_verification_never_passes_incomplete_or_old_evidence[old_acceptance]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac18_public_verification_4/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac18_public_verification_never_passes_incomplete_or_old_evidence[old_acceptance]"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Optional-only acceptance is explicit host fault injection; normal requirement.confirm rejects zero required.",
+        "Checks provider is synthetic test provider reading actual artifact bytes."
+      ],
+      "remediation": [],
+      "scenario": "验收归属",
+      "public_entries": [
+        "build_server/kernel.command/verification.run",
+        "build_server/kernel.command/requirement.confirm"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Five exact public verification counterexamples retain passed=false and incomplete; none reaches delivery_ready."
+      }
+    },
+    {
+      "id": "AC19",
+      "expect": "passed后delivery_ready，明确申请后pending，不自动approve",
+      "conditions": [
+        {
+          "condition": "passed evidence and explicit selection reach delivery_ready",
+          "observed": "current passed report selected; phase delivery_ready, queue empty",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac19_public_request_is_explicit_pending_and_never_auto_approves"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac19_public_request_is_ex0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac19_public_request_is_explicit_pending_and_never_auto_approves"
+            }
+          ]
+        },
+        {
+          "condition": "explicit request creates pending without approval/effect",
+          "observed": "delivery.request approval pending, task approval_pending, operation_id=null; premature apply rejected APPROVAL_INVALID",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac19_public_request_is_explicit_pending_and_never_auto_approves"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac19_public_request_is_ex0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac19_public_request_is_explicit_pending_and_never_auto_approves"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Verified isolated test evidence only."
+      ],
+      "remediation": [],
+      "scenario": "申请状态",
+      "public_entries": [
+        "build_server/kernel.command/attempt.select",
+        "build_server/kernel.command/delivery.request",
+        "build_server/kernel.query/approvals.queue"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Current passing evidence plus explicit selection reaches delivery_ready; only explicit request creates pending, with null operation and premature apply rejected."
+      }
+    },
+    {
+      "id": "AC20",
+      "expect": "machine/模型伪actor/role不能批准；真实用户动作绑定当前digest",
+      "conditions": [
+        {
+          "condition": "machine and forged actor/role cannot approve",
+          "observed": "machine UNSUPPORTED_COMMAND; forged schema fields INVALID_INPUT; unverified human context HUMAN_IDENTITY_UNAVAILABLE",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac20_public_human_proof_and_digest_reject_machine_and_spoofing"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac20_public_human_proof_a0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac20_public_human_proof_and_digest_reject_machine_and_spoofing"
+            }
+          ]
+        },
+        {
+          "condition": "verified test human action binds exact current digest",
+          "observed": "wrong digest APPROVAL_INVALID; verified independent human-test action records approved with exact body SHA-256",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac20_public_human_proof_and_digest_reject_machine_and_spoofing"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac20_public_human_proof_a0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac20_public_human_proof_and_digest_reject_machine_and_spoofing"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Identity proof is isolated synthetic test interaction allowed by G2; real host user action belongs to G3/G4."
+      ],
+      "remediation": [],
+      "scenario": "可信human",
+      "public_entries": [
+        "build_server/kernel.command/approval.decide rejection",
+        "build_human_server/kernel.command/approval.decide"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Machine/spoofed/unverified identities and wrong digest cannot approve. A verified synthetic human action binds the current canonical digest within frozen G2 test scope."
+      }
+    },
+    {
+      "id": "AC21",
+      "expect": "关键输入变更supersede；无关名称/审计变化不误失效",
+      "conditions": [
+        {
+          "condition": "decisive publication supersedes pending approval",
+          "observed": "requirement.confirm committed; old pending appends superseded and task delivery_ready; stale decide SNAPSHOT_CHANGED",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac21_public_requirement_change_supersedes_current_approval[pending]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac21_public_requirement_c0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac21_public_requirement_change_supersedes_current_approval[pending]"
+            }
+          ]
+        },
+        {
+          "condition": "decisive publication supersedes approved approval and replay never resurrects",
+          "observed": "approved appends superseded; original approved receipt replay remains original, current stays superseded",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac21_public_requirement_change_supersedes_current_approval[approved]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac21_public_requirement_c1/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac21_public_requirement_change_supersedes_current_approval[approved]"
+            }
+          ]
+        },
+        {
+          "condition": "publication replay and query do not append revisions",
+          "observed": "same-key requirement.confirm and approvals.queue add zero revisions after supersession",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac21_public_requirement_change_supersedes_current_approval[pending]",
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac21_public_requirement_change_supersedes_current_approval[approved]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac21_public_requirement_c0/delivery-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac21_public_requirement_c1/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac21_public_requirement_change_supersedes_current_approval[pending]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac21_public_requirement_change_supersedes_current_approval[approved]"
+            }
+          ]
+        },
+        {
+          "condition": "unrelated name/audit never invalidates",
+          "observed": "host task display_name update plus public rules.preview audit permits approval; frozen snapshot digest unchanged",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac21_unrelated_task_name_and_audit_do_not_invalidate"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac21_unrelated_task_name_0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac21_unrelated_task_name_and_audit_do_not_invalidate"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Task display_name has no frozen RPC edit command; isolated host revision change is explicit.",
+        "Owner remediation needs root independent verdict."
+      ],
+      "remediation": [
+        "refresh_approvals persists supersession in independent transaction after decisive public publication; decide/apply also guard; started effects retain reconciliation state.",
+        "Old module expectations pending/INVALID_INPUT updated to superseded/SNAPSHOT_CHANGED to meet frozen expect."
+      ],
+      "scenario": "失效准确",
+      "public_entries": [
+        "build_server/kernel.command/requirement.confirm",
+        "build_human_server/kernel.command/approval.decide",
+        "build_server/kernel.query/approvals.queue"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "g2_data_evidence",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/approval-peer-review.md",
+        "reason": "Independent reviewer checked publication hook authorization and separate CAS assessment. Final pending/approved traces are superseded; original receipt replay never restores current approval or appends repeated assessment."
+      }
+    },
+    {
+      "id": "AC22",
+      "expect": "快照重算一致，审批/operation/归档新增不改变body_digest",
+      "conditions": [
+        {
+          "condition": "frozen snapshot canonical digest recomputes",
+          "observed": "sha256_digest(snapshot.body) equals stored digest and human approval digest",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac22_public_snapshot_digest_survives_approval_operation_and_archive"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac22_public_snapshot_dige0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac22_public_snapshot_digest_survives_approval_operation_and_archive"
+            }
+          ]
+        },
+        {
+          "condition": "approval/operation/archive additions never change body",
+          "observed": "public approve/apply/close/archive.export completes; immutable body byte fields equal prior copy, no approval/operation_id fields",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac22_public_snapshot_digest_survives_approval_operation_and_archive"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac22_public_snapshot_dige0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac22_public_snapshot_digest_survives_approval_operation_and_archive"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Canonical digest through frozen Python JCS implementation; cross-language protocol matrix is separately reviewed."
+      ],
+      "remediation": [],
+      "scenario": "无循环hash",
+      "public_entries": [
+        "build_server/kernel.command/delivery.request",
+        "build_human_server/kernel.command/approval.decide",
+        "build_server/kernel.command/archive.export"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Canonical snapshot digest recomputes and exact body remains unchanged after human approval, actual delivery, close and archive additions."
+      }
+    },
+    {
+      "id": "AC23",
+      "expect": "claim前后、apply-start、效果后回执前均可对账；不盲重放",
+      "conditions": [
+        {
+          "condition": "crash before claim",
+          "observed": "no committed claim/receipt/effect; same request can execute once and reconcile applied",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[before_claim]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[before_claim]"
+            }
+          ]
+        },
+        {
+          "condition": "crash after claim",
+          "observed": "original accepted receipt recovered; operation claimed, export count zero; reconciliation never applies",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_claim]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_1/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_claim]"
+            }
+          ]
+        },
+        {
+          "condition": "crash after apply-start",
+          "observed": "accepted receipt retained, absent_pending observed as unknown, export count zero",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_start]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_2/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_start]"
+            }
+          ]
+        },
+        {
+          "condition": "crash after effect before settlement receipt",
+          "observed": "real bundle exists with correct digest; original receipt replay and reconcile recover applied, one export",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_effect]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_3/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_effect]"
+            }
+          ]
+        },
+        {
+          "condition": "all receipt/status/replay/reconcile paths avoid duplicate external effect",
+          "observed": "counted exporter unchanged across same-key delivery.apply, command.receipt, operation.status and delivery.reconcile",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[before_claim]",
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_claim]",
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_start]",
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_effect]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_0/delivery-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_1/delivery-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_2/delivery-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac23_public_crash_points_3/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[before_claim]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_claim]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_start]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac23_public_crash_points_reconcile_without_blind_effect_replay[after_effect]"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Crash injection uses explicit real UoW before/after commit exceptions in isolated process; restart provider coverage supplements separately."
+      ],
+      "remediation": [],
+      "scenario": "claim崩溃",
+      "public_entries": [
+        "build_server/kernel.command/delivery.apply",
+        "build_server/kernel.command/delivery.reconcile",
+        "build_server/kernel.query/command.receipt",
+        "build_server/kernel.query/operation.status"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Four explicit crash points preserve factual claimed/unknown/applied outcomes and original receipts; counted export does not increase during replay, queries or reconciliation."
+      }
+    },
+    {
+      "id": "AC24",
+      "expect": "旧epoch不结算；无外部fence不自动接管；start后撤回不宣称无效果",
+      "conditions": [
+        {
+          "condition": "old epoch result cannot settle",
+          "observed": "epoch changes from 1 to 2 while provider executes; old settlement leaves applying and one late_settlement audit",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac24_public_old_epoch_settlement_is_ignored"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac24_public_old_epoch_set0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac24_public_old_epoch_settlement_is_ignored"
+            }
+          ]
+        },
+        {
+          "condition": "without external fence absent target remains unknown without takeover",
+          "observed": "provider state unknown + absent file yields unknown; public reconcile keeps unknown",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac24_public_started_without_fence_stays_unknown_and_revocation_is_factful"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac24_public_started_witho0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac24_public_started_without_fence_stays_unknown_and_revocation_is_factful"
+            }
+          ]
+        },
+        {
+          "condition": "revoke after start never claims no effect",
+          "observed": "public human approval.revoke returns CANCEL_PENDING; approval remains approved and apply_started=true, operation remains unknown",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac24_public_started_without_fence_stays_unknown_and_revocation_is_factful"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac24_public_started_witho0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac24_public_started_without_fence_stays_unknown_and_revocation_is_factful"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Epoch advance is explicit host fault injection; no production external fencing provider is claimed."
+      ],
+      "remediation": [],
+      "scenario": "fencing/撤回",
+      "public_entries": [
+        "build_server/kernel.command/delivery.apply",
+        "build_server/kernel.command/delivery.reconcile",
+        "build_human_server/kernel.command/approval.revoke"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Old epoch is audited without settlement; absent effects without external fence remain unknown. Started revocation returns CANCEL_PENDING, retains approved/apply_started, and never claims no effect."
+      }
+    },
+    {
+      "id": "AC25",
+      "expect": "真实文件输出完整，既有目标异digest不覆盖，同digest幂等",
+      "conditions": [
+        {
+          "condition": "real file bundle complete",
+          "observed": "manifest.json and every artifact real bytes match frozen sha256/size; snapshot digest exact",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac25_public_real_bundle_complete_idempotent_and_conflict_preserved[False]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac25_public_real_bundle_c0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac25_public_real_bundle_complete_idempotent_and_conflict_preserved[False]"
+            }
+          ]
+        },
+        {
+          "condition": "existing different digest never overwritten",
+          "observed": "foreign manifest bytes preserved, no artifact directory, operation unknown",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac25_public_real_bundle_complete_idempotent_and_conflict_preserved[True]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac25_public_real_bundle_c1/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac25_public_real_bundle_complete_idempotent_and_conflict_preserved[True]"
+            }
+          ]
+        },
+        {
+          "condition": "same digest replay idempotent",
+          "observed": "original apply receipt replayed, reconcile no file change, exporter called once",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac25_public_real_bundle_complete_idempotent_and_conflict_preserved[False]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac25_public_real_bundle_c0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac25_public_real_bundle_complete_idempotent_and_conflict_preserved[False]"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Filesystem provider and explicit isolated output root only; non-file provider regression is supplemental."
+      ],
+      "remediation": [],
+      "scenario": "真实bundle",
+      "public_entries": [
+        "build_server/kernel.command/delivery.apply",
+        "build_server/kernel.command/delivery.reconcile",
+        "build_server/kernel.command/artifact.register"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Archived real manifest and artifact bytes match frozen digests; replay has one export. Foreign target bytes survive unchanged and outcome remains unknown."
+      }
+    },
+    {
+      "id": "AC26",
+      "expect": "required artifact未ready/缺失/改内容不能freeze",
+      "conditions": [
+        {
+          "condition": "required artifact staged but not ready cannot freeze",
+          "observed": "matching bytes only staging, ready path absent; ARTIFACT_MISSING, zero snapshot/approval",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac26_public_request_cannot_freeze_unready_missing_or_changed_artifact[staged_only]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac26_public_request_canno0/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac26_public_request_cannot_freeze_unready_missing_or_changed_artifact[staged_only]"
+            }
+          ]
+        },
+        {
+          "condition": "required artifact absent cannot freeze",
+          "observed": "registered source removed; ARTIFACT_MISSING, zero snapshot/approval",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac26_public_request_cannot_freeze_unready_missing_or_changed_artifact[missing]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac26_public_request_canno1/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac26_public_request_cannot_freeze_unready_missing_or_changed_artifact[missing]"
+            }
+          ]
+        },
+        {
+          "condition": "required artifact changed cannot freeze",
+          "observed": "registered bytes mutated; ARTIFACT_DIGEST_MISMATCH, quarantine preserves bad bytes, zero snapshot/approval",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_delivery_acceptance.py::test_ac26_public_request_cannot_freeze_unready_missing_or_changed_artifact[changed]"
+          ],
+          "evidence_detail": [
+            "delivery-evidence.json"
+          ],
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac26_public_request_canno2/delivery-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_delivery_acceptance",
+              "name": "test_ac26_public_request_cannot_freeze_unready_missing_or_changed_artifact[changed]"
+            }
+          ]
+        }
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Source faults deliberately injected into isolated filesystem after successful registration."
+      ],
+      "remediation": [],
+      "scenario": "artifact缺失",
+      "public_entries": [
+        "build_server/kernel.command/artifact.register",
+        "build_server/kernel.command/delivery.request"
+      ],
+      "initial_condition_review": "delivery",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/delivery-review.md",
+        "reason": "Staged-only, missing and changed required artifacts reject public freeze with no snapshot/approval revision; changed bytes are quarantined."
+      }
+    },
+    {
+      "id": "AC27",
+      "expect": "CAS只一次close；repair只补sink不再次执行任务",
+      "conditions": [
+        {
+          "condition": "CAS只一次close",
+          "observed": "Two independent SQLite connections and project-bound machine servers race task.close after one real delivery. One committed receipt and one rejected receipt, one archive_manifest revision and one task.closed audit event remain.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac27_rpc_concurrent_close_and_repair_without_execution"
+          ],
+          "evidence_detail": "data-evidence.json: rpc, observations.close_receipts, observations.manifest_ref",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac27_rpc_concurrent_close0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac27_rpc_concurrent_close_and_repair_without_execution"
+            }
+          ]
+        },
+        {
+          "condition": "repair只补sink不再次执行任务",
+          "observed": "After archive.export, remove one bundle artifact and call archive.repair with the original operation. Exact artifact bytes return, manifest.json bytes stay identical, executor.calls remains 1; executor.run is replaced with a failing sentinel. A missing original effect is rejected before repair.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac27_rpc_concurrent_close_and_repair_without_execution"
+          ],
+          "evidence_detail": "data-evidence.json: rpc, observations.manifest_sha256, observations.executor_calls, files",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac27_rpc_concurrent_close0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac27_rpc_concurrent_close_and_repair_without_execution"
+            }
+          ]
+        }
+      ],
+      "source_locations": [
+        "src/project_kernel/application/delivery/service.py:1477",
+        "src/project_kernel/application/evidence_service.py:156"
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Real execution is one fixed local Python subprocess under directory_only isolation; this is not DSH or production acceptance."
+      ],
+      "remediation": [],
+      "scenario": "并发close/repair",
+      "public_entries": [
+        "build_server: task.close",
+        "build_server: archive.export",
+        "build_server: archive.repair",
+        "build_server: operation.status"
+      ],
+      "initial_condition_review": "g2_data_evidence",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/data-evidence-review.md",
+        "reason": "Barrier-coordinated independent Store close has one committed result and one manifest/audit. Repair restores actual artifact without executing the task or changing manifest."
+      }
+    },
+    {
+      "id": "AC28",
+      "expect": "DB/file/flush状态分别呈现，partial可修复，manifest不变",
+      "conditions": [
+        {
+          "condition": "DB/file/flush状态分别呈现",
+          "observed": "archive.status contains main_store store/project/as_of, file-sink failed/succeeded receipts, archive_states.source_flushed and source_watermarks.gapped/ok. session_flush stays not_configured with its lack-of-proof explanation.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac28_rpc_sink_failure_and_local_source_gap_repair"
+          ],
+          "evidence_detail": "data-evidence.json: observations.failed_status, observations.file_only, observations.repaired_status",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac28_rpc_sink_failure_and0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac28_rpc_sink_failure_and_local_source_gap_repair"
+            }
+          ]
+        },
+        {
+          "condition": "partial可修复",
+          "observed": "Inject a failed file sink while source event 2 is missing event 1. Repair makes the file sink succeeded while overall and query.partial remain partial/true. Register and ingest event 1 through legal RPC, then repair re-observes local continuity and changes overall to complete and partial to false.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac28_rpc_sink_failure_and_local_source_gap_repair"
+          ],
+          "evidence_detail": "data-evidence.json: rpc, observations.failed_status, observations.file_only, observations.repaired_status",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac28_rpc_sink_failure_and0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac28_rpc_sink_failure_and_local_source_gap_repair"
+            }
+          ]
+        },
+        {
+          "condition": "manifest不变",
+          "observed": "The exact immutable archive manifest row, revision reference and digest compare equal before failures and after both repairs; task executor executes only once.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac28_rpc_sink_failure_and_local_source_gap_repair"
+          ],
+          "evidence_detail": "data-evidence.json: observations.manifest_ref, observations.manifest_digest, observations.executor_calls, files",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac28_rpc_sink_failure_and0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac28_rpc_sink_failure_and_local_source_gap_repair"
+            }
+          ]
+        },
+        {
+          "condition": "显式未flush不可自动提升为完成",
+          "observed": "A service-level explicit source_flushed=false supplied at task.close or sink callback, followed by public successful archive.export, retains source_flushed=false, overall=partial and query.partial=true.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac28_explicit_false_source_flush_stays_partial[close]",
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac28_explicit_false_source_flush_stays_partial[sink_callback]"
+          ],
+          "evidence_detail": "data-evidence.json: observations.explicit_false_not_promoted",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac28_explicit_false_sourc0/data-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac28_explicit_false_sourc1/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac28_explicit_false_source_flush_stays_partial[close]"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac28_explicit_false_source_flush_stays_partial[sink_callback]"
+            }
+          ]
+        }
+      ],
+      "source_locations": [
+        "src/project_kernel/application/delivery/service.py:1532",
+        "src/project_kernel/application/delivery/service.py:1634",
+        "src/project_kernel/application/evidence_service.py:115",
+        "src/project_kernel/data/queries/service.py:670"
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "source_flushed is local collection readiness under source_flush_basis=local_observation_only; no host final-flush proof is configured. Real host flush belongs to G3.",
+        "The explicit false counterexample uses a service fixture to supply an option that the frozen public task.close payload does not expose."
+      ],
+      "remediation": [
+        "Preserve source_collection_requested in task-close archive state so transient source gaps can be repaired without promoting an explicit false request.",
+        "Update that request when record_sink_result supplies an explicit source_flushed value, preserving explicit false through later evidence settlement.",
+        "Recompute local source readiness from the retained request plus current source watermarks on evidence settlement.",
+        "Include source-incomplete archive state in query.partial and emit archive_source_incomplete gaps."
+      ],
+      "scenario": "分sink故障",
+      "public_entries": [
+        "build_server: source.ingest",
+        "build_server: task.close",
+        "build_server: archive.export",
+        "build_server: archive.repair",
+        "build_server: archive.status"
+      ],
+      "initial_condition_review": "g2_data_evidence",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/source-flush-peer-review.md",
+        "reason": "Final gap/file repair observations move partial to complete only after local continuity returns. Both explicit false paths remain partial; manifest stays unchanged and host final flush stays not_configured."
+      }
+    },
+    {
+      "id": "AC29",
+      "expect": "已提交WAL在一致备份，integrity/FK/hash通过；恢复fence与历史保留",
+      "conditions": [
+        {
+          "condition": "已提交WAL在一致备份",
+          "observed": "After TRUNCATE checkpoint and disabled autocheckpoint, public task.create adds a committed task visible in WAL but absent from immutable main-file reading. backup.create produces a consistent SQLite file containing that task.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_wal_backup_and_fenced_test_store_recovery"
+          ],
+          "evidence_detail": "data-evidence.json: observations.wal_committed_not_in_main_file, observations.backup_manifest, files",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_wal_backup_and_f0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_wal_backup_and_fenced_test_store_recovery"
+            }
+          ]
+        },
+        {
+          "condition": "integrity/FK/hash通过",
+          "observed": "Backup manifest all_ok, integrity_ok, foreign_keys_ok, versions_ok, references_ok and artifacts_ok are true; actual backup bytes recompute to file_sha256. Public isolated restore has the same file hash and its SQLite integrity_check is ok with no foreign-key violations.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_wal_backup_and_fenced_test_store_recovery",
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_isolated_restore_target_authorization_and_busy_unknown"
+          ],
+          "evidence_detail": "data-evidence.json: observations.backup_manifest; copy case observations.restored and observations.restore_hash",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_wal_backup_and_f0/data-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_isolated_restore0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_wal_backup_and_fenced_test_store_recovery"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_isolated_restore_target_authorization_and_busy_unknown"
+            }
+          ]
+        },
+        {
+          "condition": "恢复fence",
+          "observed": "Human test RPC decision binds exact restore plan digest and target. Controlled restore refuses active Store writers with TEMPORARY_UNAVAILABLE; ordinary RPC refuses controlled replacement with CAPABILITY_UNAVAILABLE. After writer close, maintenance restore succeeds with writer_fence_held. Isolated public restore succeeds, a wrong approved target is PERMISSION_DENIED, and a busy copy fence retains accepted receipt plus unknown/FileExistsError and does not retry the effect on replay.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_wal_backup_and_fenced_test_store_recovery",
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_isolated_restore_target_authorization_and_busy_unknown"
+          ],
+          "evidence_detail": "data-evidence.json: rpc, observations.busy_error, observations.offline_recovery; copy case observations.wrong_target_response, observations.busy_unknown",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_wal_backup_and_f0/data-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_isolated_restore0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_wal_backup_and_fenced_test_store_recovery"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_isolated_restore_target_authorization_and_busy_unknown"
+            }
+          ]
+        },
+        {
+          "condition": "历史保留",
+          "observed": "Controlled restore retains original_path, post-backup history_backup containing the later task and external maintenance intent/receipt. Live restored test store contains the original task but not the later task; history copy retains the latter. Isolated RPC copy leaves the live store's later task intact. Same-key repeat returns original result.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_wal_backup_and_fenced_test_store_recovery",
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac29_rpc_isolated_restore_target_authorization_and_busy_unknown"
+          ],
+          "evidence_detail": "data-evidence.json: observations.original_task, observations.later_task, observations.offline_recovery; copy case observations.live_history_preserved",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_wal_backup_and_f0/data-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac29_rpc_isolated_restore0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_wal_backup_and_fenced_test_store_recovery"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac29_rpc_isolated_restore_target_authorization_and_busy_unknown"
+            }
+          ]
+        }
+      ],
+      "source_locations": [
+        "src/project_kernel/application/evidence_service.py:185",
+        "src/project_kernel/application/evidence_service.py:198",
+        "src/project_kernel/application/evidence_service.py:226",
+        "src/project_kernel/evidence/backup.py:309",
+        "src/project_kernel/evidence/recovery.py:57"
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Only explicit temporary test stores are restored; production replacement stays disabled.",
+        "Maintenance fencing covers cooperating Kernel Store writers. Direct SQLite clients do not participate.",
+        "Controlled maintenance is intentionally a separate offline public entry; the frozen business RPC only supports isolated copies."
+      ],
+      "remediation": [],
+      "scenario": "WAL备份恢复",
+      "public_entries": [
+        "build_server: task.create",
+        "build_server: backup.create",
+        "build_server: restore.plan",
+        "build_human_server: decision.record",
+        "build_server: restore.apply",
+        "build_server: operation.status",
+        "ControlledStoreRecovery.apply: offline configured test-store maintenance"
+      ],
+      "initial_condition_review": "g2_data_evidence",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/data-evidence-review.md",
+        "reason": "Committed WAL is included in actual consistent backup; integrity/FK/hash hold. Legal isolated restore and explicit offline test-store maintenance enforce digest/target/fence and preserve later history; busy copies remain unknown without replay."
+      }
+    },
+    {
+      "id": "AC30",
+      "expect": "零链接需求进分母，N/A明确；非空多跳同名异类型图正确",
+      "conditions": [
+        {
+          "condition": "零链接需求进分母",
+          "observed": "Two publicly confirmed requirements exist, only one is linked to a dispatch packet. requirements.coverage denominator=2, covered=1 and uncovered=['zero-links'].",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac30_rpc_coverage_and_typed_multihop_graph"
+          ],
+          "evidence_detail": "data-evidence.json: rpc, observations.coverage",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac30_rpc_coverage_and_typ0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac30_rpc_coverage_and_typed_multihop_graph"
+            }
+          ]
+        },
+        {
+          "condition": "N/A明确",
+          "observed": "The unlinked requirement has not_applicable_ids=['zero-links']; it remains in the denominator and uncovered list rather than disappearing.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac30_rpc_coverage_and_typed_multihop_graph"
+          ],
+          "evidence_detail": "data-evidence.json: observations.coverage",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac30_rpc_coverage_and_typ0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac30_rpc_coverage_and_typed_multihop_graph"
+            }
+          ]
+        },
+        {
+          "condition": "非空多跳图正确",
+          "observed": "Outgoing packet graph has nonempty nodes/edges and source_document at depth 2; incoming requirement graph contains its packet. Depth 1 reports truncated and incomplete; absent root yields REFERENCE_NOT_FOUND.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac30_rpc_coverage_and_typed_multihop_graph"
+          ],
+          "evidence_detail": "data-evidence.json: observations.graph, observations.incoming, observations.cutoff, rpc",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac30_rpc_coverage_and_typ0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac30_rpc_coverage_and_typed_multihop_graph"
+            }
+          ]
+        },
+        {
+          "condition": "同名异类型图正确",
+          "observed": "The same object_id req-1 has distinct requirement, acceptance and rules nodes, preserving all three types.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac30_rpc_coverage_and_typed_multihop_graph"
+          ],
+          "evidence_detail": "data-evidence.json: observations.graph",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac30_rpc_coverage_and_typ0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac30_rpc_coverage_and_typed_multihop_graph"
+            }
+          ]
+        }
+      ],
+      "source_locations": [
+        "src/project_kernel/data/queries/service.py:328",
+        "src/project_kernel/data/queries/service.py:356"
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "Source document and execution/provider policy refs are explicit host fixture configuration; business requirement, confirmation, packet and graph queries use the legal RPC surface."
+      ],
+      "remediation": [],
+      "scenario": "覆盖/追溯",
+      "public_entries": [
+        "build_server: requirement.save",
+        "build_server: requirement.confirm",
+        "build_server: dispatch.draft",
+        "build_server: requirements.coverage",
+        "build_server: project.trace"
+      ],
+      "initial_condition_review": "g2_data_evidence",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/data-evidence-review.md",
+        "reason": "Public coverage denominator includes zero-link requirement and explicit N/A; nonempty multihop graph preserves identical IDs across different types and declares truncation."
+      }
+    },
+    {
+      "id": "AC31",
+      "expect": "as_of一致，投影落后显式；unknown usage不置0，重建读模型一致",
+      "conditions": [
+        {
+          "condition": "as_of一致",
+          "observed": "project.overview, project.timeline and events.read use one recorded watermark after a first public task, then remain at that same as_of after a second task. Historical task count remains one and all timeline sequences stay within the bound. Future watermark yields AS_OF_UNAVAILABLE.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+          ],
+          "evidence_detail": "data-evidence.json: observations.watermark, observations.historical, observations.timeline, observations.events, rpc",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac31_rpc_watermarks_unkno0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+            }
+          ]
+        },
+        {
+          "condition": "投影落后显式",
+          "observed": "Historical envelope reports projection_stale=true, nonzero projection_lag_seq and completeness=incomplete after the store head advances.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+          ],
+          "evidence_detail": "data-evidence.json: observations.historical.freshness",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac31_rpc_watermarks_unkno0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+            }
+          ]
+        },
+        {
+          "condition": "unknown usage不置0",
+          "observed": "One real subprocess attempt has no reported provider usage. attempts.compare includes unknown usage, missing_usage_is_not_zero=true, total=null and completeness=incomplete.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+          ],
+          "evidence_detail": "data-evidence.json: observations.comparison.data.cost",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac31_rpc_watermarks_unkno0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+            }
+          ]
+        },
+        {
+          "condition": "重建读模型一致",
+          "observed": "At the public comparison watermark, read-only QueryService.rebuild_read_model reports consistent=true, reproduces public overview object_counts, leaves commit_log count unchanged and yields the same digest on repeat. Public overview data before and after rebuild is identical.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+          ],
+          "evidence_detail": "data-evidence.json: observations.rebuild, observations.before, observations.after",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac31_rpc_watermarks_unkno0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac31_rpc_watermarks_unknown_usage_and_read_model_rebuild"
+            }
+          ]
+        }
+      ],
+      "source_locations": [
+        "src/project_kernel/data/queries/service.py:208",
+        "src/project_kernel/data/queries/service.py:403",
+        "src/project_kernel/data/queries/service.py:790",
+        "src/project_kernel/data/queries/watermarks.py:129"
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "The frozen catalog has no projection.rebuild RPC. Rebuild uses the exported read-only query API with public RPC result comparison; it is not a claimed unregistered RPC command.",
+        "Rebuild is in-memory/read-only with persisted=false; no durable projection checkpoint is claimed."
+      ],
+      "remediation": [],
+      "scenario": "读水位统计",
+      "public_entries": [
+        "build_server: task.create",
+        "build_server: attempt.start",
+        "build_server: project.overview",
+        "build_server: project.timeline",
+        "build_server: events.read",
+        "build_server: attempts.compare",
+        "QueryService.rebuild_read_model: read-only application read API"
+      ],
+      "initial_condition_review": "g2_data_evidence",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/data-evidence-review.md",
+        "reason": "Historical queries share as_of, disclose projection lag and unknown cost as null; exported read-only rebuild matches public overview and adds no commit. No unregistered rebuild RPC is claimed."
+      }
+    },
+    {
+      "id": "AC32",
+      "expect": "原源hash不变，重跑不多revision，孤儿quarantine，不补pass/批准/费用",
+      "conditions": [
+        {
+          "condition": "原源hash不变",
+          "observed": "SyntheticLegacySample builds a real temporary SQLite source. LegacyReader opens SQLite mode=ro and query_only=ON. Source hash before and after the public immutable-snapshot import is equal; manifest retains per-file hash, size and table row counts.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac32_rpc_immutable_synthetic_migration_and_replay"
+          ],
+          "evidence_detail": "data-evidence.json: observations.source_sha256_before, observations.source_sha256_after, observations.source_manifest, files",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac32_rpc_immutable_synthe0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac32_rpc_immutable_synthetic_migration_and_replay"
+            }
+          ]
+        },
+        {
+          "condition": "重跑不多revision",
+          "observed": "Same-key RPC replay returns the original receipt without rereading the provider. A fresh idempotency key with the same snapshot/plan adds no revision and reuses the original report ref.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac32_rpc_immutable_synthetic_migration_and_replay"
+          ],
+          "evidence_detail": "data-evidence.json: observations.first_receipt, observations.replay_receipt, observations.rerun_receipt",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac32_rpc_immutable_synthe0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac32_rpc_immutable_synthetic_migration_and_replay"
+            }
+          ]
+        },
+        {
+          "condition": "孤儿quarantine",
+          "observed": "The synthetic orphan and unmapped-owner records produce immutable legacy_quarantine revisions classified orphan/unowned; report quarantined count equals their count. Unknown ownership is not sent to a default project.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac32_rpc_immutable_synthetic_migration_and_replay"
+          ],
+          "evidence_detail": "data-evidence.json: observations.quarantine, observations.import_report",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac32_rpc_immutable_synthe0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac32_rpc_immutable_synthetic_migration_and_replay"
+            }
+          ]
+        },
+        {
+          "condition": "不补pass/批准/费用",
+          "observed": "Every imported fact retains raw and a matching source_digest; its imported payload does not add passed/approved/cost. No native verification or approval revisions are created. Historical approved/completed/usage raw fields remain raw facts and do not become current authorization or accounting evidence.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac32_rpc_immutable_synthetic_migration_and_replay"
+          ],
+          "evidence_detail": "data-evidence.json: observations.imported_facts, observations.native_verification_count, observations.native_approval_count",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac32_rpc_immutable_synthe0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac32_rpc_immutable_synthetic_migration_and_replay"
+            }
+          ]
+        },
+        {
+          "condition": "显式test启用与引用核验",
+          "observed": "A server without legacy_config rejects the same legal payload with UNSUPPORTED_COMMAND; an absent plan revision yields REFERENCE_NOT_FOUND. The successful source_snapshot/import_plan are exact project-bound refs from a configured trusted producer.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_data_evidence_acceptance.py::test_ac32_rpc_immutable_synthetic_migration_and_replay"
+          ],
+          "evidence_detail": "data-evidence.json: rpc, host_seeds",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac32_rpc_immutable_synthe0/data-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_data_evidence_acceptance",
+              "name": "test_ac32_rpc_immutable_synthetic_migration_and_replay"
+            }
+          ]
+        }
+      ],
+      "source_locations": [
+        "src/project_kernel/application/legacy_service.py:46",
+        "src/project_kernel/migration/legacy/source.py:186",
+        "src/project_kernel/migration/legacy/mapper.py:111"
+      ],
+      "verdict": "accepted",
+      "limitations": [
+        "This is a synthetic immutable-snapshot migration rehearsal over a real temporary SQLite source, not an old production schema importer.",
+        "No production data is read or imported; DSH integration is not needed for the frozen G2 migration exercise."
+      ],
+      "remediation": [],
+      "scenario": "迁移只读",
+      "public_entries": [
+        "build_server with explicit test legacy_config: legacy.import",
+        "build_server: project.timeline"
+      ],
+      "initial_condition_review": "g2_data_evidence",
+      "independent_review": {
+        "reviewer": "root_coordinator",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/data-evidence-review.md",
+        "reason": "Legal configured test legacy.import reads real synthetic SQLite immutably, preserves source hash, quarantines orphan ownership, deduplicates new-key rerun and creates no native pass/approval/cost facts."
+      }
+    },
+    {
+      "id": "AC37",
+      "expect": "拆包/乱序应答/大frame/非法UTF8/重复key/日志通道正确",
+      "conditions": [
+        {
+          "condition": "拆包",
+          "observed": "Real Node client splits every valid request between writes; Python composition root reassembles chunks. Existing Node regression additionally splits inside UTF-8 characters.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac37_real_stdio_composition_root"
+          ],
+          "evidence_detail": "node-stdio-evidence.json: connections; Node verified output",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac37_real_stdio_compositi0/protocol-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac37_real_stdio_composition_root"
+            }
+          ]
+        },
+        {
+          "condition": "乱序应答",
+          "observed": "Client tests submit two pending requests and resolve coalesced reversed IDs to the correct promises; duplicate IDs remain orphan responses.",
+          "test_nodeids": [
+            "tests/p10_protocol/test_framing_stream.py::test_responses_echo_the_request_id_so_a_client_can_bind_out_of_order"
+          ],
+          "evidence_detail": "Node verified output: coalesced and out-of-order responses bind to their own request ids",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.p10_protocol.test_framing_stream",
+              "name": "test_responses_echo_the_request_id_so_a_client_can_bind_out_of_order"
+            }
+          ]
+        },
+        {
+          "condition": "大frame",
+          "observed": "Python stdio rejects an unterminated 1048577-byte frame, remains protocol-only, and Node rejects both complete and partial over-budget frames without resolving a result.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac37_real_stdio_composition_root"
+          ],
+          "evidence_detail": "protocol-evidence.json: responses; Node verified output",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac37_real_stdio_compositi0/protocol-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac37_real_stdio_composition_root"
+            }
+          ]
+        },
+        {
+          "condition": "非法UTF8",
+          "observed": "Raw invalid bytes generate -32700 from real Python stdin; Node fatal decoding fails all pending requests with PARSE_ERROR.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac37_real_stdio_composition_root"
+          ],
+          "evidence_detail": "protocol-evidence.json: invalid_inputs_hex,responses; Node verified output",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac37_real_stdio_compositi0/protocol-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac37_real_stdio_composition_root"
+            }
+          ]
+        },
+        {
+          "condition": "重复key",
+          "observed": "Literal and escaped equivalent JSON keys are rejected on both sides; invalid key escapes and overflowing numeric exponents remain PARSE_ERROR.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac37_real_stdio_composition_root"
+          ],
+          "evidence_detail": "protocol-evidence.json: invalid_inputs_hex,responses; Node verified output",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac37_real_stdio_compositi0/protocol-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac37_real_stdio_composition_root"
+            }
+          ]
+        },
+        {
+          "condition": "日志通道正确",
+          "observed": "Real Python process stdout contains only individually decodable JSON-RPC frames; debug logs appear on stderr and omit the trusted invocation handle.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac37_real_stdio_composition_root"
+          ],
+          "evidence_detail": "protocol-evidence.json: responses,stderr; node-stdio-evidence.json: connections",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac37_real_stdio_compositi0/protocol-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac37_real_stdio_composition_root"
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "The stdio process is a test fixture wrapping the real shipped composition root, not a DSH launch or product executable."
+      ],
+      "remediation": [
+        "Decode JSON key escapes before duplicate detection.",
+        "Check complete Node frame byte size before parsing.",
+        "Reject non-finite parsed numbers on both runtime sides."
+      ],
+      "verdict": "accepted",
+      "scenario": "stdio边界",
+      "public_entries": [
+        "build_server: kernel.initialize/kernel.command via real stdio",
+        "ProtocolClient.request/onData"
+      ],
+      "initial_condition_review": "root",
+      "independent_review": {
+        "reviewer": "g2_execution",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/protocol-peer-review.md",
+        "reason": "Separate protocol review and final actual stdio evidence confirm split/UTF-8/order/frame/key/error/log behavior; final 19 Node tests include the real Python transport."
+      }
+    },
+    {
+      "id": "AC38",
+      "expect": "timeout不等取消，原key补查receipt；未证实结果不成功",
+      "conditions": [
+        {
+          "condition": "timeout不等取消",
+          "observed": "Real test host commits task.create and deliberately drops the reply. An injected client timer reports COMMIT_OUTCOME_UNKNOWN and sends no cancel or extra command frame; the subprocess is then stopped normally.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+          ],
+          "evidence_detail": "node-stdio-evidence.json: connections,input,receipt",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac38_public_receipt_survi0/receipt-reconnect-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+            }
+          ]
+        },
+        {
+          "condition": "原key补查receipt",
+          "observed": "A new Python process and new Node client recover the durable original-key receipt and same-key retry returns the same receipt. Separate Python RPC reopen regression confirms one task after replay.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+          ],
+          "evidence_detail": "node-stdio-evidence.json: receipt,overview; receipt-reconnect-evidence.json: trace,recovered",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac38_public_receipt_survi0/receipt-reconnect-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+            }
+          ]
+        },
+        {
+          "condition": "未证实结果不成功",
+          "observed": "Both real Node-to-Python receipt recovery and separate Python public query return null for an unissued key; a timeout does not manufacture success.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+          ],
+          "evidence_detail": "node-stdio-evidence.json: connections; receipt-reconnect-evidence.json: missing_receipt",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac38_public_receipt_survi0/receipt-reconnect-evidence.json",
+            "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/stdio-0dks45/node-stdio-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "Synthetic transport loss is deliberately controlled; no real DSH or network-host lifecycle is claimed."
+      ],
+      "remediation": [],
+      "verdict": "accepted",
+      "scenario": "超时重连",
+      "public_entries": [
+        "ProtocolClient.command/recoverReceipt",
+        "build_server: command.receipt/task.create/project.overview"
+      ],
+      "initial_condition_review": "root",
+      "independent_review": {
+        "reviewer": "g2_execution",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/protocol-peer-review.md",
+        "reason": "Final real client/host drops committed reply, times out without cancel, restarts and recovers original-key receipt with one task; unissued key stays null."
+      }
+    },
+    {
+      "id": "AC43",
+      "expect": "隔离项目A/B，两方案含真实临时subprocess失败修复与重验，人工测试身份批准，真实bundle和归档/总览；标test模式非DSH",
+      "conditions": [
+        {
+          "condition": "隔离项目A/B",
+          "observed": "Two file-backed project stores and roots are separate; project A's trusted server rejects project B selector and B's public task is retained independently.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "closed-loop-evidence.json: trace,inventory",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        },
+        {
+          "condition": "两方案含真实临时subprocess失败修复与重验",
+          "observed": "Strategy s1 actually exits 7; repair runs a new successful attempt and s2 runs separately. Exactly three subprocess effects and three verification runs are captured; failed attempt and stderr artifact remain after restart.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "closed-loop-evidence.json: trace,scenario,inventory",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        },
+        {
+          "condition": "人工测试身份批准",
+          "observed": "Machine approval is rejected; synthetic verified human entry approves the exact snapshot digest. Changing candidate supersedes the earlier approval and a new human approval is recorded.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "closed-loop-evidence.json: trace,scenario",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        },
+        {
+          "condition": "真实bundle和归档/总览",
+          "observed": "Real bundle artifacts are emitted. Lost delivery settlement reconciles without a second write. A failed archive and deleted artifact are repaired, executor effects remain three; restart historical overview shows one closed task and subsequent events query is empty at the captured watermark.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "closed-loop-evidence.json: trace,inventory,scenario",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        },
+        {
+          "condition": "标test模式非DSH",
+          "observed": "Evidence explicitly records mode=test, directory_only and host-owned seed refs; execution is fixed local Python subprocess and human proof is synthetic. Raw migration in this scenario is supplemented by independent legal legacy.import RPC acceptance under AC32.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "closed-loop-evidence.json: mode,sandbox_guarantee,host_owned_seed_refs",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "Provider configuration and candidate manifests are explicitly seeded host-owned revisions. This is frozen G2 test scope, not DSH/G3, workbench/G4 or production recovery."
+      ],
+      "remediation": [],
+      "verdict": "accepted",
+      "scenario": "独立核心闭环G2",
+      "public_entries": [
+        "build_server/build_human_server: instrumented full machine/human RPC workflow"
+      ],
+      "initial_condition_review": "root",
+      "independent_review": {
+        "reviewer": "g2_execution",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/protocol-peer-review.md",
+        "reason": "Final trace and actual output inventory prove A/B isolation, three fixed real subprocess effects including failed repair, three checks, synthetic human approval, real bundle, archive repair and restart overview."
+      }
+    },
+    {
+      "id": "AC45",
+      "expect": "测试DB/WAL/SHM/知识/产物全在显式temp，golden与失败留档不污染业务",
+      "conditions": [
+        {
+          "condition": "测试DB/WAL/SHM全在显式temp",
+          "observed": "The final pytest command uses explicit project-local basetemp. A live public task records database, WAL and SHM paths under tmp_path; closed-loop A/B databases, restored copies and artifacts are inventoried within their isolated root. Raw database bytes are excluded from evidence archives and Git.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac38_public_receipt_survives_reopen_and_missing_is_unknown",
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "receipt-reconnect-evidence.json: root,live_files; closed-loop-evidence.json: root,inventory; scenario index.json",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac38_public_receipt_survi0/receipt-reconnect-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/index.json",
+            "docs/acceptance/G2-round4/protected-inputs.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac38_public_receipt_survives_reopen_and_missing_is_unknown"
+            },
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        },
+        {
+          "condition": "知识/产物全在显式temp",
+          "observed": "All full-suite knowledge/corpus tests use explicit pytest roots or memory stores. Actual execution, candidate, delivery and archive bytes are captured under the isolated scenario root; the target-user knowledge tree remains planning only.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "closed-loop-evidence.json: inventory; final pytest JUnit; scenario index.json",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/index.json",
+            "docs/acceptance/G2-round4/protected-inputs.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        },
+        {
+          "condition": "golden与失败留档不污染业务",
+          "observed": "Frozen contracts and fixture bytes match the input base commit. New synthetic captures and failures live in the fourth-round evidence tree; historical third-round files and ZIPs are unchanged. No runtime database, cache, environment or credentials are staged.",
+          "test_nodeids": [
+            "tests/g2_acceptance/test_protocol_and_closed_loop.py::test_ac43_ac45_instrumented_public_workflow"
+          ],
+          "evidence_detail": "scenario index.json; protected-inputs.json; raw fourth-round failures",
+          "evidence": [
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/g2-acceptance-final/test_ac43_ac45_instrumented_pu0/closed-loop-evidence.json",
+            "docs/acceptance/G2-round4/evidence/scenarios-acceptance-final/index.json",
+            "docs/acceptance/G2-round4/protected-inputs.json"
+          ],
+          "junit_cases": [
+            {
+              "classname": "tests.g2_acceptance.test_protocol_and_closed_loop",
+              "name": "test_ac43_ac45_instrumented_public_workflow"
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "Archive files are explicitly synthetic acceptance evidence; no production corpus or business store is used."
+      ],
+      "remediation": [],
+      "verdict": "accepted",
+      "scenario": "测试隔离",
+      "public_entries": [
+        "build_server: kernel.initialize/task.create/command.receipt",
+        "instrumented dual-project RPC scenario"
+      ],
+      "initial_condition_review": "root",
+      "independent_review": {
+        "reviewer": "g2_final_audit",
+        "decision": "accepted",
+        "report": "docs/reviews/2026-10-09-round4/ac45-final-peer-review.md",
+        "reason": "Actual independent final reviewer verified 217 stable inputs and 1280 manifest files against Git index checkout bytes, all 408 archived files, 53 protected inputs and all 25 item/87 condition bindings; generated metadata and checkout EOL gaps are resolved."
+      }
+    }
+  ]
+}

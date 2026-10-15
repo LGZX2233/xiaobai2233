@@ -1,0 +1,28 @@
+{
+  "name": "@project-kernel/agh-plugin",
+  "version": "0.3.1",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "exports": "./index.mjs",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "agnes": {
+    "plugins": [
+      {
+        "export": "kernelPlugin",
+        "id": "ext:project-kernel/agh-plugin",
+        "inject": ["extension"],
+        "services": ["pk.compare", "pk.overview", "pk.approvals", "pk.events", "pk.timeline", "pk.trace", "pk.coverage", "pk.environment", "pk.operation", "pk.tree", "pk.skills", "pk.documents", "pk.document"]
+      }
+    ],
+    "clientDescriptors": [
+      {
+        "rowId": "ext:project-kernel/agh-plugin",
+        "path": "./client/agnes.client.json"
+      }
+    ]
+  }
+}

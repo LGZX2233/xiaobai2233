@@ -1,0 +1,31 @@
+Provider accounts (0 = add):
+Account name: 
+  >> DeepSeek
+Configure a Provider for Agnes. The local backend stores the key and never returns it.
+  1) DeepSeek (deepseek)
+  2) OpenAI (openai)
+  3) Anthropic / Claude (anthropic)
+  4) Google / Gemini (google)
+  5) Qwen (qwen)
+  6) Moonshot / Kimi (moonshot)
+  7) Kimi Coding Plan (kimi-coding)
+  8) Z.ai / GLM (zai)
+  9) OpenRouter (openrouter)
+  10) MiniMax (minimax)
+  11) xAI (xai)
+  12) Agnes AI (agnes-ai)
+  13) OpenAI Codex · ChatGPT subscription (openai-codex)
+  14) GitHub Copilot subscription (github-copilot)
+Provider [1-14]: 
+  >> 1
+Base URL [https://api.deepseek.com]: 
+  >> 
+API key (stored by the local backend; never returned): 
+  >> [key]
+Credentials and model directory verified; selected-model inference was not tested.
+Models returned by the Provider:
+  1) DeepSeek V4.1 Flash (deepseek-flash)
+  2) DeepSeek V4 Pro (deepseek-v4-pro)
+Model [1-2]: 
+  >> 1
+Configuration saved for new sessions.

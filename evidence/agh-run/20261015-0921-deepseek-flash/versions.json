@@ -1,0 +1,13 @@
+{
+ "model_ids_in_session_cost_ledger": [
+  "deepseek-flash"
+ ],
+ "requested_model": "deepseek-flash",
+ "agh_version_output": "agh 0.0.0 node 24.22.0 protocol _agnes/v1 ",
+ "plugin": "@project-kernel/agh-plugin@0.3.1",
+ "python": "Python 3.12.14",
+ "node": "v24.22.0",
+ "evidence_mode": "test",
+ "isolation": "directory_only",
+ "note": "Sandbox-only workaround applied to the plugin copy: note:undefined replaced by null (see FOR-BACKEND)."
+}

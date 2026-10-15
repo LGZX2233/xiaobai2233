@@ -1,0 +1,11 @@
+$ python tools/pk_human_approve.py --root <PK_ROOT>
+运行目录: <PK_ROOT>
+[1] 审批编号: approval-request-0481f3a270639c3b42c8
+    选中策略: s2  尝试: attempt-cbef9b86e43f4114
+    alpha_fit（求解器自报，已经内核独立校验）: 0.37286
+    证据模式: test
+    快照摘要: 483ccad72ca1fd47f73387d66c237eb00b2a0235bcef3ea123973ddaa7ee6a06
+批准请输入快照摘要前 8 位；输入 r 拒绝；直接回车取消: 483ccad7
+批准理由（回车使用默认）: 
+已批准：approval-request-0481f3a270639c3b42c8（审批状态 approved）。
+现在回到 AGH 告诉智能体“已批准”，它会调用 pk_apply_delivery 完成交付。

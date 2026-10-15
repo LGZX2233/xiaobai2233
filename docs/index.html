@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Kernel · 给 AGH 的外置项目账本</title>
+<meta name="description" content="把 LLM agent 的记忆和过程外置成结构化账本：模型查询，独立复算，人来放行。AGH 插件，绕开模型的局限，不声称修好了模型。">
+<style>
+:root{
+  color-scheme: light dark;
+  --bg:#f3f5f7; --paper:#fbfcfd; --ink:#16212e; --ink2:#47566a; --rule:#d5dce4; --rule2:#e7ebf0;
+  --navy:#1d3557; --pass:#1f7a4d; --fail:#b3261e; --unk:#8f5700; --gate:#4b3f9e;
+  --mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  --serif: "Source Han Serif SC","Noto Serif CJK SC","Songti SC","STSong",Georgia,serif;
+  --sans: system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0f141a; --paper:#151c24; --ink:#e3e9ef; --ink2:#a3b0bf; --rule:#2a3542; --rule2:#1d2630;
+    --navy:#8fb3e0; --pass:#4fc38a; --fail:#ff7a6e; --unk:#f0b04a; --gate:#b3a9ff; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--navy);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gate);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--bg);padding:.5rem 1rem}
+.skip:focus{left:1rem;top:1rem;z-index:9}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+header.top{border-bottom:1px solid var(--rule);background:var(--paper);position:sticky;top:0;z-index:5}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:56px}
+.mark{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:.02em}
+.mark b{display:inline-grid;place-items:center;width:28px;height:28px;background:var(--ink);color:var(--paper);font:600 12px var(--mono);border-radius:3px}
+nav.top a{margin-left:18px;font-size:14px;color:var(--ink2);text-decoration:none}
+nav.top a:hover{color:var(--ink);text-decoration:underline}
+@media (max-width:860px){ nav.top{display:none} }
+section{padding:72px 0;border-bottom:1px solid var(--rule)}
+.kicker{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 18px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;letter-spacing:.01em;margin:0}
+h1{font-size:clamp(28px,5.4vw,60px);line-height:1.15}
+h2{font-size:clamp(26px,3.4vw,36px);line-height:1.25;margin-bottom:12px}
+h3{font-size:19px;line-height:1.35}
+p.lead{font-size:clamp(17px,1.9vw,20px);color:var(--ink2);max-width:46em;margin:0 0 8px}
+.mono,code{font-family:var(--mono)}
+code{font-size:.88em}
+small,.note{color:var(--ink2);font-size:13px}
+.note{margin:14px 0 0;max-width:62em}
+
+/* hero */
+.hero{padding:88px 0 64px;background:repeating-linear-gradient(to bottom,transparent 0 35px,var(--rule2) 35px 36px)}
+.hero h1 em{font-style:normal;border-bottom:3px solid var(--fail)}
+.walls{display:grid;grid-template-columns:repeat(5,1fr);margin-top:48px;border-top:2px solid var(--ink);background:var(--bg)}
+.walls div{padding:18px 16px 10px 0;border-right:1px solid var(--rule)}
+.walls div+div{padding-left:16px}
+.walls div:last-child{border-right:0}
+.walls .n{font:600 13px var(--mono);color:var(--fail)}
+.walls h3{margin:6px 0 6px;font-size:17px}
+.walls p{margin:0;color:var(--ink2);font-size:14.5px;line-height:1.6}
+@media (max-width:1000px){ .walls{grid-template-columns:repeat(2,1fr)} .walls div{border-right:0;border-bottom:1px solid var(--rule);padding-left:0!important} }
+@media (max-width:560px){ .walls{grid-template-columns:1fr} }
+.answer{margin-top:36px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;max-width:54em;background:var(--bg)}
+.answer .bar{width:4px;align-self:stretch;background:var(--navy)}
+.answer p{margin:0 0 8px;font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;padding:0;list-style:none}
+.chips li{font:12.5px var(--mono);border:1px solid var(--rule);background:var(--paper);padding:3px 9px;border-radius:2px;color:var(--ink2)}
+
+/* context vs ledger */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:28px;border:1px solid var(--rule);background:var(--paper);border-radius:4px;overflow:hidden}
+.pair>div{padding:20px 22px}
+.pair>div+div{border-left:1px solid var(--rule)}
+.pair h3{font-size:16px;margin-bottom:10px}
+.pair ol{margin:0;padding:0;list-style:none;font-size:14.5px}
+.pair li{padding:6px 0;border-top:1px dashed var(--rule)}
+.pair li .t{font:12px var(--mono);color:var(--ink2);margin-right:8px}
+.fade1{opacity:.85}.fade2{opacity:.6}.fade3{opacity:.4}
+@media (max-width:760px){ .pair{grid-template-columns:1fr} .pair>div+div{border-left:0;border-top:1px solid var(--rule)} }
+
+/* tables */
+.scroll{overflow-x:auto}
+table.matrix{width:100%;border-collapse:collapse;margin-top:24px;background:var(--paper);font-size:14.5px}
+.matrix caption{text-align:left;color:var(--ink2);font-size:13px;padding-bottom:8px}
+.matrix th,.matrix td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule2);vertical-align:top}
+.matrix thead th{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);border-bottom:1px solid var(--rule)}
+.matrix tbody th{font-weight:600;width:20%}
+.tag{font:600 12px var(--mono);white-space:nowrap}
+.tag.ok{color:var(--pass)}.tag.half{color:var(--unk)}.tag.no{color:var(--ink2)}
+.tag.ok::before{content:"■ "}.tag.half::before{content:"◧ "}.tag.no::before{content:"□ "}
+.matrix td .tag{display:block;margin-bottom:2px}
+
+/* ledger run story */
+.ledger{margin-top:32px;background:var(--paper);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.ledger-head,.row{display:grid;grid-template-columns:56px 190px 1fr 150px}
+.ledger-head{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);background:var(--rule2)}
+.ledger-head span,.row>*{padding:12px 14px;border-right:1px solid var(--rule2)}
+.ledger-head span:last-child,.row>*:last-child{border-right:0}
+.row{border-top:1px solid var(--rule2);align-items:center}
+.row .seq{font:13px var(--mono);color:var(--ink2)}
+.row .tool{font:13px var(--mono);word-break:break-all}
+.row .what{font-size:15px}
+.row .what code{background:var(--rule2);padding:1px 5px;border-radius:2px}
+.st{font:600 12px var(--mono);display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1.5px solid currentColor;border-radius:2px;white-space:nowrap;letter-spacing:.04em}
+.st.unk{color:var(--unk);border-style:dashed}.st.fail{color:var(--fail)}.st.pass{color:var(--pass)}.st.gate{color:var(--gate)}.st.info{color:var(--ink2)}
+.row.human{background:color-mix(in srgb,var(--gate) 8%,transparent)}
+.row.human .tool{color:var(--gate)}
+@media (max-width:760px){
+  .ledger-head{display:none}
+  .row{grid-template-columns:44px 1fr;grid-template-areas:"seq tool" "seq what" "seq st"}
+  .row>*{border-right:0;padding:6px 12px}
+  .row .seq{grid-area:seq;padding-top:12px}.row .tool{grid-area:tool;padding-top:12px}.row .what{grid-area:what}.row .sc{grid-area:st;padding-bottom:12px}
+}
+/* the one orchestrated reveal: rows ink in one after another, once; --i is the row number */
+.js .ledger .row{opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s ease}
+.js .ledger.go .row{opacity:1;transform:none;transition-delay:calc(var(--i) * .26s)}
+@media (prefers-reduced-motion: reduce){ .js .ledger .row{opacity:1;transform:none;transition:none} }
+.replay{margin-top:12px;font:13px var(--mono);background:none;border:1px solid var(--rule);color:var(--ink2);padding:6px 12px;border-radius:3px;cursor:pointer}
+.replay:hover{color:var(--ink);border-color:var(--ink2)}
+
+/* fail vs pass */
+.vs{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:28px;border:1px solid var(--rule);background:var(--paper);border-radius:4px}
+.vs>div{padding:22px;border-right:1px solid var(--rule)}
+.vs>div:last-child{border-right:0}
+.vs .big{font:600 34px/1.1 var(--mono);margin:10px 0 6px}
+.vs .fail .big,.vs .forged .big{color:var(--fail)}.vs .pass .big{color:var(--pass)}
+.vs dl{margin:12px 0 0;font-size:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.vs dt{color:var(--ink2)}.vs dd{margin:0;font-family:var(--mono)}
+.gauge{margin:34px 8px 0;position:relative;height:64px;border-top:1px solid var(--ink2)}
+.gauge .band{position:absolute;top:-7px;height:14px;background:color-mix(in srgb,var(--pass) 18%,transparent);border-left:1px solid var(--pass);border-right:1px solid var(--pass)}
+.gauge .pin{position:absolute;top:-14px;width:0;height:28px;border-left:2px solid}
+.gauge .pin span{position:absolute;top:30px;left:-44px;width:88px;text-align:center;font:12px var(--mono)}
+@media (max-width:760px){ .vs{grid-template-columns:1fr} .vs>div{border-right:0;border-bottom:1px solid var(--rule)} }
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);margin-top:28px;border-top:2px solid var(--ink)}
+.pillars article{padding:20px 18px 6px 0}
+.pillars article+article{padding-left:18px;border-left:1px solid var(--rule)}
+.pillars .num{font:600 28px var(--mono);color:var(--ink2)}
+.pillars .val{margin:4px 0 0;color:var(--ink2);font-size:14.5px}
+.pillars ul{padding:0;margin:12px 0;list-style:none;font-size:14.5px}
+.pillars li{margin:0;padding:8px 0;border-top:1px dashed var(--rule)}
+.pillars li b{font-weight:600}
+.pillars li code{display:block;color:var(--navy);word-break:break-all;margin-top:2px;font-size:12px}
+.pillars li i{font-style:normal;color:var(--unk);font-size:12.5px}
+@media (max-width:1000px){ .pillars{grid-template-columns:1fr 1fr} .pillars article:nth-child(3){padding-left:0;border-left:0} }
+@media (max-width:560px){ .pillars{grid-template-columns:1fr} .pillars article{padding-left:0!important;border-left:0!important;border-bottom:1px solid var(--rule)} }
+
+/* screenshots */
+.shots{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}
+.shots figure{margin:0;background:var(--paper);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.shots figure.wide{grid-column:1/-1}
+.shots img{display:block;width:100%;height:auto}
+.shots figcaption{padding:10px 14px;font-size:13px;color:var(--ink2);border-top:1px solid var(--rule2)}
+@media (max-width:760px){ .shots{grid-template-columns:1fr} }
+
+/* AGH + model */
+.flow{display:grid;grid-template-columns:repeat(3,1fr);margin-top:26px;border:1px solid var(--rule);background:var(--paper);border-radius:4px}
+.flow>div{padding:22px;border-right:1px solid var(--rule)}
+.flow>div:last-child{border-right:0}
+.flow h3{font-size:17px;margin-bottom:8px}
+.flow .who{font:600 12px var(--mono);color:var(--ink2);letter-spacing:.08em}
+.flow ul{margin:8px 0 0;padding-left:1.1em;font-size:15px}
+@media (max-width:860px){ .flow{grid-template-columns:1fr} .flow>div{border-right:0;border-bottom:1px solid var(--rule)} }
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:18px;border:1px solid var(--rule);border-radius:4px;background:var(--paper)}
+.doors>div{padding:16px 20px;font-size:14.5px}
+.doors>div+div{border-left:1px solid var(--rule)}
+.doors b{font-family:var(--serif)}
+@media (max-width:760px){ .doors{grid-template-columns:1fr} .doors>div+div{border-left:0;border-top:1px solid var(--rule)} }
+
+/* tests / start */
+.cases{display:grid;grid-template-columns:repeat(3,1fr);margin-top:24px;border:1px solid var(--rule);background:var(--paper);border-radius:4px}
+.cases>div{padding:18px 20px;border-right:1px solid var(--rule);font-size:14.5px}
+.cases>div:last-child{border-right:0}
+.cases h3{font-size:17px;margin-bottom:6px}
+.cases ul{margin:6px 0 0;padding-left:1.1em}
+@media (max-width:860px){ .cases{grid-template-columns:1fr} .cases>div{border-right:0;border-bottom:1px solid var(--rule)} }
+pre.code{margin:20px 0 0;padding:16px;background:var(--paper);border:1px solid var(--rule);border-radius:4px;overflow-x:auto;font:13px/1.6 var(--mono)}
+.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.links a,.links span{display:inline-block;padding:10px 16px;border:1.5px solid var(--ink);color:var(--ink);text-decoration:none;font-weight:600;border-radius:3px}
+.links a:hover{background:var(--ink);color:var(--bg)}
+.links span.todo{border-style:dashed;color:var(--ink2);border-color:var(--ink2);font-weight:400}
+footer{padding:36px 0 56px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="top"><div class="wrap">
+  <div class="mark"><b>PK</b><span>Project Kernel</span></div>
+  <nav class="top" aria-label="页内导航">
+    <a href="#pain">痛点</a><a href="#run">一次运行</a><a href="#pillars">四个支柱</a><a href="#agh">AGH 与模型</a><a href="#tests">测试</a><a href="#status">现状</a><a href="#links">链接</a>
+  </nav>
+</div></header>
+
+<main id="main">
+<section class="hero" aria-labelledby="h-problem">
+  <div class="wrap">
+    <p class="kicker">科研 Agent 与 Harness 工程 · AGH 插件</p>
+    <h1 id="h-problem">科研 agent 跑得越久，<br><em>越不可信</em>。</h1>
+    <div class="walls">
+      <div><span class="n">01</span><h3>注意力会丢</h3><p>对话越长，早期事实越容易被忽略。第 40 轮时，那次没通过验收的网格搜索可能已被忘掉。</p></div>
+      <div><span class="n">02</span><h3>记忆会断</h3><p>关掉会话，"试过什么、结果如何、为什么选它"归零，只能重跑或重读聊天记录。</p></div>
+      <div><span class="n">03</span><h3>错误会重复</h3><p>卡死的求解器被当成"没跑"再启动；超时的写入被再写一次，外部效果被翻倍。</p></div>
+      <div><span class="n">04</span><h3>过程是黑箱</h3><p>模型说"α=0.9，已验证"，没人能核对；谁批准了什么，没有记录。</p></div>
+      <div><span class="n">05</span><h3>记录是散的</h3><p>每个对话各记各的。回头看项目结构、技术债、模型哪里理解错了，只能翻聊天记录。</p></div>
+    </div>
+    <div class="answer"><span class="bar" aria-hidden="true"></span>
+      <div>
+        <p>更大的模型能缓解一部分，但"事实放在哪里、由谁裁决"不是模型能力问题。我们<strong>绕开</strong>模型的局限，不声称<strong>修好</strong>它，也不碰 Transformer。</p>
+        <p>做法：把记忆和过程搬出上下文，存进一份只追加的账本。模型调用工具去查，结果由独立程序重算，交付由人从模型够不到的入口放行。内核不规划，只记录、校验、拦截。</p>
+      </div>
+    </div>
+    <ul class="chips" aria-label="当前状态">
+      <li>accepted_g2 · release_approved=false</li><li>证据模式 test</li><li>隔离 directory_only（非 OS 沙盒）</li><li>演示数据为合成数据</li><li>自有 JSON-RPC，非 MCP</li><li>仅在 AGH 上验证</li>
+    </ul>
+  </div>
+</section>
+
+<section id="pain" aria-labelledby="h-pain">
+  <div class="wrap">
+    <p class="kicker">问题价值</p>
+    <h2 id="h-pain">同一个问题，两种做法</h2>
+    <p class="lead">下面是示意，不是测量。右边每一步都对应仓库里能跑的测试。</p>
+    <div class="pair">
+      <div>
+        <h3>靠上下文记忆</h3>
+        <ol>
+          <li class="fade1"><span class="t">第 3 轮</span>网格搜索 α=0.35，未通过验收。</li>
+          <li class="fade2"><span class="t">第 12 轮</span>换成黄金分割，通过。</li>
+          <li class="fade3"><span class="t">第 40 轮</span>上下文里早期的失败细节已远，模型可能不再提起；新会话里则完全没有。</li>
+        </ol>
+      </div>
+      <div>
+        <h3>查账本</h3>
+        <ol>
+          <li><span class="t">任何时候</span><code>pk_compare</code>：s1 <code>passed: false</code>、s3 <code>unknown</code> 仍在列表里。</li>
+          <li><span class="t">换会话后</span><code>pk_state</code>、<code>pk_events</code> 读到同一份事实。</li>
+          <li><span class="t">回看历史</span><code>as_of_seq</code> 读水位，落后时标 <code>incomplete</code>，重启后结果不变。</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="scroll"><table class="matrix">
+      <caption>痛点 → 机制 → 证据 → 状态（■ 已实现并测试　◧ 已实现未接通或有限制　□ 设计 / 方向，没有机制）</caption>
+      <thead><tr><th scope="col">痛点</th><th scope="col">机制</th><th scope="col">证据</th><th scope="col">状态</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">执行记录不清晰，是黑箱</th><td>每个命令在一个事务里写入不可变 revision、事件、审计和回执</td><td class="mono">data/store/uow.py · showcase A</td><td><span class="tag ok">已实现并测试</span></td></tr>
+        <tr><th scope="row">长对话注意力丢失，跨会话失忆</th><td>模型用工具读账本；<code>as_of_seq</code> 回看历史</td><td class="mono">adapters/agh-plugin/index.mjs · showcase A</td><td><span class="tag ok">读账本：已实现并测试</span><span class="tag no">token 节省：未测量</span></td></tr>
+        <tr><th scope="row">卡死的任务被重跑</th><td>超时结算为 <code>unknown</code> 并保留；幂等回执</td><td class="mono">science_executor.py · showcase B、D</td><td><span class="tag ok">已实现并测试</span></td></tr>
+        <tr><th scope="row">模型自报的结果不可信</th><td>独立闭式重算，读数须与固定种子数据一致</td><td class="mono">science_checker.py · 伪造 α=0.9 被拒</td><td><span class="tag ok">已实现并测试</span></td></tr>
+        <tr><th scope="row">没有探索和比较方案</th><td>多策略独立 attempt；并列比较；显式选择带理由</td><td class="mono">p14 · <code>failures_retained</code></td><td><span class="tag ok">已实现并测试</span></td></tr>
+        <tr><th scope="row">缺少公司式治理</th><td>审批只在人工入口；批准绑定快照摘要；规则只能收紧</td><td class="mono">interfaces/rpc/policy.py · showcase C、E</td><td><span class="tag ok">审批：已实现并测试</span><span class="tag half">隔离 directory_only，非沙盒</span></td></tr>
+        <tr><th scope="row">外部效果是否发生不确定</th><td>交付状态机；<code>reconcile</code> 只观察，不重放</td><td class="mono">application/delivery/service.py · showcase F</td><td><span class="tag ok">已实现并测试</span></td></tr>
+        <tr><th scope="row">模型不了解环境，重复造轮子</th><td><code>environment.report</code> 分五类事实</td><td class="mono">environment_service.py · showcase G</td><td><span class="tag ok">已实现并测试</span><span class="tag no">减少重复造轮子：未测量</span></td></tr>
+        <tr><th scope="row">结构混乱，技术债看不见</th><td>23 节点模块树 + 追溯 / 覆盖 / 时间线视图</td><td class="mono">docs/modules/registry.json · client/src/views/</td><td><span class="tag ok">已实现并测试（文档声明）</span><span class="tag no">耦合度量：设计</span></td></tr>
+        <tr><th scope="row">需求不清，不知用户能力边界</th><td>需求与验收项精确版本化，覆盖可计算</td><td class="mono">application/design/</td><td><span class="tag ok">需求与覆盖</span><span class="tag no">用户能力边界：仅文档</span></td></tr>
+        <tr><th scope="row">数据留存供后续调优</th><td>KnowledgeService、corpus</td><td class="mono">tests/p08_knowledge · tests/p09_corpus</td><td><span class="tag half">未接入 RPC / 默认关闭</span></td></tr>
+        <tr><th scope="row">记录能在不同 agent 框架互通</th><td>版本化 stdio JSON-RPC + 冻结 Schema</td><td class="mono">contracts/v1 · tests/p10_protocol</td><td><span class="tag ok">协议已测试</span><span class="tag no">互通：设计目标，只验证过 AGH</span></td></tr>
+        <tr><th scope="row">版本对不上对话；人机沟通随意</th><td><code>conversation_refs</code> 预留；表单化交换</td><td class="mono">registry.json（全空）· agent-exchange-and-live-forms.md</td><td><span class="tag no">方向，未实现</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="run" aria-labelledby="h-run">
+  <div class="wrap">
+    <p class="kicker">一次运行 · 一维热传导反问题</p>
+    <h2 id="h-run">账本里的一次真实反演</h2>
+    <p class="lead">反演热扩散系数 α：真值 0.37，固定种子合成数据，相对容差 5%。三种策略，一个卡死，一个失败，一个通过。每一行对应内核里的一次提交；顺序和数值取自 <span class="mono">tests/p14_science_demo</span> 与 <span class="mono">adapters/agh-plugin/test/tools.test.mjs</span>。</p>
+    <div class="ledger" id="ledger" role="table" aria-label="运行记录">
+      <div class="ledger-head" role="row"><span role="columnheader">#</span><span role="columnheader">调用</span><span role="columnheader">内核记录了什么</span><span role="columnheader">状态</span></div>
+      <div class="row" style="--i:0" role="row"><span class="seq" role="cell">01</span><span class="tool" role="cell">pk_state</span><span class="what" role="cell">模型先读账本：任务、策略 s1/s2/s3、环境检查，以及推荐步骤 <code>guide</code>（里面写着"你不能批准"）。</span><span class="sc" role="cell"><span class="st info">read</span></span></div>
+      <div class="row" style="--i:1" role="row"><span class="seq" role="cell">02</span><span class="tool" role="cell">pk_run_strategy s3</span><span class="what" role="cell">求解器卡死，轮询超时。结算为 <code>unknown</code> 并保留；查询、比较、同键重放都不再启动它。</span><span class="sc" role="cell"><span class="st unk">? unknown</span></span></div>
+      <div class="row" style="--i:2" role="row"><span class="seq" role="cell">03</span><span class="tool" role="cell">pk_run_strategy s1</span><span class="what" role="cell">网格搜索（步长 0.05）完成，拟合 α=0.35000。</span><span class="sc" role="cell"><span class="st info">completed</span></span></div>
+      <div class="row" style="--i:3" role="row"><span class="seq" role="cell">04</span><span class="tool" role="cell">pk_verify s1</span><span class="what" role="cell">checker 用闭式解对 9 个读数取中位数重算，得 0.3786；0.3500 与它相差 7.55%，超出 5%。失败被记录，不删除。</span><span class="sc" role="cell"><span class="st fail">× fail</span></span></div>
+      <div class="row" style="--i:4" role="row"><span class="seq" role="cell">05</span><span class="tool" role="cell">pk_run_strategy s2</span><span class="what" role="cell">黄金分割 30 次迭代完成，拟合 α=0.37286。</span><span class="sc" role="cell"><span class="st info">completed</span></span></div>
+      <div class="row" style="--i:5" role="row"><span class="seq" role="cell">06</span><span class="tool" role="cell">pk_verify s2</span><span class="what" role="cell">独立重算通过：与闭式参考相差 1.51%，距真值 0.77%；读数与固定种子数据逐项一致（≤1e-12）。</span><span class="sc" role="cell"><span class="st pass">✓ pass</span></span></div>
+      <div class="row" style="--i:6" role="row"><span class="seq" role="cell">07</span><span class="tool" role="cell">pk_compare</span><span class="what" role="cell">三个尝试并列；<code>failures_retained</code> 含 s3；缺失的用量记为未知，不是 0。</span><span class="sc" role="cell"><span class="st info">compared</span></span></div>
+      <div class="row" style="--i:7" role="row"><span class="seq" role="cell">08</span><span class="tool" role="cell">pk_select s2</span><span class="what" role="cell">模型写下选择理由，连同比较对象一起存档。</span><span class="sc" role="cell"><span class="st info">selected</span></span></div>
+      <div class="row" style="--i:8" role="row"><span class="seq" role="cell">09</span><span class="tool" role="cell">pk_request_delivery</span><span class="what" role="cell">冻结交付快照，生成 pending 审批，绑定 <code>snapshot_digest</code>。模型到此停下。</span><span class="sc" role="cell"><span class="st gate">◆ pending</span></span></div>
+      <div class="row human" style="--i:9" role="row"><span class="seq" role="cell">10</span><span class="tool" role="cell">人 · 终端</span><span class="what" role="cell"><code>tools\pk-human-approve.ps1</code>：人核对摘要，亲手输入前 8 位。机器通道发同一命令，返回 <code>UNSUPPORTED_COMMAND</code>。</span><span class="sc" role="cell"><span class="st gate">◆ approved</span></span></div>
+      <div class="row" style="--i:10" role="row"><span class="seq" role="cell">11</span><span class="tool" role="cell">pk_apply_delivery</span><span class="what" role="cell">交付执行；之后的 <code>reconcile</code> 只观察，不重放写入。</span><span class="sc" role="cell"><span class="st pass">✓ applied</span></span></div>
+      <div class="row" style="--i:11" role="row"><span class="seq" role="cell">12</span><span class="tool" role="cell">pk_events</span><span class="what" role="cell">按提交序号核对整条链的事件。</span><span class="sc" role="cell"><span class="st info">read</span></span></div>
+    </div>
+    <button class="replay" type="button" id="replay" hidden>重放这段记录</button>
+    <p class="note">上表是推荐顺序，也是测试走的顺序。真实模型的顺序由它自己决定：<span class="mono">evidence/rehearsal/</span> 里的预演（AGH 之外，DeepSeek 与 Agnes 各两次）中，模型都是先跑完三个策略，再逐个校验。</p>
+
+    <h3 style="margin-top:56px">失败与通过，同一把尺</h3>
+    <div class="vs">
+      <div class="fail"><span class="st fail">× s1 网格搜索</span><div class="big">0.3500</div><dl><dt>闭式参考</dt><dd>0.3786</dd><dt>相差</dt><dd>7.55%</dd><dt>结论</dt><dd>超出 5%，失败，保留</dd></dl></div>
+      <div class="pass"><span class="st pass">✓ s2 黄金分割</span><div class="big">0.37286</div><dl><dt>闭式参考</dt><dd>0.3786</dd><dt>相差</dt><dd>1.51%</dd><dt>距真值</dt><dd>0.77%，通过</dd></dl></div>
+      <div class="forged"><span class="st fail">× 伪造候选</span><div class="big">0.9</div><dl><dt>做法</dt><dd>保留真实读数，只改 α</dd><dt>结论</dt><dd>重算不一致，拒绝</dd></dl></div>
+    </div>
+    <div class="gauge" role="img" aria-label="数轴：真值 0.37 两侧 5% 为通过带；s1 0.3500 在带外，s2 0.37286 在带内">
+      <div class="band" style="left:calc((0.3515 - 0.33)/0.07*100%);width:calc(0.037/0.07*100%)"></div>
+      <div class="pin" style="left:calc((0.35 - 0.33)/0.07*100%);color:var(--fail)"><span>s1 0.3500</span></div>
+      <div class="pin" style="left:calc((0.37 - 0.33)/0.07*100%);color:var(--ink2)"><span>真值 0.37</span></div>
+      <div class="pin" style="left:calc((0.37286 - 0.33)/0.07*100%);color:var(--pass);top:-22px;height:36px"><span style="top:-20px">s2 0.37286</span></div>
+    </div>
+    <p class="note">通过带按真值 ±5% 示意（0.3515–0.3885）。checker 同时要求拟合值与闭式参考 0.3786 的相对差不超过 5%，两项都满足才算通过。数值来自直接运行 <span class="mono">heat_worker.py</span> 与 <span class="mono">science_checker.judge</span>。</p>
+  </div>
+</section>
+
+<section id="pillars" aria-labelledby="h-pillars">
+  <div class="wrap">
+    <p class="kicker">设计</p>
+    <h2 id="h-pillars">四个支柱，每一项都有代码位置</h2>
+    <div class="pillars">
+      <article><div class="num">01</div><h3>记忆与记录</h3><p class="val">事实在账本里，不在上下文里。</p>
+        <ul>
+          <li><b>不可变账本</b>：revision、事件、回执同事务提交<code>data/store/uow.py</code></li>
+          <li><b>读水位</b>：回看任意提交序号，落后如实标注<code>data/queries/watermarks.py</code></li>
+          <li><b>unknown 保留不重跑</b><code>science_executor.py · application/attempt/service.py</code></li>
+          <li><b>幂等回执</b>：同键重放返回原回执<code>data/store/uow.py</code></li>
+          <li><b>失败不删，缺失不当零</b><code>data/queries/service.py</code></li>
+          <li><b>备份与恢复</b> <i>（生产恢复未启用）</i><code>evidence/backup.py</code></li>
+        </ul></article>
+      <article><div class="num">02</div><h3>信任与治理</h3><p class="val">模型说了不算。</p>
+        <ul>
+          <li><b>独立复算</b>：闭式解，不信自报<code>tests/p14_science_demo/science_checker.py</code></li>
+          <li><b>人工专属命令</b>：机器通道得 UNSUPPORTED_COMMAND<code>interfaces/rpc/policy.py</code></li>
+          <li><b>快照绑定审批</b>，候选变化后旧批准作废<code>application/delivery/service.py</code></li>
+          <li><b>规则只能收紧</b>：只有 deny，allow 被拒<code>application/design/service.py</code></li>
+          <li><b>只观察的对账</b><code>domain/delivery/effect.py</code></li>
+          <li><b>终端人工确认</b> <i>（交互证明，不是安全边界）</i><code>tools/pk_human_approve.py</code></li>
+          <li><b>目录隔离</b> <i>（directory_only，不是 OS 沙盒）</i><code>science_executor.py</code></li>
+        </ul></article>
+      <article><div class="num">03</div><h3>结构与可视</h3><p class="val">给人审阅结构和技术债。</p>
+        <ul>
+          <li><b>23 节点模块树</b>：单根、无环<code>docs/modules/registry.json</code></li>
+          <li><b>只读查询</b>：追溯、覆盖、时间线、环境<code>data/queries/</code></li>
+          <li><b>14 视图面板</b>：总览 设计 工作区 结构 需求 执行 审批 环境 版本 事件 错误 文档 Skill 知识<code>adapters/agh-plugin/client/src/views/</code></li>
+          <li><b>来源分四类标注</b>：实时 / 文档声明 / 派生 / 设计预览</li>
+          <li><b>设计视图</b>：痛点 → 机制 → 位置 → 状态</li>
+        </ul></article>
+      <article><div class="num">04</div><h3>集成</h3><p class="val">挂在宿主旁边，不接管规划。</p>
+        <ul>
+          <li><b>版本化 JSON-RPC</b> + 冻结 Schema<code>contracts/v1 · interfaces/rpc/</code></li>
+          <li><b>两个入口</b>：机器通道与人工入口权限不同<code>bootstrap.py</code></li>
+          <li><b>AGH 插件</b>：8 个 pk_* 工具、13 个只读服务<code>adapters/agh-plugin/index.mjs</code></li>
+          <li><b>短参数工具</b>：只传 strategy_id 与 reason<code>index.mjs · WORKFLOW_GUIDE</code></li>
+          <li><b>平台范围</b>：只在 AGH 上验证，自有协议非 MCP</li>
+        </ul></article>
+    </div>
+
+    <div class="shots" id="shots" aria-label="面板截图">
+      <figure class="wide"><picture><source srcset="assets/panel-execution-dark.png" media="(prefers-color-scheme: dark)"><img src="assets/panel-execution.png" alt="独立面板渲染，真实内核数据，非 AGH 内截图：执行视图，s3 未知不重跑，s1 失败保留，s2 校验通过并显示选择理由" loading="lazy" width="1920" height="1080"></picture><figcaption>执行视图：三个尝试并列，未知、失败、通过各自保留。（独立面板渲染，非 AGH 内截图）</figcaption></figure>
+      <figure><picture><source srcset="assets/panel-design-dark.png" media="(prefers-color-scheme: dark)"><img src="assets/panel-design.png" alt="独立面板渲染，真实内核数据，非 AGH 内截图：设计视图，痛点到机制到代码位置到状态" loading="lazy" width="1920" height="1080"></picture><figcaption>设计视图：每个痛点对应机制、代码与状态。（独立渲染）</figcaption></figure>
+      <figure><picture><source srcset="assets/panel-permissions-dark.png" media="(prefers-color-scheme: dark)"><img src="assets/panel-permissions.png" alt="独立面板渲染，真实内核数据，非 AGH 内截图：审批视图，待人工批准的交付" loading="lazy" width="1920" height="1080"></picture><figcaption>审批：pending 与快照摘要。（独立渲染）</figcaption></figure>
+      <figure><picture><source srcset="assets/panel-events-dark.png" media="(prefers-color-scheme: dark)"><img src="assets/panel-events.png" alt="独立面板渲染，真实内核数据，非 AGH 内截图：事件视图，按序的提交事件" loading="lazy" width="1920" height="1080"></picture><figcaption>事件：按提交序号排列。（独立渲染）</figcaption></figure>
+      <figure><picture><source srcset="assets/panel-structure-dark.png" media="(prefers-color-scheme: dark)"><img src="assets/panel-structure.png" alt="独立面板渲染，真实内核数据，非 AGH 内截图：结构视图，23 节点模块树" loading="lazy" width="1920" height="1080"></picture><figcaption>结构：模块、需求与实现状态。（独立渲染）</figcaption></figure>
+    </div>
+    <p class="note">以上截图是独立渲染的面板，数据来自真实内核演示宿主（<span class="mono">tests/p14_science_demo</span>），不是 AGH 内截图。下面是官方 AGH 构建内的截图（Linux 沙盒，自动化浏览器驱动，模型与工具调用为真实运行）。</p>
+    <div class="shots" id="agh-shots" aria-label="AGH 内面板截图" hidden>
+      <figure><img data-agh="assets/agh-overview.png" alt="官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的 Project Kernel 面板：总览" width="1920" height="1080" loading="lazy"><figcaption>AGH 内：总览（DeepSeek deepseek-flash 运行结束后）。</figcaption></figure>
+      <figure><img data-agh="assets/agh-design.png" alt="官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的 Project Kernel 面板：设计" width="1920" height="1080" loading="lazy"><figcaption>AGH 内：设计。</figcaption></figure>
+      <figure><img data-agh="assets/agh-execution.png" alt="官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的 Project Kernel 面板：执行" width="1920" height="1080" loading="lazy"><figcaption>AGH 内：执行。</figcaption></figure>
+      <figure><img data-agh="assets/agh-approvals.png" alt="官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的 Project Kernel 面板：审批" width="1920" height="1080" loading="lazy"><figcaption>AGH 内：审批。</figcaption></figure>
+      <figure><img data-agh="assets/agh-structure.png" alt="官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的 Project Kernel 面板：结构" width="1920" height="1080" loading="lazy"><figcaption>AGH 内：结构。</figcaption></figure>
+      <figure><img data-agh="assets/agh-events.png" alt="官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的 Project Kernel 面板：事件" width="1920" height="1080" loading="lazy"><figcaption>AGH 内：事件。</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="video" aria-labelledby="h-video"><div class="wrap"><h2 id="h-video">演示视频（3 分 12 秒）</h2>
+<video controls preload="metadata" width="100%" style="max-width:1100px;border-radius:12px" src="assets/demo.mp4">你的浏览器不能播放视频，<a href="assets/demo.mp4">点此下载</a>。</video>
+<p class="note">项目背景、问题与机制对应、架构与流程，以及官方 AGH 构建（Linux 沙盒，自动化浏览器驱动）内的真实模型运行。</p></div></section>
+
+<section id="agh" aria-labelledby="h-agh">
+  <div class="wrap">
+    <p class="kicker">执行闭环</p>
+    <h2 id="h-agh">AGH 与模型怎样驱动它</h2>
+    <div class="flow">
+      <div><span class="who">AGENT 运行时</span><h3>Agnes Harness</h3><ul><li>加载插件，把 <span class="mono">pk_*</span> 工具交给模型</li><li>执行工具调用，把结果送回模型</li><li>渲染 Project Kernel 面板</li><li>规划、能力调用、反馈处理三步都在这里</li></ul></div>
+      <div><span class="who">规划者</span><h3>AGH 里的模型</h3><ul>
+        <li>DeepSeek（队长选定）。API 报告的 id：<span class="mono">deepseek-flash</span>、<span class="mono">deepseek-v4-pro</span>；版本标签"DeepSeek V4.1 Flash" API 未确认，<strong>待队长确认</strong></li>
+        <li>Agnes 3.0 Flash（<span class="mono">agnes-3.0-flash</span>，provider <span class="mono">agnes-ai</span>）：已用 API 验证能返回工具调用，AGH 之外的预演有 2 次记录；是否出现在 AGH 运行记录里，<strong>以 <span class="mono">evidence/agh-run/</span> 为准</strong></li>
+        <li>OpenAI 兼容 chat completions + tool calling</li></ul></div>
+      <div><span class="who">记录 · 校验 · 拦截</span><h3>Project Kernel</h3><ul><li>不规划，不替模型决定下一步</li><li>插件里没有审批工具</li><li>人工批准走独立终端入口</li><li>内核本身不调用任何模型</li></ul></div>
+    </div>
+    <div class="doors">
+      <div><b>第一道门：AGH 的工具权限确认。</b>模型要调用 <span class="mono">pk_request_delivery</span> 时，AGH 先请人确认这次工具调用（沙盒观察到约 60 秒不处理会超时，模型会如实报告"没有执行"）。</div>
+      <div><b>第二道门：内核的人工审批。</b>交付请求产生 pending 审批后，必须由人在终端输入快照摘要前 8 位；这是交互确认，不是安全边界。</div>
+    </div>
+    <p class="note">工具：pk_state · pk_run_strategy · pk_verify · pk_compare · pk_select · pk_request_delivery · pk_apply_delivery · pk_events。密钥只在 AGH 设置页填写，不进任何文件。AGH 之外已有 4 次预演（<span class="mono">deepseek-flash</span> 与 <span class="mono">agnes-3.0-flash</span> 各 2 次），经聊天补全 API 驱动同一组工具和同一个内核，每次 9 次接口调用、总 token 约 2.9 万至 3.1 万，都选 s2、α=0.37286、交付 applied（<span class="mono">evidence/rehearsal/summary.md</span>）；其中人工批准一步由操作员脚本完成，不是模型。预演不是 AGH 运行。</p>
+  </div>
+</section>
+
+<section id="tests" aria-labelledby="h-tests">
+  <div class="wrap">
+    <p class="kicker">验证与异常处理</p>
+    <h2 id="h-tests">三类测试样例</h2>
+    <div class="cases">
+      <div><h3>正常</h3><ul><li>s2 黄金分割通过</li><li>s1 粗网格没达到容差</li><li>选择 s2 并写理由</li><li>人工批准后交付 <code>applied</code></li></ul></div>
+      <div><h3>边界</h3><ul><li>伪造 α=0.9 被拒</li><li>机器通道批准：<code>UNSUPPORTED_COMMAND</code></li><li>批准后候选变化：旧批准 <code>superseded</code></li><li><code>allow</code> 规则：<code>INVALID_INPUT</code></li><li>跨项目查询：<code>SCOPE_MISMATCH</code></li></ul></div>
+      <div><h3>失败</h3><ul><li>s3 卡死：<code>unknown</code> 保留，启动次数不变</li><li>同键重放返回原回执</li><li><code>reconcile</code> 不重放写入</li><li>关库重启，水位读取结果不变</li></ul></div>
+    </div>
+<pre class="code"><code>python -m pytest -q tests/p14_science_demo tests/p15_innovation_showcase   # 2026-10-15 实测：7 passed
+python -m pytest -q tests                                                  # 2026-10-15 实测：627 passed
+node --test test/tools.test.mjs test/services.test.mjs test/polling.test.mjs   # 在 adapters/agh-plugin 下：16 passed</code></pre>
+    <p class="note">断言位置与行号、实测输出见 <a href="https://github.com/LGZX2233/xiaobai2233/blob/main/docs/submission/测试样例.md">测试样例</a>。面板的 node 测试正在随界面改版，以提交前重跑为准。</p>
+  </div>
+</section>
+
+<section id="status" aria-labelledby="h-status">
+  <div class="wrap">
+    <p class="kicker">诚实边界</p>
+    <h2 id="h-status">做到了什么，没做到什么</h2>
+    <p class="lead">内核历史状态 <span class="mono">accepted_g2</span>，<span class="mono">release_approved=false</span>；证据模式 <span class="mono">test</span>；演示数据为合成数据。这不是已发布产品。</p>
+    <div class="scroll"><table class="matrix">
+      <caption>■ 已实现并测试　◧ 已实现未接通或有限制　□ 设计 / 未实现</caption>
+      <thead><tr><th scope="col">能力</th><th scope="col">状态</th><th scope="col">依据</th></tr></thead>
+      <tbody>
+        <tr><td>不可变账本、读水位、重启后可读</td><td><span class="tag ok">已实现并测试</span></td><td class="mono">showcase（A）</td></tr>
+        <tr><td>多策略、比较、显式选择；失败与未知保留</td><td><span class="tag ok">已实现并测试</span></td><td class="mono">tests/p14_science_demo</td></tr>
+        <tr><td>unknown 不重跑、幂等回执</td><td><span class="tag ok">已实现并测试</span></td><td class="mono">showcase（B、D）</td></tr>
+        <tr><td>独立重算验收、伪造拒绝</td><td><span class="tag ok">已实现并测试</span></td><td class="mono">science_checker.py</td></tr>
+        <tr><td>人工专属审批、快照绑定、批准作废</td><td><span class="tag ok">已实现并测试</span></td><td class="mono">policy.py · showcase（C、E）</td></tr>
+        <tr><td>交付状态与只观察的对账</td><td><span class="tag ok">已实现并测试</span></td><td class="mono">showcase（F）</td></tr>
+        <tr><td>AGH 插件 8 个工具、13 个只读服务、14 视图面板</td><td><span class="tag ok">工具与服务已测试</span></td><td class="mono">adapters/agh-plugin/test</td></tr>
+        <tr><td>Python 全量测试</td><td><span class="tag ok">627 / 627 通过</span></td><td>2026-10-15 沙盒实测</td></tr>
+        <tr><td>KnowledgeService（上下文预算、提升）</td><td><span class="tag half">未装配进 RPC</span></td><td class="mono">tests/p08_knowledge</td></tr>
+        <tr><td>corpus 数据集与导出</td><td><span class="tag half">默认关闭</span></td><td class="mono">enable_corpus=false</td></tr>
+        <tr><td>两项项目技能</td><td><span class="tag half">not_validated</span></td><td class="mono">docs/records/skills/registry.json</td></tr>
+        <tr><td>执行隔离</td><td><span class="tag half">directory_only</span></td><td>不是操作系统沙盒</td></tr>
+        <tr><td>模型间交换、表单化人机交互、版本↔对话关联</td><td><span class="tag no">设计 / 方向</span></td><td><span class="mono">conversation_refs</span> 全为空</td></tr>
+        <tr><td>跨 agent 框架、MCP 传输</td><td><span class="tag no">未实现</span></td><td>只在 AGH 上验证</td></tr>
+        <tr><td>token / 成本节省的量化</td><td><span class="tag no">未测量</span></td><td>路线图</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="links" aria-labelledby="h-links" style="border-bottom:0">
+  <div class="wrap">
+    <h2 id="h-links">看代码，看视频，自己跑</h2>
+    <div class="links">
+      <a href="https://github.com/LGZX2233/xiaobai2233">代码仓库</a>
+      <a id="video-link" href="{{VIDEO_URL}}">演示视频</a>
+      <a href="https://github.com/LGZX2233/xiaobai2233/blob/main/docs/submission/测试样例.md">测试样例</a>
+      <a href="https://github.com/LGZX2233/xiaobai2233/blob/main/docs/submission/运行证据.md">运行证据</a>
+    </div>
+<pre class="code"><code># Linux / macOS
+python3.12 -m venv .venv &amp;&amp; . .venv/bin/activate
+pip install -e ".[test]"
+python -m pytest -q tests/p14_science_demo tests/p15_innovation_showcase
+
+# Windows PowerShell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[test]"
+.\.venv\Scripts\python.exe -m pytest -q tests\p14_science_demo tests\p15_innovation_showcase</code></pre>
+    <p class="note">在 AGH 里跑：<span class="mono">tools\install-agh-plugin.ps1</span>、<span class="mono">tools\start-agh.ps1</span>、<span class="mono">tools\pk-human-approve.ps1</span>，步骤见仓库 README。</p>
+  </div>
+</section>
+</main>
+<footer><div class="wrap">Project Kernel · AGH 插件 0.3.1 · 证据模式 test · 合成演示数据 · 本页离线可用，加载时无外部请求</div></footer>
+
+<script>
+(function(){
+  var doc=document.documentElement;
+
+  /* a placeholder video link stays inert until a real URL replaces {{VIDEO_URL}} */
+  var video=document.getElementById('video-link');
+  if(video && (video.getAttribute('href')||'').indexOf('{{')===0){
+    var todo=document.createElement('span'); todo.className='todo'; todo.textContent='演示视频（链接待填）';
+    video.parentNode.replaceChild(todo,video);
+  }
+
+  /* AGH screenshots appear only if the files exist in docs/assets */
+  var box=document.getElementById('agh-shots');
+  if(box){
+    var figs=[].slice.call(box.querySelectorAll('figure')), shown=0;
+    figs.forEach(function(fig){
+      var img=fig.querySelector('img');
+      img.addEventListener('load',function(){ shown+=1; box.hidden=false; });
+      img.addEventListener('error',function(){ fig.parentNode&&fig.parentNode.removeChild(fig); });
+      img.src=img.getAttribute('data-agh');
+    });
+  }
+
+  /* one orchestrated reveal of the run story; static when motion is reduced */
+  var ledger=document.getElementById('ledger'), btn=document.getElementById('replay');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce||!('IntersectionObserver' in window)) return;
+  doc.classList.add('js');
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ ledger.classList.add('go'); btn.hidden=false; io.disconnect(); } });
+  },{threshold:.2});
+  io.observe(ledger);
+  btn.addEventListener('click',function(){
+    ledger.classList.remove('go'); void ledger.offsetWidth;
+    requestAnimationFrame(function(){ ledger.classList.add('go'); });
+  });
+})();
+</script>
+</body>
+</html>

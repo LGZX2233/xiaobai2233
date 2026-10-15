@@ -1,0 +1,1872 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/command-payloads.schema.json",
+  "title": "Command-specific payload schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "project.provision"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "display_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "canonical_root": {
+              "type": "string",
+              "minLength": 1
+            },
+            "host_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "workspace_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": [
+            "display_name",
+            "canonical_root",
+            "host_id"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "project.reconcile"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provision_request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": [
+            "provision_request_id"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "project.bind"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "host_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "binding_kind": {
+              "type": "string",
+              "enum": [
+                "root",
+                "workspace",
+                "session"
+              ]
+            },
+            "canonical_key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expected_binding_version": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "project_id",
+            "host_id",
+            "binding_kind",
+            "canonical_key",
+            "expected_binding_version"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "task.create"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "goal": {
+              "type": "string",
+              "minLength": 1
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "production",
+                "test"
+              ]
+            }
+          },
+          "required": [
+            "title",
+            "goal",
+            "requirement_refs",
+            "mode"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "requirement.save"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "parent_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "negative_requirements": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "title",
+            "source_text",
+            "assumptions",
+            "negative_requirements",
+            "source_refs"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "requirement.confirm"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "draft_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "acceptance_items": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/acceptance_item"
+              },
+              "minItems": 1
+            },
+            "confirmed_assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "draft_ref",
+            "acceptance_items",
+            "confirmed_assumptions"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "design.save"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "parent_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/strategy"
+              },
+              "minItems": 1
+            },
+            "selected_strategy_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "interface_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "requirement_refs",
+            "options",
+            "rationale",
+            "interface_refs"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "design.confirm"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "draft_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "decision_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "draft_ref",
+            "decision_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "dispatch.draft"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "design_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "strategies": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/strategy"
+              },
+              "minItems": 1
+            },
+            "scope": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/scope"
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            },
+            "acceptance_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            },
+            "rule_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            },
+            "environment_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "dependency_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            },
+            "budget_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "base_content_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "production",
+                "test"
+              ]
+            }
+          },
+          "required": [
+            "task_ref",
+            "design_ref",
+            "strategies",
+            "scope",
+            "requirement_refs",
+            "acceptance_refs",
+            "rule_refs",
+            "environment_ref",
+            "dependency_refs",
+            "budget_ref",
+            "base_content_digest",
+            "mode"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "dispatch.confirm"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "draft_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "expected_baseline_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "draft_ref",
+            "expected_baseline_digest"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "dispatch.revoke"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "packet_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "packet_ref",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "rules.save"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ruleset_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "parent_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "data_rules": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/policy_rule"
+              },
+              "minItems": 0
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "data_rules",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "rules.publish"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "draft_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "impact_preview_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "draft_ref",
+            "impact_preview_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "environment.probe"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "execution_root_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            },
+            "recipe_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "task_ref",
+            "execution_root_ref",
+            "requirement_refs",
+            "recipe_refs"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "attempt.start"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "packet_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "strategy_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "execution_root_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "packet_ref",
+            "strategy_id",
+            "execution_root_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "attempt.cancel"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attempt_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "attempt_ref",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "attempt.settle"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "execution_handle_id": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "source_result_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "execution_handle_id",
+            "source_result_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "attempt.select"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attempt_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "comparison_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            },
+            "purpose": {
+              "type": "string",
+              "enum": [
+                "delivery",
+                "knowledge"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "attempt_ref",
+            "comparison_refs",
+            "purpose",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "verification.run"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attempt_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "candidate_manifest_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "acceptance_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "attempt_ref",
+            "candidate_manifest_ref",
+            "acceptance_refs"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "delivery.request"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "selection_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "candidate_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "target_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "selection_ref",
+            "candidate_ref",
+            "target_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "approval.decide"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "approval_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "decision": {
+              "type": "string",
+              "enum": [
+                "approved",
+                "rejected"
+              ]
+            },
+            "snapshot_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "approval_id",
+            "decision",
+            "snapshot_digest",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "delivery.apply"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "approval_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "snapshot_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "approval_id",
+            "snapshot_digest"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "delivery.reconcile"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": [
+            "operation_id"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "task.close"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "applied_operation_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "task_ref",
+            "applied_operation_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "task.terminate"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "terminated",
+                "cancelled"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unsettled_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "task_ref",
+            "outcome",
+            "reason",
+            "unsettled_refs"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "artifact.register"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "trusted_staged_locator_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "source_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "media_type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "retention_policy_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "trusted_staged_locator_ref",
+            "digest",
+            "source_ref",
+            "media_type",
+            "retention_policy_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "archive.export"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "manifest_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "sink_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": [
+            "manifest_ref",
+            "sink_id"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "archive.repair"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "manifest_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "sink_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "original_effect_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": [
+            "manifest_ref",
+            "sink_id",
+            "original_effect_id"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "backup.create"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "store_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "policy_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "store_ref",
+            "policy_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "restore.plan"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "revision_or_backup_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "restore_kind": {
+              "type": "string",
+              "enum": [
+                "business_revision",
+                "disaster_recovery"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "revision_or_backup_ref",
+            "restore_kind",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "restore.apply"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "restore_plan_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "human_decision_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "restore_plan_ref",
+            "human_decision_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "source.ingest"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_stream": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "host_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                },
+                "origin_session_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                },
+                "log_generation": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                }
+              },
+              "required": [
+                "host_id",
+                "origin_session_id",
+                "log_generation"
+              ]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_seq": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  },
+                  "payload_hash": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "schema_version": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "payload_artifact_ref": {
+                    "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/artifact_ref"
+                  },
+                  "evidence_mode": {
+                    "type": "string",
+                    "enum": [
+                      "production",
+                      "test"
+                    ]
+                  },
+                  "inherited_from": {
+                    "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/source_key"
+                  }
+                },
+                "required": [
+                  "source_seq",
+                  "payload_hash",
+                  "schema_version",
+                  "payload_artifact_ref",
+                  "evidence_mode"
+                ]
+              },
+              "minItems": 1
+            },
+            "observed_range": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "first": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "last": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "truncated": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "first",
+                "last",
+                "truncated"
+              ]
+            }
+          },
+          "required": [
+            "source_stream",
+            "events",
+            "observed_range"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "legacy.import"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_snapshot_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "import_plan_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "source_snapshot_ref",
+            "import_plan_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "knowledge.record_use"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "knowledge_ref": {
+              "oneOf": [
+                {
+                  "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+                },
+                {
+                  "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/shared_knowledge_ref"
+                }
+              ]
+            },
+            "source_use_key": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "use_kind": {
+              "type": "string",
+              "enum": [
+                "retrieved",
+                "injected",
+                "cited",
+                "adopted"
+              ]
+            },
+            "context_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "knowledge_ref",
+            "source_use_key",
+            "use_kind",
+            "context_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "knowledge.record_outcome"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_outcome_key": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "use_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "verified_result_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "source_outcome_key",
+            "use_ref",
+            "verified_result_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "knowledge.promote"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "knowledge_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "reviewed_scope": {
+              "type": "string",
+              "enum": [
+                "shared"
+              ]
+            },
+            "human_decision_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "knowledge_ref",
+            "reviewed_scope",
+            "human_decision_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "dataset.build"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "policy_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "source_as_of": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "purpose_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "split_spec": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "group_by": {
+                  "type": "string",
+                  "enum": [
+                    "project_task_lineage"
+                  ]
+                },
+                "seed": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "train_percent": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "eval_percent": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "test_percent": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "group_by",
+                "seed",
+                "train_percent",
+                "eval_percent",
+                "test_percent"
+              ]
+            }
+          },
+          "required": [
+            "policy_ref",
+            "source_as_of",
+            "purpose_ref",
+            "split_spec"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "dataset.export"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "reviewed_dataset_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "sink_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            },
+            "human_decision_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "reviewed_dataset_ref",
+            "sink_id",
+            "human_decision_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "artifacts.plan_cleanup"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "retention_policy_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "as_of_seq": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "retention_policy_ref",
+            "as_of_seq"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "payload"
+      ],
+      "properties": {
+        "command": {
+          "const": "approval.revoke"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "approval_id",
+            "snapshot_digest",
+            "reason"
+          ],
+          "properties": {
+            "approval_id": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "snapshot_digest": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "verification.record_review"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verification_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "check_id": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "candidate_digest": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+            },
+            "result": {
+              "type": "string",
+              "enum": [
+                "pass",
+                "fail"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "verification_ref",
+            "check_id",
+            "candidate_digest",
+            "result",
+            "evidence_refs",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "decision.record"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "subject_kind": {
+              "type": "string",
+              "enum": [
+                "restore_plan",
+                "knowledge_promotion",
+                "dataset_export"
+              ]
+            },
+            "subject_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "subject_digest": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "restore.apply",
+                "knowledge.promote",
+                "dataset.export"
+              ]
+            },
+            "target_scope": {
+              "type": "string",
+              "enum": [
+                "project",
+                "shared",
+                "approved_export_sink"
+              ]
+            },
+            "decision": {
+              "type": "string",
+              "enum": [
+                "approved",
+                "rejected"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "subject_kind",
+            "subject_ref",
+            "subject_digest",
+            "action",
+            "target_scope",
+            "decision",
+            "reason",
+            "target_ref"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "dataset.review"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dataset_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "sample_reviews": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "sample_id": {
+                    "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+                  },
+                  "verdict": {
+                    "type": "string",
+                    "enum": [
+                      "accepted",
+                      "rejected"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "sample_id",
+                  "verdict",
+                  "reason"
+                ]
+              },
+              "minItems": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "dataset_ref",
+            "sample_reviews",
+            "reason"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "const": "rules.preview"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "draft_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "source_as_of": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/seq"
+            }
+          },
+          "required": [
+            "draft_ref",
+            "source_as_of"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "payload"
+      ]
+    }
+  ]
+}

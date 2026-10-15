@@ -1,0 +1,10 @@
+{
+  "client": {
+    "entry": "./index.js",
+    "styles": ["./index.css"],
+    "slots": ["workbench.panel"],
+    "publicConfig": {},
+    "services": ["pk.compare", "pk.overview", "pk.approvals", "pk.events", "pk.timeline", "pk.trace", "pk.coverage", "pk.environment", "pk.operation", "pk.tree", "pk.skills", "pk.documents", "pk.document"],
+    "projections": []
+  }
+}

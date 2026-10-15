@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/initialize-result.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": {
+      "const": "1.0.0"
+    },
+    "schema_bundle_digest": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+    },
+    "server_instance_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "mode": {
+      "enum": [
+        "production",
+        "test"
+      ]
+    },
+    "supported_commands": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+      }
+    },
+    "supported_queries": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+      }
+    },
+    "provider_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "provider_id": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+          },
+          "supported_actions": {
+            "type": "array",
+            "items": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            }
+          },
+          "supported_sandbox_level": {
+            "enum": [
+              "none",
+              "directory_only",
+              "partial",
+              "os_enforced",
+              "unknown"
+            ]
+          },
+          "can_cancel": {
+            "type": "boolean"
+          },
+          "can_query_effect": {
+            "type": "boolean"
+          },
+          "idempotent_apply": {
+            "type": "boolean"
+          },
+          "external_fencing": {
+            "type": "boolean"
+          },
+          "durable_result": {
+            "type": "boolean"
+          },
+          "model_usage_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "provider_id",
+          "supported_actions",
+          "supported_sandbox_level",
+          "can_cancel",
+          "can_query_effect",
+          "idempotent_apply",
+          "external_fencing",
+          "durable_result",
+          "model_usage_available"
+        ]
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_frame_bytes": {
+          "type": "integer",
+          "minimum": 1024
+        },
+        "max_inflight": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "max_frame_bytes",
+        "max_inflight"
+      ]
+    }
+  },
+  "required": [
+    "protocol_version",
+    "schema_bundle_digest",
+    "server_instance_id",
+    "mode",
+    "supported_commands",
+    "supported_queries",
+    "provider_capabilities",
+    "limits"
+  ]
+}

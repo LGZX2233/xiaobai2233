@@ -1,0 +1,220 @@
+{
+  "schema_version": "1.0.0",
+  "document_version": "1.5.0",
+  "updated_at": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "timestamp_precision": "date",
+  "source_version": "1.0.0",
+  "source_revision": "16410c9fbf4a8507445b4603e371e701614e4499",
+  "source_worktree": "existing consumer, SCM, training and skill documentation; AGH read-only adapter and K-BRIDGE navigation added; no new acceptance",
+  "relation_definition": "relationships.md",
+  "nodes": [
+    {
+      "node_id": "K-ROOT",
+      "document": "nodes/root.md",
+      "node_kind": "aggregate",
+      "navigation_parent": null,
+      "depends_on": [],
+      "related_to": ["K-CORE", "K-DATA", "K-EXTENSIONS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-CORE",
+      "document": "nodes/core.md",
+      "node_kind": "aggregate",
+      "navigation_parent": "K-ROOT",
+      "depends_on": [],
+      "related_to": ["K-BOOTSTRAP", "K-CONTRACTS", "K-RPC", "K-BRIDGE", "K-DESIGN", "K-RULES", "K-ENVIRONMENT", "K-EXECUTION", "K-DELIVERY", "K-DATA"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-BOOTSTRAP",
+      "document": "nodes/bootstrap.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-RPC", "K-DESIGN", "K-EXECUTION", "K-DELIVERY", "K-ENVIRONMENT", "K-EVIDENCE", "K-QUERIES", "K-IDENTITY", "K-LEGACY", "K-CORPUS"],
+      "related_to": ["K-KNOWLEDGE", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-CONTRACTS",
+      "document": "nodes/contracts.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": [],
+      "related_to": ["K-DATA", "K-STORAGE", "K-LEDGER", "K-IDENTITY", "K-EVIDENCE", "K-RECOVERY", "K-QUERIES", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-RPC",
+      "document": "nodes/rpc.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-IDENTITY", "K-STORAGE", "K-LEDGER", "K-EXECUTION", "K-EVIDENCE"],
+      "related_to": ["K-BOOTSTRAP", "K-BRIDGE", "K-QUERIES"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-BRIDGE",
+      "document": "nodes/bridge.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-RPC"],
+      "related_to": ["K-BOOTSTRAP"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-DESIGN",
+      "document": "nodes/design.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-QUERIES", "K-IDENTITY", "K-RULES"],
+      "related_to": ["K-EXECUTION", "K-DELIVERY", "K-ENVIRONMENT", "K-BOOTSTRAP", "K-RPC", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-RULES",
+      "document": "nodes/rules.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-QUERIES", "K-IDENTITY"],
+      "related_to": ["K-DESIGN", "K-EXECUTION", "K-DELIVERY", "K-ENVIRONMENT", "K-BOOTSTRAP", "K-RECORDS", "K-EXTENSIONS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-ENVIRONMENT",
+      "document": "nodes/environment.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-IDENTITY"],
+      "related_to": ["K-DESIGN", "K-EXECUTION", "K-RULES", "K-QUERIES", "K-BOOTSTRAP", "K-RPC", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-EXECUTION",
+      "document": "nodes/execution.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-QUERIES", "K-IDENTITY", "K-EVIDENCE"],
+      "related_to": ["K-DESIGN", "K-DELIVERY", "K-ENVIRONMENT", "K-RULES", "K-BOOTSTRAP", "K-RPC", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-DELIVERY",
+      "document": "nodes/delivery.md",
+      "node_kind": "module",
+      "navigation_parent": "K-CORE",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-QUERIES", "K-IDENTITY", "K-EVIDENCE"],
+      "related_to": ["K-DESIGN", "K-EXECUTION", "K-RULES", "K-ENVIRONMENT", "K-BOOTSTRAP", "K-RPC", "K-RECOVERY", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-DATA",
+      "document": "nodes/data.md",
+      "node_kind": "aggregate",
+      "navigation_parent": "K-ROOT",
+      "depends_on": ["K-CONTRACTS"],
+      "related_to": ["K-CORE", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-STORAGE",
+      "document": "nodes/storage.md",
+      "node_kind": "module",
+      "navigation_parent": "K-DATA",
+      "depends_on": ["K-CONTRACTS"],
+      "related_to": ["K-LEDGER", "K-IDENTITY", "K-RECOVERY", "K-QUERIES"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-LEDGER",
+      "document": "nodes/records.md",
+      "node_kind": "module",
+      "navigation_parent": "K-DATA",
+      "depends_on": ["K-STORAGE", "K-CONTRACTS"],
+      "related_to": ["K-EVIDENCE", "K-RECOVERY", "K-QUERIES", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-IDENTITY",
+      "document": "nodes/identity.md",
+      "node_kind": "module",
+      "navigation_parent": "K-DATA",
+      "depends_on": ["K-STORAGE", "K-LEDGER", "K-CONTRACTS"],
+      "related_to": ["K-LEDGER", "K-CORE", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-EVIDENCE",
+      "document": "nodes/evidence.md",
+      "node_kind": "module",
+      "navigation_parent": "K-DATA",
+      "depends_on": ["K-LEDGER", "K-STORAGE", "K-QUERIES", "K-CONTRACTS"],
+      "related_to": ["K-RECOVERY", "K-QUERIES", "K-CORE", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-RECOVERY",
+      "document": "nodes/recovery.md",
+      "node_kind": "module",
+      "navigation_parent": "K-DATA",
+      "depends_on": ["K-EVIDENCE", "K-STORAGE", "K-LEDGER", "K-CONTRACTS"],
+      "related_to": ["K-IDENTITY", "K-QUERIES", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-QUERIES",
+      "document": "nodes/queries.md",
+      "node_kind": "module",
+      "navigation_parent": "K-DATA",
+      "depends_on": ["K-LEDGER", "K-STORAGE", "K-CONTRACTS"],
+      "related_to": ["K-EVIDENCE", "K-RECOVERY", "K-CORE", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-EXTENSIONS",
+      "document": "nodes/extensions.md",
+      "node_kind": "aggregate",
+      "navigation_parent": "K-ROOT",
+      "depends_on": [],
+      "related_to": ["K-LEGACY", "K-KNOWLEDGE", "K-CORPUS", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-LEGACY",
+      "document": "nodes/legacy.md",
+      "node_kind": "module",
+      "navigation_parent": "K-EXTENSIONS",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-IDENTITY"],
+      "related_to": ["K-BOOTSTRAP", "K-QUERIES", "K-EVIDENCE"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-KNOWLEDGE",
+      "document": "nodes/knowledge.md",
+      "node_kind": "module",
+      "navigation_parent": "K-EXTENSIONS",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER"],
+      "related_to": ["K-CORPUS", "K-BOOTSTRAP", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-CORPUS",
+      "document": "nodes/corpus.md",
+      "node_kind": "module",
+      "navigation_parent": "K-EXTENSIONS",
+      "depends_on": ["K-CONTRACTS", "K-STORAGE", "K-LEDGER", "K-QUERIES", "K-IDENTITY"],
+      "related_to": ["K-KNOWLEDGE", "K-EVIDENCE", "K-BOOTSTRAP", "K-RECORDS"],
+      "conversation_refs": []
+    },
+    {
+      "node_id": "K-RECORDS",
+      "document": "nodes/continuous-records.md",
+      "node_kind": "workflow",
+      "navigation_parent": "K-EXTENSIONS",
+      "depends_on": ["K-ROOT"],
+      "related_to": ["K-DESIGN", "K-RULES", "K-EXECUTION", "K-DELIVERY", "K-QUERIES", "K-KNOWLEDGE", "K-CORPUS"],
+      "conversation_refs": []
+    }
+  ]
+}

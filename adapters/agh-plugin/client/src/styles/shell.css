@@ -1,0 +1,166 @@
+/* Project Kernel panel: an engineering logbook. Flat ledger sections, serif numerals, mono ids,
+   and one bold gesture: the verdict stamp (see views.css). Colours come from --agnes-* with fallbacks. */
+.pk-root {
+  --pk-bg: var(--agnes-bg-page, #1c2026);
+  --pk-card: var(--agnes-bg-card, rgb(255 255 255 / .045));
+  --pk-pop: var(--agnes-bg-popover, #262b34);
+  --pk-line: var(--agnes-line-primary, #393f49);
+  --pk-text: var(--agnes-text-primary, #ecf0f6);
+  --pk-muted: var(--agnes-text-secondary, #a6b0c0);
+  --pk-faint: var(--agnes-text-tertiary, #7d889c);
+  --pk-accent: var(--agnes-brand-primary, #6983fc);
+  --pk-ok: var(--agnes-status-success-text, #4ade80);
+  --pk-warn: var(--agnes-status-warning-text, #ffb547);
+  --pk-bad: var(--agnes-status-danger-text, #ff6b6b);
+  /* Latin glyphs and numerals come from the serif; CJK falls through to the system sans so small Chinese text stays crisp. */
+  --pk-serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', serif;
+  --pk-human: var(--pk-accent);
+  --pk-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
+  /* The host mounts workbench.panel inside its flex <main>; the root takes no height there.
+     Launcher and drawer are fixed so the conversation column and composer keep their place. */
+  box-sizing: border-box;
+  flex: 0 0 0;
+  width: 0;
+  height: 0;
+  min-height: 0;
+  overflow: visible;
+  padding: 0;
+  margin: 0;
+  color: var(--pk-text);
+  font: 14px/1.55 system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+.pk-root[data-theme="light"] {
+  --pk-bg: var(--agnes-bg-page, #ffffff);
+  --pk-card: var(--agnes-bg-card, rgb(25 28 29 / .035));
+  --pk-pop: var(--agnes-bg-popover, #ffffff);
+  --pk-line: var(--agnes-line-primary, #d9dce6);
+  --pk-text: var(--agnes-text-primary, #191c1d);
+  --pk-muted: var(--agnes-text-secondary, #424656);
+  --pk-faint: var(--agnes-text-tertiary, #6c7388);
+  --pk-accent: var(--agnes-brand-primary, #3248af);
+  --pk-ok: var(--agnes-status-success-text, #15803d);
+  --pk-warn: var(--agnes-status-warning-text, #805e21);
+  --pk-bad: var(--agnes-status-danger-text, #a62f2f);
+}
+.pk-root *, .pk-root *::before, .pk-root *::after { box-sizing: border-box; }
+.pk-root h2, .pk-root h3, .pk-root h4, .pk-root p { margin-top: 0; }
+.pk-root { isolation: isolate; text-align: left; }
+/* AGH style.css sets global button/select/textarea rules (min-height, weight, hover background,
+   active translate). Reset them inside the panel so host rules do not reshape our controls. */
+.pk-root button { min-height: 0; gap: 0; font-weight: inherit; line-height: inherit; transform: none; box-shadow: none; }
+.pk-root button:active:not(:disabled) { transform: none; }
+.pk-root button:hover:not(:disabled) { background: inherit; }
+.pk-root .pk-button:hover:not(:disabled), .pk-root .pk-text-button:hover:not(:disabled) { background: var(--pk-card); border-color: var(--pk-accent); }
+.pk-root .pk-nav-item:hover:not(:disabled) { background: transparent; }
+.pk-root .pk-nav-item.is-active:hover:not(:disabled) { background: color-mix(in srgb, var(--pk-accent) 9%, transparent); }
+.pk-root select, .pk-root textarea { min-height: 0; }
+.pk-root button, .pk-root input, .pk-root select, .pk-root textarea { font: inherit; }
+.pk-root button { cursor: pointer; }
+.pk-root button:disabled { cursor: default; opacity: .55; }
+.pk-root :focus-visible { outline: 2px solid var(--pk-accent); outline-offset: 3px; }
+.pk-root code { font-family: var(--pk-mono); font-size: .92em; overflow-wrap: anywhere; }
+
+/* Tooltips: caveats live in title-style hints instead of paragraphs. Shown on hover and keyboard focus. */
+.pk-root [data-tip] { position: relative; }
+.pk-root [data-tip]::after {
+  content: attr(data-tip); position: absolute; z-index: 1200; top: calc(100% + 8px); left: 0; width: max-content; max-width: 300px; padding: 8px 11px;
+  color: var(--pk-text); background: var(--pk-pop); border: 1px solid var(--pk-line); border-radius: 4px; box-shadow: 0 10px 28px rgb(0 0 0 / .32);
+  font: 400 12px/1.5 system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; letter-spacing: 0; text-align: left; white-space: normal;
+  opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-3px); transition: opacity .14s ease, transform .14s ease, visibility .14s;
+}
+.pk-root [data-tip]:hover::after, .pk-root [data-tip]:focus-visible::after { opacity: 1; visibility: visible; transform: none; }
+.pk-root [data-tip][data-edge="end"]::after { left: auto; right: 0; }
+.pk-root .pk-steps [data-tip]::after { left: 50%; transform: translate(-50%, -3px); }
+.pk-root .pk-steps [data-tip]:hover::after { transform: translate(-50%, 0); }
+.pk-info { display: inline-grid; place-items: center; flex: 0 0 auto; width: 16px; height: 16px; color: var(--pk-faint); border: 1px solid var(--pk-line); border-radius: 50%; font: italic 700 10px/1 var(--pk-serif); cursor: help; transition: color .15s, border-color .15s; }
+.pk-info:hover, .pk-info:focus-visible { color: var(--pk-accent); border-color: var(--pk-accent); }
+
+/* Launcher: fixed, bottom-right, above the composer but below host modals. */
+.pk-root .pk-launcher { position: fixed; right: 18px; bottom: 96px; z-index: 900; display: inline-flex; align-items: center; gap: 9px; padding: 7px 13px 7px 7px; color: var(--pk-text); background: var(--pk-pop); border: 1px solid var(--pk-line); border-radius: 6px; box-shadow: 0 8px 24px rgb(0 0 0 / .28); font-size: 13px; font-weight: 600; transition: border-color .15s, transform .15s; }
+.pk-root .pk-launcher:hover:not(:disabled) { background: var(--pk-pop); border-color: var(--pk-accent); }
+.pk-root[data-open="true"] .pk-launcher { display: none; }
+.pk-launcher-mark, .pk-brand-mark { display: grid; place-items: center; width: 28px; height: 28px; color: var(--pk-bg); background: var(--pk-text); border-radius: 3px; font: 800 11px/1 var(--pk-mono); letter-spacing: .02em; }
+.pk-launcher-badge, .pk-count-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; color: #1b1300; background: var(--pk-warn); border-radius: 10px; font: 700 11px/1 var(--pk-mono); }
+.pk-launcher .pk-live { gap: 0; }
+
+/* Drawer: fixed to the right edge, full viewport height, scrolls internally. */
+.pk-drawer { position: fixed; top: 0; right: 0; z-index: 950; display: flex; flex-direction: column; width: min(1040px, 94vw); height: 100vh; height: 100dvh; color: var(--pk-text); background: var(--pk-bg); border-left: 1px solid var(--pk-line); box-shadow: -18px 0 48px rgb(0 0 0 / .35); animation: pk-slide .26s cubic-bezier(.2, .8, .2, 1) both; container-type: inline-size; }
+.pk-drawer[hidden] { display: none; }
+.pk-root[data-wide="true"] .pk-drawer { width: min(1440px, 99vw); }
+.pk-shell-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--pk-line); }
+.pk-shell-branding { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.pk-brand-mark { width: 34px; height: 34px; font-size: 13px; }
+.pk-shell-branding h2 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; line-height: 1.2; }
+.pk-breadcrumb { display: flex; gap: 6px; align-items: center; color: var(--pk-faint); font-size: 12px; }
+.pk-breadcrumb strong { color: var(--pk-muted); font-weight: 600; }
+.pk-shell-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px; }
+.pk-icon-button { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0; color: var(--pk-muted); background: transparent; border: 1px solid var(--pk-line); border-radius: 4px; font-size: 15px; transition: color .15s, border-color .15s; }
+.pk-root .pk-icon-button:hover:not(:disabled) { color: var(--pk-text); background: var(--pk-card); border-color: var(--pk-accent); }
+.pk-icon-button[aria-pressed="true"] { color: var(--pk-accent); border-color: var(--pk-accent); }
+.pk-drawer > .pk-banner, .pk-drawer > .pk-permission-notice, .pk-drawer > .pk-approval-popup { margin: 12px 20px 0; }
+.pk-shell-content { display: grid; grid-template-columns: 148px minmax(0, 1fr); flex: 1 1 auto; min-height: 0; }
+.pk-shell-nav { min-height: 0; overflow-y: auto; padding: 16px 8px 16px 12px; border-right: 1px solid var(--pk-line); }
+.pk-shell-main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.pk-view-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 22px 26px 30px; overscroll-behavior: contain; }
+.pk-view-metadata { flex: 0 0 auto; padding: 7px 26px 8px; border-top: 1px solid var(--pk-line); }
+.pk-view-metadata .pk-watermarks { padding: 0; border: 0; background: transparent; }
+.pk-live { display: inline-flex; gap: 7px; align-items: center; color: var(--pk-muted); font-size: 12px; white-space: nowrap; }
+.pk-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--pk-faint); }
+.pk-live[data-state="on"]::before { background: var(--pk-ok); animation: pk-pulse 2.2s ease-out infinite; }
+.pk-live[data-state="off"]::before { background: var(--pk-warn); }
+.pk-button, .pk-text-button { padding: 6px 13px; border: 1px solid var(--pk-line); border-radius: 4px; background: transparent; color: var(--pk-text); font-size: 13px; transition: border-color .15s, background-color .15s; }
+.pk-button:hover, .pk-text-button:hover { border-color: var(--pk-accent); }
+.pk-text-button { padding: 2px 8px; color: var(--pk-accent); font-size: 12px; border-color: transparent; }
+.pk-button-strong { color: var(--pk-bg); background: var(--pk-text); border-color: var(--pk-text); font-weight: 600; }
+.pk-root .pk-button-strong:hover:not(:disabled) { background: var(--pk-accent); border-color: var(--pk-accent); color: #fff; }
+.pk-watermarks { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; color: var(--pk-faint); font-size: 12px; }
+.pk-watermarks strong, .pk-watermarks code { margin-left: 4px; color: var(--pk-muted); font-weight: 500; }
+.pk-watermarks.pk-stale code, .pk-watermarks.pk-stale strong { color: var(--pk-warn); }
+.pk-history { padding: 1px 8px; border: 1px dashed var(--pk-warn); border-radius: 3px; color: var(--pk-warn); font-weight: 600; }
+.pk-banner { padding: 10px 14px; margin: 0 0 12px; border: 1px solid var(--pk-warn); border-left-width: 4px; border-radius: 3px; color: var(--pk-warn); }
+.pk-banner p { margin: 5px 0 0; font-size: 12px; overflow-wrap: anywhere; }
+.pk-gaps { padding: 0; margin: 0; color: var(--pk-warn); font-size: 12px; }
+.pk-gaps summary { cursor: pointer; }
+.pk-gaps ul { margin-bottom: 0; }
+
+/* Navigation: plain group captions, a bar marks the open view. */
+.pk-nav { display: flex; flex-direction: column; gap: 16px; }
+.pk-nav-group { display: flex; flex-direction: column; gap: 1px; }
+.pk-nav-group-title { display: block; margin: 0; padding: 0 10px 5px; color: var(--pk-faint); font-size: 11px; font-weight: 600; }
+.pk-nav-item { display: flex; align-items: center; gap: 7px; width: 100%; padding: 7px 10px; color: var(--pk-muted); border: 0; border-left: 2px solid transparent; border-radius: 0 4px 4px 0; background: transparent; font-size: 14px; text-align: left; transition: color .15s, background-color .15s, border-color .15s; }
+.pk-nav-item:hover { color: var(--pk-text); }
+.pk-nav-item.is-active { color: var(--pk-text); font-weight: 650; background: color-mix(in srgb, var(--pk-accent) 9%, transparent); border-left-color: var(--pk-accent); }
+.pk-root .pk-nav-item:focus-visible { outline-offset: -2px; }
+.pk-count-badge { margin-left: auto; flex-shrink: 0; }
+.pk-view { min-height: 210px; min-width: 0; }
+.pk-enter { animation: pk-rise .28s ease-out both; }
+.pk-i-0 { animation-delay: 0ms; } .pk-i-1 { animation-delay: 30ms; }
+.pk-i-2 { animation-delay: 60ms; } .pk-i-3 { animation-delay: 90ms; }
+.pk-i-4 { animation-delay: 120ms; } .pk-i-5 { animation-delay: 150ms; }
+.pk-i-6 { animation-delay: 180ms; } .pk-i-7 { animation-delay: 210ms; }
+.pk-i-8 { animation-delay: 240ms; } .pk-i-9 { animation-delay: 270ms; }
+.pk-i-10 { animation-delay: 300ms; } .pk-i-11 { animation-delay: 330ms; }
+.pk-i-12 { animation-delay: 360ms; } .pk-i-13 { animation-delay: 390ms; }
+.pk-i-14 { animation-delay: 420ms; } .pk-i-15 { animation-delay: 450ms; }
+@keyframes pk-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes pk-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--pk-ok) 50%, transparent); } 100% { box-shadow: 0 0 0 7px transparent; } }
+@keyframes pk-slide { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
+@keyframes pk-badge-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--pk-warn) 60%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+@keyframes pk-attention { 0%, 100% { box-shadow: inset 0 0 0 0 color-mix(in srgb, var(--pk-warn) 0%, transparent); } 50% { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--pk-warn) 55%, transparent); } }
+@keyframes pk-drop { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: none; } }
+.pk-launcher-badge { animation: pk-badge-pulse 2.2s ease-out infinite; }
+
+/* Narrow drawers move the grouped nav above the content as horizontal scrolling rows. */
+@container (max-width: 700px) {
+  .pk-shell-content { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .pk-shell-nav { padding: 8px 10px; border-right: 0; border-bottom: 1px solid var(--pk-line); overflow-x: auto; }
+  .pk-nav { flex-direction: row; gap: 16px; }
+  .pk-nav-group { flex-direction: row; align-items: center; }
+  .pk-nav-group-title { padding: 0 6px 0 0; white-space: nowrap; }
+  .pk-nav-item { width: auto; white-space: nowrap; border-left: 0; border-bottom: 2px solid transparent; border-radius: 0; }
+  .pk-nav-item.is-active { border-bottom-color: var(--pk-accent); }
+  .pk-shell-header { flex-wrap: wrap; }
+  .pk-view-scroll { padding: 16px 16px 24px; }
+}
+@media (max-width: 640px) { .pk-drawer { width: 100vw; } .pk-root .pk-launcher { right: 10px; bottom: 84px; } }
+@media (prefers-reduced-motion: reduce) { .pk-root *, .pk-root *::before, .pk-root *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

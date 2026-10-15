@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "round": 4,
+  "gate": "G2",
+  "as_of": "2026-10-10",
+  "timezone": "Asia/Shanghai",
+  "scope": "D:\\deepseekhannes\\kernel_next",
+  "status": "accepted_g2",
+  "release_approved": false,
+  "acceptance_scope": "independent kernel with synthetic test identities and directory_only real local subprocesses",
+  "contract_digest": "d5fe5816356b0731e78790e997857ea18668cbec16f68673da1f433da07c97cc",
+  "input_commit": "aca09b044c8138389039783152d0f1e13e58dba8",
+  "python_tests": {
+    "distinct_passed": 620,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": [
+      "docs/acceptance/G2-round4/evidence/pytest-acceptance-final.xml"
+    ]
+  },
+  "node_tests": {
+    "passed": 19,
+    "failed": 0,
+    "output": "docs/acceptance/G2-round4/evidence/node-acceptance-final-output.txt"
+  },
+  "validation_runs": [
+    {
+      "capture": "docs/acceptance/G2-round4/evidence/python-acceptance-final-result.json",
+      "require_fingerprints": true
+    },
+    {
+      "capture": "docs/acceptance/G2-round4/evidence/node-acceptance-final-result.json",
+      "require_fingerprints": true
+    }
+  ],
+  "independent_reviewer": {
+    "overall_g2_signoff": true,
+    "decisions": "docs/reviews/2026-10-09-round4/independent-decisions.json"
+  },
+  "not_performed": [
+    "DSH/G3",
+    "workbench/G4",
+    "production restore/import",
+    "paid model calls",
+    "training/upload",
+    "target-user knowledge tree"
+  ],
+  "platform_claim": "adaptable only",
+  "required_next": []
+}

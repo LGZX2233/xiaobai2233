@@ -1,0 +1,9 @@
+Observed in this session (08:09 CST), `agh doctor provider --probe --json`, both accounts enabled:
+- route for deepseek-flash: models_endpoint ok, minimal_inference ok, fields ok (8.1 s)
+- route for agnes-3.0-flash: models_endpoint ok, minimal_inference ok, fields ok (2.3 s)
+- models[].observed=false with E_PROVIDER_MODEL_MISMATCH for both (AGH's catalogue comparison; the probe itself passed)
+Direct chat/completions call with max_tokens=16 (key not printed):
+- requested deepseek-flash  -> API reported model "deepseek-flash" (HTTP 200)
+- requested agnes-3.0-flash -> API reported model "agnes-3.0-flash" (HTTP 200)
+GET https://api.deepseek.com/models listed exactly: deepseek-flash, deepseek-v4-pro.
+AGH's pinned catalogue names deepseek-flash "DeepSeek V4.1 Flash"; the API itself does not use that name.

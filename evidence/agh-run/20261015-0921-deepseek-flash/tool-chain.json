@@ -1,0 +1,133 @@
+{
+ "calls": [
+  {
+   "seq": 20,
+   "time_utc": "2026-10-15T01:13:21.191Z",
+   "tool": "pk_state",
+   "arguments": {},
+   "result_seq": 24,
+   "is_error": false,
+   "result_summary": "{\"guide\":\"Workflow: (1) pk_state to inspect the task, strategies and environment; (2) pk_run_strategy for each strategy s1, s2, s3 (s3 stalls and settles as unknown; that is expected and kept); (3) pk_verify {strategy_id} for every completed strategy; a failed check is a real result, keep it; (4) pk_compare; (5) pk_select {strategy_id, reason} for the strategy whose check passed; (6) pk_request_de",
+   "error_code": null
+  },
+  {
+   "seq": 38,
+   "time_utc": "2026-10-15T01:13:22.819Z",
+   "tool": "pk_run_strategy",
+   "arguments": {
+    "strategy_id": "s1"
+   },
+   "result_seq": 43,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s1\",\"attempt_status\":\"completed\",\"attempt_id\":\"attempt-f23fb274a0bd4303\",\"receipt_status\":\"accepted\",\"error\":null,\"note\":null,\"operation\":{\"status\":\"completed\",\"attempt_id\":\"attempt-f23fb274a0bd4303\",\"strategy_id\":\"s1\",\"exit_code\":0},\"attempt_ref\":{\"project_id\":\"agh-heat-demo\",\"object_type\":\"attempt\",\"object_id\":\"attempt-f23fb274a0bd4303\",\"revision_id\":\"rev-1\"},\"request_id\":\"bab844",
+   "error_code": null
+  },
+  {
+   "seq": 39,
+   "time_utc": "2026-10-15T01:13:22.819Z",
+   "tool": "pk_run_strategy",
+   "arguments": {
+    "strategy_id": "s2"
+   },
+   "result_seq": 47,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s2\",\"attempt_status\":\"completed\",\"attempt_id\":\"attempt-5bc5ea7a0b1d42b9\",\"receipt_status\":\"accepted\",\"error\":null,\"note\":null,\"operation\":{\"status\":\"completed\",\"attempt_id\":\"attempt-5bc5ea7a0b1d42b9\",\"strategy_id\":\"s2\",\"exit_code\":0},\"attempt_ref\":{\"project_id\":\"agh-heat-demo\",\"object_type\":\"attempt\",\"object_id\":\"attempt-5bc5ea7a0b1d42b9\",\"revision_id\":\"rev-1\"},\"request_id\":\"4760e7",
+   "error_code": null
+  },
+  {
+   "seq": 61,
+   "time_utc": "2026-10-15T01:13:26.475Z",
+   "tool": "pk_run_strategy",
+   "arguments": {
+    "strategy_id": "s3"
+   },
+   "result_seq": 65,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s3\",\"attempt_status\":\"unknown\",\"attempt_id\":\"attempt-cfd5413aeb6f4f4d\",\"receipt_status\":\"accepted\",\"error\":null,\"note\":\"kept as a failure sample; the kernel will not relaunch it\",\"operation\":{\"status\":\"unknown\",\"attempt_id\":\"attempt-cfd5413aeb6f4f4d\",\"strategy_id\":\"s3\",\"exit_code\":null},\"attempt_ref\":{\"project_id\":\"agh-heat-demo\",\"object_type\":\"attempt\",\"object_id\":\"attempt-cfd5413",
+   "error_code": null
+  },
+  {
+   "seq": 79,
+   "time_utc": "2026-10-15T01:13:31.645Z",
+   "tool": "pk_verify",
+   "arguments": {
+    "strategy_id": "s1"
+   },
+   "result_seq": 84,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s1\",\"attempt_id\":\"attempt-f23fb274a0bd4303\",\"passed\":false,\"verification_result\":\"failed\",\"reason\":\"fit 0.3500 disagrees with closed-form 0.3786\",\"method\":\"grid\",\"alpha_fit\":0.35000000000000003,\"elapsed_s\":0.015,\"receipt_status\":\"accepted\",\"error\":null,\"candidate_id\":\"cand-attempt-f23fb274a0bd4303\",\"status\":\"accepted\",\"candidate_manifest_ref\":{\"project_id\":\"agh-heat-demo\",\"object_t",
+   "error_code": null
+  },
+  {
+   "seq": 80,
+   "time_utc": "2026-10-15T01:13:31.645Z",
+   "tool": "pk_verify",
+   "arguments": {
+    "strategy_id": "s2"
+   },
+   "result_seq": 88,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s2\",\"attempt_id\":\"attempt-5bc5ea7a0b1d42b9\",\"passed\":true,\"verification_result\":\"passed\",\"reason\":\"ok\",\"method\":\"golden\",\"alpha_fit\":0.3728610547894271,\"elapsed_s\":0.021,\"receipt_status\":\"accepted\",\"error\":null,\"candidate_id\":\"cand-attempt-5bc5ea7a0b1d42b9\",\"status\":\"accepted\",\"candidate_manifest_ref\":{\"project_id\":\"agh-heat-demo\",\"object_type\":\"candidate_manifest\",\"object_id\":\"can",
+   "error_code": null
+  },
+  {
+   "seq": 102,
+   "time_utc": "2026-10-15T01:13:33.919Z",
+   "tool": "pk_compare",
+   "arguments": {},
+   "result_seq": 106,
+   "is_error": false,
+   "result_summary": "{\"attempts\":[{\"strategy_id\":\"s2\",\"attempt_id\":\"attempt-5bc5ea7a0b1d42b9\",\"status\":\"completed\",\"exit_code\":0,\"verification_result\":\"passed\",\"alpha_fit\":0.3728610547894271,\"reason\":\"ok\"},{\"strategy_id\":\"s3\",\"attempt_id\":\"attempt-cfd5413aeb6f4f4d\",\"status\":\"unknown\",\"exit_code\":null,\"verification_result\":null,\"alpha_fit\":null,\"reason\":null},{\"strategy_id\":\"s1\",\"attempt_id\":\"attempt-f23fb274a0bd4303\",",
+   "error_code": null
+  },
+  {
+   "seq": 120,
+   "time_utc": "2026-10-15T01:13:37.464Z",
+   "tool": "pk_select",
+   "arguments": {
+    "strategy_id": "s2",
+    "reason": "Only s2 passed the independent check (alpha_fit 0.37286 agrees with the closed-form 0.3786), while s1 failed the check and s3 settled as unknown."
+   },
+   "result_seq": 124,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s2\",\"attempt_id\":\"attempt-5bc5ea7a0b1d42b9\",\"compared_attempts\":3,\"reason\":\"Only s2 passed the independent check (alpha_fit 0.37286 agrees with the closed-form 0.3786), while s1 failed the check and s3 settled as unknown.\",\"selection_id\":\"selection-4a4101b08f4d\",\"status\":\"committed\",\"operation_id\":null,\"object_refs\":[{\"project_id\":\"agh-heat-demo\",\"object_type\":\"selection\",\"object_i",
+   "error_code": null
+  },
+  {
+   "seq": 138,
+   "time_utc": "2026-10-15T01:13:39.220Z",
+   "tool": "pk_request_delivery",
+   "arguments": {},
+   "result_seq": 144,
+   "is_error": false,
+   "result_summary": "{\"strategy_id\":\"s2\",\"status\":\"committed\",\"operation_id\":null,\"object_refs\":[{\"project_id\":\"agh-heat-demo\",\"object_type\":\"approval\",\"object_id\":\"approval-request-cfdd04d795e587903e4d\",\"revision_id\":\"rev-1\"},{\"project_id\":\"agh-heat-demo\",\"object_type\":\"delivery_snapshot\",\"object_id\":\"request-cfdd04d795e587903e4d\",\"revision_id\":\"rev-1\"}],\"error\":null,\"recovered\":false,\"request_id\":\"9fc65b99-6002-4630",
+   "error_code": null
+  },
+  {
+   "seq": 179,
+   "time_utc": "2026-10-15T01:14:02.504Z",
+   "tool": "pk_apply_delivery",
+   "arguments": {},
+   "result_seq": 183,
+   "is_error": false,
+   "result_summary": "{\"applied\":true,\"approval_id\":\"approval-request-cfdd04d795e587903e4d\",\"approval_status\":\"approved\",\"operation_id\":\"operation-bd976d2755e420cf0a0d\",\"operation_status\":\"applied\",\"strategy_id\":\"s2\",\"receipt_status\":\"accepted\"}",
+   "error_code": null
+  }
+ ],
+ "agh_approval_events": [
+  {
+   "seq": 141,
+   "type": "approval/asked",
+   "summary": "pk_request_delivery",
+   "verdict": null,
+   "via": null
+  },
+  {
+   "seq": 142,
+   "type": "approval/decided",
+   "summary": null,
+   "verdict": "allowed-once",
+   "via": "sync"
+  }
+ ]
+}

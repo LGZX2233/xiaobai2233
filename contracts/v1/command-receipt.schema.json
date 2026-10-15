@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/command-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "command_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "command": {
+      "enum": [
+        "project.provision",
+        "project.reconcile",
+        "project.bind",
+        "requirement.save",
+        "requirement.confirm",
+        "design.save",
+        "dispatch.draft",
+        "dispatch.confirm",
+        "dispatch.revoke",
+        "attempt.start",
+        "attempt.cancel",
+        "attempt.settle",
+        "attempt.select",
+        "verification.run",
+        "delivery.request",
+        "approval.decide",
+        "delivery.apply",
+        "delivery.reconcile",
+        "task.close",
+        "task.terminate",
+        "artifact.register",
+        "archive.export",
+        "archive.repair",
+        "backup.create",
+        "restore.plan",
+        "restore.apply",
+        "source.ingest",
+        "legacy.import",
+        "rules.publish",
+        "knowledge.record_use",
+        "knowledge.record_outcome",
+        "knowledge.promote",
+        "dataset.build",
+        "dataset.export",
+        "artifacts.plan_cleanup",
+        "task.create",
+        "design.confirm",
+        "rules.save",
+        "environment.probe",
+        "approval.revoke",
+        "verification.record_review",
+        "decision.record",
+        "dataset.review",
+        "rules.preview"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "committed",
+        "accepted",
+        "rejected"
+      ]
+    },
+    "commit_seq": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "event_cursor": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/cursor"
+    },
+    "object_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 0
+    },
+    "operation_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "error": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/block_error"
+    },
+    "result_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 0
+    },
+    "committed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "receipt_domain": {
+      "type": "string",
+      "enum": [
+        "identity",
+        "project"
+      ]
+    },
+    "store_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    }
+  },
+  "required": [
+    "command_id",
+    "idempotency_key",
+    "command",
+    "status",
+    "commit_seq",
+    "event_cursor",
+    "object_refs",
+    "result_refs",
+    "committed_at",
+    "receipt_domain",
+    "store_id"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "rejected"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "error"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "accepted"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "operation_id"
+        ]
+      }
+    }
+  ]
+}
