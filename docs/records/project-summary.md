@@ -1,12 +1,12 @@
 ---
 record_id: CCR-PROJECT
-record_version: 13
+record_version: 15
 updated_at: 2026-10-15
 timezone: Asia/Shanghai
 source_revision: 16410c9fbf4a8507445b4603e371e701614e4499
-source_worktree: consumer, SCM, training, skill and kernel design documentation; runtime unchanged
+source_worktree: existing consumer, SCM, training and kernel design documentation; document layout/navigation and the uncommitted comparison bundle are maintained; no runtime source change
 status: active
-requirement_ids: [REQ-BOUNDARY-01, REQ-BOUNDARY-02, REQ-BOUNDARY-03, REQ-BOUNDARY-04, REQ-BOUNDARY-05, REQ-BOUNDARY-06, REQ-BOUNDARY-07, REQ-BOUNDARY-08, REQ-BOUNDARY-09, REQ-BOUNDARY-10, REQ-BOUNDARY-11, REQ-BOUNDARY-12, REQ-BOUNDARY-13, REQ-CCR-05, REQ-CCR-10, REQ-SG-01, REQ-SG-02, REQ-SG-03, REQ-SG-04, REQ-SG-05, REQ-SG-06, REQ-SG-07, REQ-RPC-01, REQ-RPC-02, REQ-RPC-03, REQ-RPC-04, REQ-RPC-05]
+requirement_ids: [REQ-BOUNDARY-01, REQ-BOUNDARY-02, REQ-BOUNDARY-03, REQ-BOUNDARY-04, REQ-BOUNDARY-05, REQ-BOUNDARY-06, REQ-BOUNDARY-07, REQ-BOUNDARY-08, REQ-BOUNDARY-09, REQ-BOUNDARY-10, REQ-BOUNDARY-11, REQ-BOUNDARY-12, REQ-BOUNDARY-13, REQ-CCR-05, REQ-CCR-10, REQ-SG-01, REQ-SG-02, REQ-SG-03, REQ-SG-04, REQ-SG-05, REQ-SG-06, REQ-SG-07, REQ-RPC-01, REQ-RPC-02, REQ-RPC-03, REQ-RPC-04, REQ-RPC-05, REQ-DOC-01, REQ-DOC-02, REQ-DOC-03, REQ-DOC-04, REQ-DOC-05]
 module_ids: [K-RECORDS, K-RPC, K-ROOT, K-QUERIES, K-KNOWLEDGE, K-DELIVERY, K-CORPUS, K-EXECUTION, K-STORAGE, K-LEDGER, K-DESIGN]
 acceptance_status: not_behaviorally_validated
 ---
@@ -23,10 +23,12 @@ Project Kernel 保存需求、方案、尝试、验收、审批、交付和证�
 | 完整设计与成长路线 | 八阶段执行闭环、L0/L1、模型输出垃圾治理、低耦合边界和无可视化 agent 接入计划 | [设计与成长](../architecture/kernel-design-and-growth.md)、[本次任务](tasks/2026-10-15-kernel-cleanup.md) |
 | 独立核心接受 | 冻结25项87条件为 `accepted_g2`；`release_approved=false` | [G2 第四轮报告](../acceptance/G2-round4-report.md)、[条件与证据](../acceptance/G2-round4/checks.json) |
 | 当前能力 | 显式组合、版本账本、执行和交付事实、来源证据、查询、test 范围恢复 | [内核现状](../architecture/current-state.md) |
+| 对比评测 | 23 项本地行为用例通过；控制臂为自建机制消融，规模画像不等于容量结论 | [评测目录](../../evaluation/kernel-comparison-2026-10-15/README.md)、[本次任务](tasks/2026-10-15-kernel-comparison.md) |
+| 问题定义 | README 按长期 Agent 任务的事实交接、核对和追责重新描述 12 类失效；第 1 类为理解偏移，第 11 类为需求上下文丢失；项目级与任务级记录分开维护 | [README](../../README.md#我们真正要解决的问题)、[问题定义修订记录](tasks/2026-10-15-problem-definition.md) |
 | RPC 修复与剩余问题 | RPC 深度、Unicode/id 和序列化兜底修复已提交并推送 main，仅静态审查、未行为验证；knowledge 提升缺口仍未修复，且未接入核心 RPC | [RPC 修复记录](tasks/2026-10-10-rpc-resilience.md)、[静态设计审查](../reviews/2026-10-10-design-review.md) |
 | 记录与学习 | 模块树、项目/任务总结、学习资料与文字画像帮助查找和理解项目 | [记录目录](README.md)、[持续记录职责](../architecture/continuous-records.md) |
 | 技能成长 | 在项目内改进可复用工作方法；技能评价与用户画像分开 | [技能成长](../architecture/skill-growth.md)、[当前需求](../requirements/2026-10-10-clean-layout-and-skill-growth.md) |
-| 目录整理 | 测试集中在 tests，运行源码缓存已清理；原验收保留原路径与字节摘要 | [目录分工](../development/repository-layout.md)、[当前任务](tasks/2026-10-10-layout-and-skill-growth.md) |
+| 目录与文档导航 | 文档按架构、开发、计划、交接和记录归位，统一入口导航到各自 owner；测试布局和历史验收继续由原记录拥有 | [文档总入口](../README.md)、[目录分工](../development/repository-layout.md)、[本次整理](tasks/2026-10-15-document-layout.md) |
 
 ## 必须保留的设计约束
 
@@ -63,6 +65,13 @@ Project Kernel 保存需求、方案、尝试、验收、审批、交付和证�
 | 11 | 2026-10-13 | 记录 AGH 独立适配及既有检查，详情由当时任务拥有 |
 | 12 | 2026-10-15 | 新增完整设计与治理/成长路线入口 |
 | 13 | 2026-10-15 | 重写内核 README、整合设计与问题映射、记录持续整洁/headless 计划及视频成果 |
+| 14 | 2026-10-15 | 文档归位并接入统一入口；本次需求、路径变更和静态检查由独立目录整理任务拥有 |
+| 15 | 2026-10-15 | 新增逐项对比评测文件夹与本次运行记录；23 项通过，未扩大历史接受范围 |
+| 16 | 2026-10-15 | 按用户补充的 12 类失效重写 README 问题定义，区分理解偏移与需求记忆丢失，记录项目级/任务级双留档边界；无运行源码或验收变更 |
+
+## 记录版本 15 补充
+
+[问题定义修订](tasks/2026-10-15-problem-definition.md)将项目主问题收束为长期 Agent 流程中的项目事实交接、核对和追责困难。问题场景描述失效与后果；机制和代码入口另见 README 后续架构章节及[当前实现](../architecture/current-state.md)。12 类问题中，第 1 类是对已有上下文理解偏移和技术债累积，第 11 类是需求上下文本身在会话切换后丢失。项目级记录维护稳定事实与模块关系，任务级记录维护一次变更的目标、证据和结果，通过链接关联而不覆盖。此次仅更新文档，不新增运行能力或验收。
 
 ## 2026-10-12 当前补充
 

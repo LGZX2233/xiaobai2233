@@ -4,11 +4,11 @@
 | --- | --- |
 | node_id | K-ROOT |
 | node_kind | aggregate |
-| document_version | 1.5.0 |
+| document_version | 1.7.0 |
 | updated_at | 2026-10-15 Asia/Shanghai |
 | source_version | 1.0.0 |
 | source_revision | `c36453981a2151c7652b54301c0cb5a7a1840856` |
-| source_worktree_changes | RPC 修复及维护已提交并推送 main；后续变动为同步文档 |
+| source_worktree_changes | 既有 RPC 修复及维护已提交并推送 main；本轮修订 README 问题定义与提交摘要，仅维护文档，不重新审查运行实现 |
 | implementation_status | 独立核心已实现，发布未批准 |
 | navigation_parent | null |
 | conversation_refs | [] |
@@ -18,6 +18,8 @@
 独立内核保存项目事实并执行从需求到交付的受控流程。宿主适配和 UI 属于外部项目。它的三个阅读分组是[K-CORE](core.md)、[K-DATA](data.md)和[K-EXTENSIONS](extensions.md)；分组不增加运行包。
 
 源码入口：[bootstrap.py](../../../src/project_kernel/bootstrap.py) 的 `KernelServices`、`build_server`、`build_human_server`；部署元数据：[pyproject.toml](../../../pyproject.toml)。具体输入输出和持久对象进入对应节点，不在此重复完整目录。
+
+[文档总入口](../../README.md)按读者目标组织架构、开发、计划、交接和记录；实际目录职责由[目录分工](../../development/repository-layout.md)拥有。
 
 ## 关系
 
@@ -31,7 +33,9 @@
 | [REQ-CCR-01/02/03/11](../../requirements/2026-10-10-continuous-records.md) | 文档树、详细节点、关系、干净结构 | 本轮文档交付，不改运行核心 |
 | [REQ-SG-01至07](../../requirements/2026-10-10-clean-layout-and-skill-growth.md) | 测试布局、技能成长与阅读入口 | 新增维护交付，实际静态结果见[任务记录](../../records/tasks/2026-10-10-layout-and-skill-growth.md) |
 | [REQ-RPC-01至05](../../requirements/2026-10-10-rpc-resilience.md) | RPC 异常处理修复、静态记录与普通主分支同步 | 修复已实施；未行为验证，同步进度由[任务记录](../../records/tasks/2026-10-10-rpc-resilience.md)拥有 |
+| [REQ-DOC-01至05](../../requirements/2026-10-15-document-layout.md) | 文档归位、统一导航、兼容路径和保护历史资料 | 本次变更和检查由[目录整理任务](../../records/tasks/2026-10-15-document-layout.md)拥有，不新增运行接受 |
 | [第四轮报告](../../acceptance/G2-round4-report.md) | 原25项/87条件 | 历史 `accepted_g2`，`release_approved=false`；本轮没有新验收 |
+| [问题定义修订](../../records/tasks/2026-10-15-problem-definition.md) | 长期 Agent 任务中的事实交接、核对和追责；12 类失效场景及状态边界 | README 和提交摘要已更新；无运行能力或历史接受变更 |
 
 ## 当前问题与变更
 
@@ -49,3 +53,7 @@
 文档版本 1.4.0：[详细规格](../../architecture/reproduction-blueprint.md)补充R1 总体职责、参考选择、章节和验收入口，对应 [REQ-BOUNDARY-13](../../requirements/2026-10-12-kernel-boundaries.md)。R1 参照源码 `16410c9fbf4a8507445b4603e371e701614e4499`，规格建立时新增字段、接口与流程尚未实现；后续独立 R1 S0–S7 切片见[任务](../../records/tasks/2026-10-13-r1-s6-s7-acceptance.md)，不等于 v1 新增能力或真实宿主验收；规格建立时的交付由[任务记录](../../records/tasks/2026-10-12-kernel-boundaries.md)拥有，不改变本节点的既有运行依赖或历史接受。
 
 文档版本 1.5.0：[设计、问题治理与无界面接入计划](../../architecture/kernel-design-and-growth.md)补充完整目标流程、模型输出垃圾治理、模块化低耦合和 headless agent 路线。该文档是设计与维护基线，不能把计划或静态判断当成新运行能力；本轮记录见[内核目录整理任务](../../records/tasks/2026-10-15-kernel-cleanup.md)。
+
+文档版本 1.6.0：接入[文档总入口](../../README.md)与[本次目录整理](../../records/tasks/2026-10-15-document-layout.md)。节点身份、依赖和历史验收范围不变；原始证据继续由原路径拥有。
+
+文档版本 1.7.0：按用户提出的 12 类问题修订 [README 问题定义](../../../README.md#我们真正要解决的问题)及提交摘要；区分模型对已有上下文的理解偏移与换会话后的需求记忆丢失，并记录项目级/任务级双留档的职责边界。问题主文案描述场景与后果，实现和验证单独标注；未修改运行源码或扩大历史接受，详见[任务记录](../../records/tasks/2026-10-15-problem-definition.md)。
