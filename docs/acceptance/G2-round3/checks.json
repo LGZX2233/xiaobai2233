@@ -1,0 +1,2368 @@
+{
+  "as_of": "2026-10-09",
+  "mode": "test",
+  "gate": "G2",
+  "overall_acceptance_approved": false,
+  "status": "pending_g2_acceptance",
+  "frozen_scope": "AC12-32, AC37-38, AC43, AC45",
+  "mapping_document": "docs/reviews/2026-10-09-round3/g2-evidence-map.md",
+  "junit": "docs/acceptance/G2-round3/evidence/pytest-verified.xml",
+  "mapping_semantics": "Each item references passing tests from the listed modules. This association is evidence indexing, not proof that every frozen acceptance condition was independently signed off. Cases may overlap between criteria; they are never added to the full-suite total.",
+  "checks": [
+    {
+      "id": "AC12",
+      "scenario": "版本派发",
+      "test_paths": [
+        "tests/p02_design/test_design.py"
+      ],
+      "public_entries": [
+        "dispatch.draft",
+        "dispatch.confirm"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 7,
+      "junit_cases": [
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_confirmation_retains_draft_acceptance_and_assumptions"
+        },
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_dispatch_freezes_all_fields_and_only_becomes_ready"
+        },
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_dispatch_refuses_invalid_baselines[missing]"
+        },
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_dispatch_refuses_invalid_baselines[foreign]"
+        },
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_dispatch_refuses_invalid_baselines[digest]"
+        },
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_dispatch_refuses_invalid_baselines[cas]"
+        },
+        {
+          "classname": "tests.p02_design.test_design",
+          "name": "test_rules_publish_records_preview_and_dispatch_revoke"
+        }
+      ],
+      "limits": "可做模块证据；需当前组合根合法 payload 和冻结 packet 结果",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC13",
+      "scenario": "规则与未知",
+      "test_paths": [
+        "tests/p02_design/test_rules.py"
+      ],
+      "public_entries": [
+        "rules.save",
+        "rules.preview",
+        "rules.publish"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 7,
+      "junit_cases": [
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_resolve_fact_and_unknown"
+        },
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_deny_matching_blocks"
+        },
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_unknown_deny_condition_blocks"
+        },
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_require_human_and_warn"
+        },
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_no_allow_effect_exists"
+        },
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_all_any_not_conditions"
+        },
+        {
+          "classname": "tests.p02_design.test_rules",
+          "name": "test_integer_comparison"
+        }
+      ],
+      "limits": "规则未知/拒绝有测试；生产事实 provider 仍未验收",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC14",
+      "scenario": "无 provider / 模拟",
+      "test_paths": [
+        "tests/p03_attempt/test_attempt.py",
+        "tests/p04_delivery/test_verification.py"
+      ],
+      "public_entries": [
+        "attempt.start",
+        "verification.run"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 14,
+      "junit_cases": [
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_real_subprocess_success_settles_completed"
+        },
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_settled_attempt_keeps_task_packet_and_strategy_linkage"
+        },
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_real_subprocess_failure_settles_failed"
+        },
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_timeout_is_unknown_not_failed"
+        },
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_no_provider_is_capability_unavailable"
+        },
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_cross_project_packet_is_rejected"
+        },
+        {
+          "classname": "tests.p03_attempt.test_attempt",
+          "name": "test_concurrent_attempts_use_real_wal_and_settle_independently"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_zero_required_items_report_incomplete_and_persisted"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_skipped_and_unknown_and_simulation_never_pass"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_stale_candidate_manifest_cannot_pass"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_human_review_missing_is_incomplete_and_record_review_does_not_overwrite"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_record_review_requires_matching_candidate_and_evidence"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_acceptance_refs_are_resolved_and_missing_refs_rejected"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_check_validity_marks_stale_on_acceptance_change_and_supersedes_approval"
+        }
+      ],
+      "limits": "能力缺失和 simulation 语义需用当前组合根复验",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC15",
+      "scenario": "方案隔离",
+      "test_paths": [
+        "tests/p03_attempt/test_replay_regressions.py",
+        "tests/p13_integration/test_closed_loop.py"
+      ],
+      "public_entries": [
+        "attempt.start",
+        "attempts.compare"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 7,
+      "junit_cases": [
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_replay_and_restart_do_not_restart_provider_and_keep_output"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_unknown_cancel_without_provider_confirmation_stays_pending"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_start_requires_exact_packet_and_strategy_root[strategy]"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_start_requires_exact_packet_and_strategy_root[root]"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_start_requires_exact_packet_and_strategy_root[revision]"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_provider_cannot_overwrite_kernel_owned_execution_identity"
+        },
+        {
+          "classname": "tests.p13_integration.test_closed_loop",
+          "name": "test_dual_project_workflow_delivery_archive_and_offline_restore"
+        }
+      ],
+      "limits": "test executor 闭环；需保留 A/B scope 与 strategy root 产物",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC16",
+      "scenario": "取消与重试",
+      "test_paths": [
+        "tests/p03_attempt/test_replay_regressions.py"
+      ],
+      "public_entries": [
+        "attempt.cancel",
+        "attempt.start",
+        "operation.status"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 6,
+      "junit_cases": [
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_replay_and_restart_do_not_restart_provider_and_keep_output"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_unknown_cancel_without_provider_confirmation_stays_pending"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_start_requires_exact_packet_and_strategy_root[strategy]"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_start_requires_exact_packet_and_strategy_root[root]"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_start_requires_exact_packet_and_strategy_root[revision]"
+        },
+        {
+          "classname": "tests.p03_attempt.test_replay_regressions",
+          "name": "test_provider_cannot_overwrite_kernel_owned_execution_identity"
+        }
+      ],
+      "limits": "unknown cancel 与新 attempt 有回归；宿主真实取消属于 G3",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC17",
+      "scenario": "环境真实结果",
+      "test_paths": [
+        "tests/p05_evidence/test_service.py"
+      ],
+      "public_entries": [
+        "environment.probe",
+        "environment.report"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 4,
+      "junit_cases": [
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_archive_partial_repair_and_lost_receipt_reconcile"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_artifact_ingest_requires_bound_stream_and_preserves_gap"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_environment_versions_missing_and_old_are_retained"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_restore_refuses_an_unapproved_target_and_busy_fence"
+        }
+      ],
+      "limits": "当前为本地 Python 探测；无宿主 provider 矩阵",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC18",
+      "scenario": "验收归属",
+      "test_paths": [
+        "tests/p04_delivery/test_verification.py"
+      ],
+      "public_entries": [
+        "verification.run",
+        "operation.status"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 7,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_zero_required_items_report_incomplete_and_persisted"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_skipped_and_unknown_and_simulation_never_pass"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_stale_candidate_manifest_cannot_pass"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_human_review_missing_is_incomplete_and_record_review_does_not_overwrite"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_record_review_requires_matching_candidate_and_evidence"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_acceptance_refs_are_resolved_and_missing_refs_rejected"
+        },
+        {
+          "classname": "tests.p04_delivery.test_verification",
+          "name": "test_check_validity_marks_stale_on_acceptance_change_and_supersedes_approval"
+        }
+      ],
+      "limits": "zero/skipped/unknown/stale 规则有测试；需当前 candidate digest 证据",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC19",
+      "scenario": "申请状态",
+      "test_paths": [
+        "tests/p13_integration/test_closed_loop.py"
+      ],
+      "public_entries": [
+        "delivery.request",
+        "approvals.queue"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 1,
+      "junit_cases": [
+        {
+          "classname": "tests.p13_integration.test_closed_loop",
+          "name": "test_dual_project_workflow_delivery_archive_and_offline_restore"
+        }
+      ],
+      "limits": "申请不自动批准；需公开入口回执和 approval revision",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC20",
+      "scenario": "可信 human",
+      "test_paths": [
+        "tests/p13_integration/test_context.py",
+        "tests/p13_integration/test_wiring.py"
+      ],
+      "public_entries": [
+        "approval.decide"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 11,
+      "junit_cases": [
+        {
+          "classname": "tests.p13_integration.test_context",
+          "name": "test_human_only_commands_are_not_in_machine_allowlist"
+        },
+        {
+          "classname": "tests.p13_integration.test_context",
+          "name": "test_unminted_invocation_context_is_rejected"
+        },
+        {
+          "classname": "tests.p13_integration.test_context",
+          "name": "test_minted_context_works"
+        },
+        {
+          "classname": "tests.p13_integration.test_context",
+          "name": "test_approval_decide_not_registered_in_server"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_declared_machine_commands_reject_empty_payloads"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_human_only_commands_exist_only_on_the_human_entry"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_human_decision_records_and_authorizes_the_export_chain"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_human_entry_applies_the_identity_gate"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_declared_queries_answer_on_a_real_empty_store"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_freeze_refuses_a_missing_required_artifact"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_dataset_build_over_rpc_then_preview"
+        }
+      ],
+      "limits": "仅 synthetic interaction proof；真实宿主身份属于 G3/G4",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC21",
+      "scenario": "失效准确",
+      "test_paths": [
+        "tests/p04_delivery/test_approval.py"
+      ],
+      "public_entries": [
+        "approval.decide",
+        "approval.revoke"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 14,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_passed_verification_reaches_delivery_ready_then_request_never_auto_approves"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_request_approval_requires_delivery_ready_task"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_machine_actor_cannot_approve_even_with_the_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_human_without_approval_capability_is_denied"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_decide_is_bound_to_the_snapshot_digest"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_unrelated_display_name_change_does_not_invalidate"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_decisive_requirement_change_supersedes_the_pending_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_stale_verification_supersedes_the_pending_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_expiry_is_visible_and_blocks_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_revoke_pending_is_superseded_and_returns_task"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_revoke_approved_before_apply_start_is_revoked"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_revoke_after_apply_start_only_requests_cancellation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_same_snapshot_request_returns_the_active_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_snapshot_body_digest_is_shell_independent"
+        }
+      ],
+      "limits": "decisive 与无关输入已有回归；需当前快照摘要",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC22",
+      "scenario": "无循环 hash",
+      "test_paths": [
+        "tests/p04_delivery/test_delivery.py"
+      ],
+      "public_entries": [
+        "delivery.request",
+        "archive.export"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 9,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_snapshot_body_digest_is_stable_and_shell_independent"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_freeze_rejects_a_body_that_violates_the_frozen_schema"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_full_loop_writes_a_real_bundle_and_retry_is_idempotent"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_existing_target_with_another_digest_is_never_overwritten"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_apply_requires_an_approved_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_apply_requires_the_delivery_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_claim_then_apply_start_binds_the_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_claim_refuses_when_decisive_inputs_moved"
+        },
+        {
+          "classname": "tests.p04_delivery.test_delivery",
+          "name": "test_bundle_manifest_body_references_snapshot_and_operation"
+        }
+      ],
+      "limits": "snapshot digest 测试；需当前 manifest 产物摘要",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC23",
+      "scenario": "claim 崩溃",
+      "test_paths": [
+        "tests/p04_delivery/test_reconcile.py",
+        "tests/p04_delivery/test_effect_regressions.py",
+        "tests/p04_delivery/test_provider_recovery.py"
+      ],
+      "public_entries": [
+        "delivery.apply",
+        "delivery.reconcile",
+        "operation.status"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 49,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_replay_after_restart_calls_exporter_once"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[revoked]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[expired]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[candidate]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_effect_succeeds_but_settlement_is_lost_then_reconciled"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_verification_provider_failure_has_durable_unknown_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_close_keeps_archive_incomplete_when_source_has_a_gap"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_approved_delivery_cannot_redirect_to_another_sink"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_two_connections_close_once_and_keep_one_manifest"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_non_file_provider_publishes_the_approved_manifest_and_artifact"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_observation_failure_keeps_receipt_and_recovers_after_restart_without_apply"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_restart_reconcile_requires_the_original_provider_target[namespace]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_restart_reconcile_requires_the_original_provider_target[sink_ids]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_invalid_provider_observation_keeps_accepted_receipt_and_unknown_effect[updates0]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_invalid_provider_observation_keeps_accepted_receipt_and_unknown_effect[updates1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_invalid_provider_observation_keeps_accepted_receipt_and_unknown_effect[updates2]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_observation_with_unverified_digest_cannot_settle[None]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_observation_with_unverified_digest_cannot_settle[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_absence_requires_boolean_terminal_evidence[None]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_absence_requires_boolean_terminal_evidence[False]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_absence_requires_boolean_terminal_evidence[true]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_absence_requires_boolean_terminal_evidence[1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_approval_cannot_authorize_a_changed_provider_namespace"
+        },
+        {
+          "classname": "tests.p04_delivery.test_provider_recovery",
+          "name": "test_provider_target_policy_cannot_bypass_declared_sink_ids"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_crash_before_apply_start_keeps_claim_then_unclaims_after_lease_expiry"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_crash_after_apply_start_is_unknown_until_a_real_effect_is_queried"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_effect_present_with_pinned_digest_recovers_applied"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_absent_final_needs_terminal_evidence"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_external_fence_can_prove_absent_final"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_late_old_epoch_result_is_audited_and_never_applied"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_missing_or_foreign_operation_identity[receipt0]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_missing_or_foreign_operation_identity[receipt1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_typed_receipt_for_another_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_untrusted_fence_reference[fence_ref0]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_untrusted_fence_reference[fence_ref1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_effect_receipt_identity_matches_reconciled_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_external_fence_flag_without_evidence_cannot_prove_absence"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_of_a_terminal_operation_is_a_no_op"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_requires_the_delivery_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_receipt_with_unverified_digest_stays_unknown[None]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_receipt_with_unverified_digest_stays_unknown[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_existing_fence_cannot_release_another_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_does_not_trust_manifest_when_artifact_is_damaged[missing]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_does_not_trust_manifest_when_artifact_is_damaged[changed]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[false]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[true]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[terminal3]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[terminal4]"
+        }
+      ],
+      "limits": "本轮已重跑；观察失败、目标改变与重启后对账不可重写 sink",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC24",
+      "scenario": "fencing / 撤回",
+      "test_paths": [
+        "tests/p04_delivery/test_reconcile.py",
+        "tests/p04_delivery/test_approval.py"
+      ],
+      "public_entries": [
+        "delivery.reconcile",
+        "approval.revoke"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 39,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_passed_verification_reaches_delivery_ready_then_request_never_auto_approves"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_request_approval_requires_delivery_ready_task"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_machine_actor_cannot_approve_even_with_the_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_human_without_approval_capability_is_denied"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_decide_is_bound_to_the_snapshot_digest"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_unrelated_display_name_change_does_not_invalidate"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_decisive_requirement_change_supersedes_the_pending_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_stale_verification_supersedes_the_pending_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_expiry_is_visible_and_blocks_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_revoke_pending_is_superseded_and_returns_task"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_revoke_approved_before_apply_start_is_revoked"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_revoke_after_apply_start_only_requests_cancellation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_same_snapshot_request_returns_the_active_approval"
+        },
+        {
+          "classname": "tests.p04_delivery.test_approval",
+          "name": "test_snapshot_body_digest_is_shell_independent"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_crash_before_apply_start_keeps_claim_then_unclaims_after_lease_expiry"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_crash_after_apply_start_is_unknown_until_a_real_effect_is_queried"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_effect_present_with_pinned_digest_recovers_applied"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_absent_final_needs_terminal_evidence"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_external_fence_can_prove_absent_final"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_late_old_epoch_result_is_audited_and_never_applied"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_missing_or_foreign_operation_identity[receipt0]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_missing_or_foreign_operation_identity[receipt1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_typed_receipt_for_another_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_untrusted_fence_reference[fence_ref0]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_rejects_untrusted_fence_reference[fence_ref1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_effect_receipt_identity_matches_reconciled_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_external_fence_flag_without_evidence_cannot_prove_absence"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_of_a_terminal_operation_is_a_no_op"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_requires_the_delivery_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_receipt_with_unverified_digest_stays_unknown[None]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_receipt_with_unverified_digest_stays_unknown[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_existing_fence_cannot_release_another_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_does_not_trust_manifest_when_artifact_is_damaged[missing]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_reconcile_does_not_trust_manifest_when_artifact_is_damaged[changed]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[false]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[true]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[1]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[terminal3]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_reconcile",
+          "name": "test_provider_truthy_terminal_does_not_prove_final_absence[terminal4]"
+        }
+      ],
+      "limits": "epoch 与无 fence unknown 有回归；需当前 provider receipt",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC25",
+      "scenario": "真实 bundle",
+      "test_paths": [
+        "tests/p05_evidence/test_evidence.py",
+        "tests/p13_integration/test_closed_loop.py"
+      ],
+      "public_entries": [
+        "delivery.apply",
+        "archive.export"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 31,
+      "junit_cases": [
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_stage_publish_verify_roundtrip"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_same_digest_is_verified_then_reused_without_rewrite"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_modified_staging_file_is_rejected_on_publish"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_register_rejects_declared_digest_that_does_not_match_bytes"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_register_accepts_object_ref_locator_and_rejects_escape"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_store_entry_is_isolated_and_reported"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_publish_refuses_to_overwrite_different_bytes_for_same_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_missing_artifact_never_verifies"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_require_ready_freeze_guard"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_scoped_artifact_port_checks_scope_and_resolves_object_refs"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_and_repair"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_manifest_digest_excludes_shell"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_no_overwrite_different_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_is_idempotent_for_same_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_partial_export_is_repaired_without_reingesting_content"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_exported_artifact_is_isolated_and_refilled"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_repair_refuses_a_different_manifest_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_changed_content_produces_new_manifest_and_keeps_old_reference"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_status_reports_acceptance_flush_and_sinks_separately"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_sink_receipts_are_durable_and_gate_completeness"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_export_rejects_a_sink_outside_the_allowed_range"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_sink_ledger_state_machine_rejects_non_terminal_settle"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_failing_sink_is_reported_as_failed_not_success"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_wal_consistent_backup_with_integrity"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_backup_reports_versions_references_and_artifact_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_backup_detects_tampered_version_and_reference"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_backup_file_fails_integrity_check"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_plan_distinguishes_business_vs_disaster"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_apply_fence_semantics_and_never_fakes_success"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_verify_and_business_apply_are_explicitly_not_implemented"
+        },
+        {
+          "classname": "tests.p13_integration.test_closed_loop",
+          "name": "test_dual_project_workflow_delivery_archive_and_offline_restore"
+        }
+      ],
+      "limits": "文件 provider 可测；非文件 sink 不在本轮 G2 要求",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC26",
+      "scenario": "artifact 缺失",
+      "test_paths": [
+        "tests/p05_evidence/test_evidence.py",
+        "tests/p13_integration/test_wiring.py"
+      ],
+      "public_entries": [
+        "artifact.register",
+        "delivery.request"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 37,
+      "junit_cases": [
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_stage_publish_verify_roundtrip"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_same_digest_is_verified_then_reused_without_rewrite"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_modified_staging_file_is_rejected_on_publish"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_register_rejects_declared_digest_that_does_not_match_bytes"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_register_accepts_object_ref_locator_and_rejects_escape"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_store_entry_is_isolated_and_reported"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_publish_refuses_to_overwrite_different_bytes_for_same_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_missing_artifact_never_verifies"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_require_ready_freeze_guard"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_scoped_artifact_port_checks_scope_and_resolves_object_refs"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_and_repair"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_manifest_digest_excludes_shell"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_no_overwrite_different_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_is_idempotent_for_same_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_partial_export_is_repaired_without_reingesting_content"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_exported_artifact_is_isolated_and_refilled"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_repair_refuses_a_different_manifest_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_changed_content_produces_new_manifest_and_keeps_old_reference"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_status_reports_acceptance_flush_and_sinks_separately"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_sink_receipts_are_durable_and_gate_completeness"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_export_rejects_a_sink_outside_the_allowed_range"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_sink_ledger_state_machine_rejects_non_terminal_settle"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_failing_sink_is_reported_as_failed_not_success"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_wal_consistent_backup_with_integrity"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_backup_reports_versions_references_and_artifact_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_backup_detects_tampered_version_and_reference"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_backup_file_fails_integrity_check"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_plan_distinguishes_business_vs_disaster"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_apply_fence_semantics_and_never_fakes_success"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_verify_and_business_apply_are_explicitly_not_implemented"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_declared_machine_commands_reject_empty_payloads"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_human_only_commands_exist_only_on_the_human_entry"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_human_decision_records_and_authorizes_the_export_chain"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_human_entry_applies_the_identity_gate"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_declared_queries_answer_on_a_real_empty_store"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_freeze_refuses_a_missing_required_artifact"
+        },
+        {
+          "classname": "tests.p13_integration.test_wiring",
+          "name": "test_dataset_build_over_rpc_then_preview"
+        }
+      ],
+      "limits": "缺失和摘要变更阻断 freeze；需当前产物清单",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC27",
+      "scenario": "并发 close / repair",
+      "test_paths": [
+        "tests/p04_delivery/test_effect_regressions.py",
+        "tests/p05_evidence/test_service.py"
+      ],
+      "public_entries": [
+        "task.close",
+        "archive.repair"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 13,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_replay_after_restart_calls_exporter_once"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[revoked]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[expired]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[candidate]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_effect_succeeds_but_settlement_is_lost_then_reconciled"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_verification_provider_failure_has_durable_unknown_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_close_keeps_archive_incomplete_when_source_has_a_gap"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_approved_delivery_cannot_redirect_to_another_sink"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_two_connections_close_once_and_keep_one_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_archive_partial_repair_and_lost_receipt_reconcile"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_artifact_ingest_requires_bound_stream_and_preserves_gap"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_environment_versions_missing_and_old_are_retained"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_restore_refuses_an_unapproved_target_and_busy_fence"
+        }
+      ],
+      "limits": "CAS 与 repair 规则有测试；需并发原始输出",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC28",
+      "scenario": "分 sink 故障",
+      "test_paths": [
+        "tests/p04_delivery/test_closure.py",
+        "tests/p05_evidence/test_service.py"
+      ],
+      "public_entries": [
+        "archive.export",
+        "archive.status"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 22,
+      "junit_cases": [
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_close_requires_an_applied_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_close_marks_delivered_and_links_the_archive"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_archive_never_claims_complete_without_the_source_flush"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_close_twice_is_rejected"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_close_refuses_when_the_primary_evidence_is_no_longer_accepted"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_is_blocked_while_a_delivery_is_unknown"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_after_proven_no_effect_preserves_failures"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_unclaims_a_claimed_operation_and_blocks_apply_start"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_ignores_the_callers_unsettled_self_report"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_requires_settled_attempts"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_requires_a_reason_and_a_known_outcome"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_closed_task_cannot_be_terminated_or_reopened"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_record_sink_result_rejects_an_unknown_sink"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_close_requires_the_delivery_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_terminate_requires_the_dispatch_capability"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_sink_callback_rejects_unverified_or_wrong_manifest_success[False-True]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_sink_callback_rejects_unverified_or_wrong_manifest_success[True-False]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_closure",
+          "name": "test_sink_callback_rejects_unverified_or_wrong_manifest_success[True-true]"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_archive_partial_repair_and_lost_receipt_reconcile"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_artifact_ingest_requires_bound_stream_and_preserves_gap"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_environment_versions_missing_and_old_are_retained"
+        },
+        {
+          "classname": "tests.p05_evidence.test_service",
+          "name": "test_restore_refuses_an_unapproved_target_and_busy_fence"
+        }
+      ],
+      "limits": "sink/source flush 分开；没有远端 final flush 证明",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC29",
+      "scenario": "WAL 备份恢复",
+      "test_paths": [
+        "tests/p05_evidence/test_controlled_recovery.py",
+        "tests/p05_evidence/test_evidence.py"
+      ],
+      "public_entries": [
+        "backup.create",
+        "restore.plan",
+        "restore.apply"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 34,
+      "junit_cases": [
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_real_restore_blocks_live_writers_and_preserves_post_backup_history"
+        },
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_fence_blocks_new_writer_in_another_process"
+        },
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_failed_post_restore_verification_restores_original_and_keeps_audit"
+        },
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_lost_recovery_receipt_reconciles_without_replacement"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_stage_publish_verify_roundtrip"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_same_digest_is_verified_then_reused_without_rewrite"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_modified_staging_file_is_rejected_on_publish"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_register_rejects_declared_digest_that_does_not_match_bytes"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_register_accepts_object_ref_locator_and_rejects_escape"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_store_entry_is_isolated_and_reported"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_publish_refuses_to_overwrite_different_bytes_for_same_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_missing_artifact_never_verifies"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_require_ready_freeze_guard"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_scoped_artifact_port_checks_scope_and_resolves_object_refs"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_and_repair"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_manifest_digest_excludes_shell"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_no_overwrite_different_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_export_is_idempotent_for_same_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_partial_export_is_repaired_without_reingesting_content"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_exported_artifact_is_isolated_and_refilled"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_repair_refuses_a_different_manifest_digest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_changed_content_produces_new_manifest_and_keeps_old_reference"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_archive_status_reports_acceptance_flush_and_sinks_separately"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_sink_receipts_are_durable_and_gate_completeness"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_export_rejects_a_sink_outside_the_allowed_range"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_sink_ledger_state_machine_rejects_non_terminal_settle"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_failing_sink_is_reported_as_failed_not_success"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_wal_consistent_backup_with_integrity"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_backup_reports_versions_references_and_artifact_manifest"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_backup_detects_tampered_version_and_reference"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_corrupt_backup_file_fails_integrity_check"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_plan_distinguishes_business_vs_disaster"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_apply_fence_semantics_and_never_fakes_success"
+        },
+        {
+          "classname": "tests.p05_evidence.test_evidence",
+          "name": "test_restore_verify_and_business_apply_are_explicitly_not_implemented"
+        }
+      ],
+      "limits": "仅显式临时 test store；生产恢复后置",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC30",
+      "scenario": "覆盖 / 追溯",
+      "test_paths": [
+        "tests/p06_queries/test_graph_coverage.py"
+      ],
+      "public_entries": [
+        "requirements.coverage",
+        "project.trace"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 2,
+      "junit_cases": [
+        {
+          "classname": "tests.p06_queries.test_graph_coverage",
+          "name": "test_trace_multihop_and_same_name_different_type"
+        },
+        {
+          "classname": "tests.p06_queries.test_graph_coverage",
+          "name": "test_coverage_counts_linked_and_marks_zero_link_not_applicable"
+        }
+      ],
+      "limits": "图查询测试；需当前读模型结果",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC31",
+      "scenario": "读水位统计",
+      "test_paths": [
+        "tests/p06_queries/test_readmodels.py",
+        "tests/p06_queries/test_typed_reads.py"
+      ],
+      "public_entries": [
+        "project.overview",
+        "project.timeline",
+        "events.read"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 14,
+      "junit_cases": [
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_envelope_fields_and_no_source_data_is_not_failure"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_gapped_source_incomplete_and_unavailable_source_unknown"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_legacy_delimiter_cursor_is_unavailable_not_trusted"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_as_of_watermark_consistency_and_future_watermark_refused"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_timeline_pagination_token_opaque_and_cross_page_stable"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_page_token_tamper_cross_project_and_filter_reuse_rejected"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_approvals_queue_status_filter_and_invalid_status"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_archive_status_partial_reports_archive_partial"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_environment_report_no_data_vs_source_failure"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_rebuild_is_read_only_consistent_and_detects_bad_head"
+        },
+        {
+          "classname": "tests.p06_queries.test_readmodels",
+          "name": "test_attempts_compare_unknown_usage_not_zero_and_no_double_count"
+        },
+        {
+          "classname": "tests.p06_queries.test_typed_reads",
+          "name": "test_list_revisions_is_project_scoped"
+        },
+        {
+          "classname": "tests.p06_queries.test_typed_reads",
+          "name": "test_latest_revisions_truncates_at_as_of_and_keeps_one_per_object"
+        },
+        {
+          "classname": "tests.p06_queries.test_typed_reads",
+          "name": "test_queries_run_on_a_read_only_store_connection"
+        }
+      ],
+      "limits": "watermarks 和 unavailable 语义有测试；需当前 as-of 输出",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC32",
+      "scenario": "迁移只读",
+      "test_paths": [
+        "tests/p07_migration"
+      ],
+      "public_entries": [
+        "legacy.import",
+        "project.timeline"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 25,
+      "junit_cases": [
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_entry_persists_facts_quarantine_report_atomically_and_replays"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_requires_project_admin_and_test_mode"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_conflicting_key_hash_is_rejected_without_writes"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_same_key_different_payload_conflicts_before_provider_or_writes"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_replay_survives_store_restart_without_rereading_source"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_provider_failure_leaves_no_success_receipt_or_partial_import"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_rejects_snapshot_or_plan_mismatch_before_writes[provider_ref]"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_rejects_snapshot_or_plan_mismatch_before_writes[producer]"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_rejects_snapshot_or_plan_mismatch_before_writes[digest]"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_rejects_snapshot_or_plan_mismatch_before_writes[target]"
+        },
+        {
+          "classname": "tests.p07_migration.test_entry",
+          "name": "test_import_rejects_snapshot_or_plan_mismatch_before_writes[mapping]"
+        },
+        {
+          "classname": "tests.p07_migration.test_import",
+          "name": "test_rerun_adds_no_revision_or_event"
+        },
+        {
+          "classname": "tests.p07_migration.test_import",
+          "name": "test_cross_scope_isolation"
+        },
+        {
+          "classname": "tests.p07_migration.test_import",
+          "name": "test_no_fabricated_pass_approval_usage_or_causal_parent"
+        },
+        {
+          "classname": "tests.p07_migration.test_import",
+          "name": "test_quarantine_writes_manifest_and_raw_and_repair_plan"
+        },
+        {
+          "classname": "tests.p07_migration.test_import",
+          "name": "test_conflicting_source_digest_is_quarantined_not_silently_skipped"
+        },
+        {
+          "classname": "tests.p07_migration.test_manifest",
+          "name": "test_source_bytes_and_hash_unchanged_after_import"
+        },
+        {
+          "classname": "tests.p07_migration.test_manifest",
+          "name": "test_manifest_records_schema_and_counts"
+        },
+        {
+          "classname": "tests.p07_migration.test_mapper",
+          "name": "test_mapping_is_deterministic_and_idempotent"
+        },
+        {
+          "classname": "tests.p07_migration.test_mapper",
+          "name": "test_classification_matrix"
+        },
+        {
+          "classname": "tests.p07_migration.test_mapper",
+          "name": "test_raw_fields_are_retained"
+        },
+        {
+          "classname": "tests.p07_migration.test_mapper",
+          "name": "test_same_display_name_projects_are_not_merged"
+        },
+        {
+          "classname": "tests.p07_migration.test_reconcile",
+          "name": "test_reconcile_reports_failed_unselected_and_preserves_decisions"
+        },
+        {
+          "classname": "tests.p07_migration.test_reconcile",
+          "name": "test_reconcile_detects_fabricated_pass"
+        },
+        {
+          "classname": "tests.p07_migration.test_reconcile",
+          "name": "test_reconcile_direct_call_without_store"
+        }
+      ],
+      "limits": "synthetic immutable fixture；不读取生产数据",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC37",
+      "scenario": "stdio 边界",
+      "test_paths": [
+        "tests/p10_protocol"
+      ],
+      "public_entries": [
+        "initialize",
+        "kernel.command",
+        "kernel.query"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 78,
+      "junit_cases": [
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_declared_surface_may_not_exceed_the_allowlist"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_declared_surface_may_not_expose_human_only_commands"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_machine_allowlist_may_not_contain_human_only_commands"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_surface_names_must_exist_in_the_frozen_catalog"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_human_only_is_refused_before_the_payload_is_validated"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_an_allowlist_that_claims_a_human_only_command_fails_at_composition"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_not_allowlisted_and_not_wired_commands_are_unsupported"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_initialize_advertises_the_consistent_surface"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_rpc_human_only_matches_the_composition_root"
+        },
+        {
+          "classname": "tests.p10_protocol.test_command_surface",
+          "name": "test_the_real_composition_root_is_surface_consistent"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_framer_reassembles_a_frame_split_across_chunks"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_framer_splits_coalesced_frames_and_keeps_the_partial_tail"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_framer_split_inside_a_multi_byte_character"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_framer_accepts_crlf_and_drops_a_bare_newline"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_framer_rejects_an_unterminated_oversized_partial_frame"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_framer_requires_a_sane_minimum_size"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_server_feed_answers_only_complete_frames"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_server_feed_handles_coalesced_requests_in_order"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_server_feed_reports_an_oversized_chunk_without_dying"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_a_valid_frame_sharing_a_chunk_with_an_oversized_partial_is_still_served"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_illegal_utf8_duplicate_keys_and_non_finite_are_parse_errors"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_unknown_fields_are_rejected_at_each_layer"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_stdout_only_protocol_has_no_log_noise"
+        },
+        {
+          "classname": "tests.p10_protocol.test_framing_stream",
+          "name": "test_responses_echo_the_request_id_so_a_client_can_bind_out_of_order"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_valid_input_maps_to_a_typed_request"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_the_handle_does_not_change_the_input_hash"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_truncated_range_may_carry_a_subset_but_a_complete_claim_may_not"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_duplicate_out_of_range_and_inverted_ranges_are_refused"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_leading_zero_and_non_string_sequences_are_refused"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_receipt_domain_mapping_follows_design_04"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_bridge_delegates_and_only_shapes_the_receipt"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_bridge_refuses_a_delegate_that_returns_no_receipt"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_server_wires_the_bridge_through_the_allowlisted_surface"
+        },
+        {
+          "classname": "tests.p10_protocol.test_ingest_mapping",
+          "name": "test_the_delegate_is_not_reached_when_the_payload_is_invalid"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_minted_handle_resolves_and_carries_principal_and_capabilities"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_unminted_handle_is_refused_and_never_echoed"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_expired_handle_is_refused_with_a_recovery_action"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_revoked_and_purged_handles_stop_resolving"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_zero_ttl_or_bad_limits_are_configuration_errors"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_human_handle_requires_verified_interaction_proof"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_handle_capacity_is_bounded"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_coerce_accepts_tuples_and_refuses_garbage"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_server_refuses_an_unminted_handle_before_payload_validation"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_server_refuses_an_expired_handle"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_handler_receives_no_handle_but_sees_the_trusted_context"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_the_handle_never_reaches_logs"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_query_path_also_revalidates_the_handle"
+        },
+        {
+          "classname": "tests.p10_protocol.test_invocation_context",
+          "name": "test_current_context_is_not_leaked_into_other_threads"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_roundtrip_preserves_strings_and_unicode"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_duplicate_keys_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_non_finite_number_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_illegal_utf8_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_oversized_frame_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_initialize_returns_bundle_digest_and_limits"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_command_envelope_rejects_unknown_command_before_dispatch"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_command_dispatch_reaches_handler"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_payload_extra_field_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_unknown_method_returns_method_not_found"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_stdout_only_protocol"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_in_flight_limiter_refuses_beyond_the_capacity_and_recovers"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_in_flight_limiter_requires_a_positive_capacity"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_the_advertised_in_flight_limit_is_enforced_by_default"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_refuses_an_extra_request_instead_of_queueing"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_in_flight_slot_is_released_after_a_failure"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_ledger_replays_same_hash_and_refuses_a_different_hash"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_ledger_never_manufactures_a_receipt"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_ledger_is_bounded"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_replays_the_original_receipt_for_a_retry"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_refuses_a_same_key_with_different_content"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_replays_a_rejected_receipt_unchanged"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_replay_requires_a_resolved_principal"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_the_original_receipt_survives_a_different_handle_and_connection"
+        },
+        {
+          "classname": "tests.p10_protocol.test_vectors",
+          "name": "test_vector_file_is_present_and_shaped"
+        },
+        {
+          "classname": "tests.p10_protocol.test_vectors",
+          "name": "test_every_vector_payload_is_schema_valid_and_hashes_identically"
+        },
+        {
+          "classname": "tests.p10_protocol.test_vectors",
+          "name": "test_semantically_ordered_expected_heads_change_the_hash"
+        },
+        {
+          "classname": "tests.p10_protocol.test_vectors",
+          "name": "test_the_handle_is_not_part_of_the_hash_input"
+        },
+        {
+          "classname": "tests.p10_protocol.test_vectors",
+          "name": "test_large_sequences_and_amounts_stay_strings"
+        },
+        {
+          "classname": "tests.p10_protocol.test_vectors",
+          "name": "test_selector_normalization_drops_non_candidate_keys"
+        }
+      ],
+      "limits": "协议回归可索引；需第三轮 Node 原始输出",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC38",
+      "scenario": "超时重连",
+      "test_paths": [
+        "tests/p10_protocol/test_session_guards.py",
+        "tests/p10_protocol/test_protocol.py"
+      ],
+      "public_entries": [
+        "command.receipt",
+        "operation.status"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 24,
+      "junit_cases": [
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_roundtrip_preserves_strings_and_unicode"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_duplicate_keys_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_non_finite_number_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_illegal_utf8_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_oversized_frame_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_initialize_returns_bundle_digest_and_limits"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_command_envelope_rejects_unknown_command_before_dispatch"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_command_dispatch_reaches_handler"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_payload_extra_field_rejected"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_unknown_method_returns_method_not_found"
+        },
+        {
+          "classname": "tests.p10_protocol.test_protocol",
+          "name": "test_stdout_only_protocol"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_in_flight_limiter_refuses_beyond_the_capacity_and_recovers"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_in_flight_limiter_requires_a_positive_capacity"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_the_advertised_in_flight_limit_is_enforced_by_default"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_refuses_an_extra_request_instead_of_queueing"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_in_flight_slot_is_released_after_a_failure"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_ledger_replays_same_hash_and_refuses_a_different_hash"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_ledger_never_manufactures_a_receipt"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_ledger_is_bounded"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_replays_the_original_receipt_for_a_retry"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_refuses_a_same_key_with_different_content"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_server_replays_a_rejected_receipt_unchanged"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_replay_requires_a_resolved_principal"
+        },
+        {
+          "classname": "tests.p10_protocol.test_session_guards",
+          "name": "test_the_original_receipt_survives_a_different_handle_and_connection"
+        }
+      ],
+      "limits": "receipt 重放和 unknown 语义；不证明宿主重启",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC43",
+      "scenario": "独立核心闭环 G2",
+      "test_paths": [
+        "tests/p13_integration/test_closed_loop.py",
+        "tests/p05_evidence/test_controlled_recovery.py"
+      ],
+      "public_entries": [
+        "kernel.command",
+        "kernel.query",
+        "approval.decide",
+        "delivery.apply",
+        "archive.repair",
+        "restore.apply",
+        "project.overview"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 5,
+      "junit_cases": [
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_real_restore_blocks_live_writers_and_preserves_post_backup_history"
+        },
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_fence_blocks_new_writer_in_another_process"
+        },
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_failed_post_restore_verification_restores_original_and_keeps_audit"
+        },
+        {
+          "classname": "tests.p05_evidence.test_controlled_recovery",
+          "name": "test_lost_recovery_receipt_reconciles_without_replacement"
+        },
+        {
+          "classname": "tests.p13_integration.test_closed_loop",
+          "name": "test_dual_project_workflow_delivery_archive_and_offline_restore"
+        }
+      ],
+      "limits": "test 身份、`directory_only`、临时 subprocess；需 A/B、两方案、失败修复、人工批准、bundle、归档和总览的当前证据",
+      "judgment": "pending_independent_acceptance"
+    },
+    {
+      "id": "AC45",
+      "scenario": "测试隔离",
+      "test_paths": [
+        "tests/p01_store/test_concurrency.py",
+        "tests/p04_delivery/test_effect_regressions.py"
+      ],
+      "public_entries": [
+        "initialize",
+        "project.overview"
+      ],
+      "status": "tests_passed_acceptance_pending",
+      "evidence_level": "module_or_rpc_tests_in_current_full_run",
+      "mapped_test_count": 10,
+      "junit_cases": [
+        {
+          "classname": "tests.p01_store.test_concurrency",
+          "name": "test_concurrent_writers_never_collide_on_commit_seq"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_replay_after_restart_calls_exporter_once"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[revoked]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[expired]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_apply_start_rechecks_approval_and_candidate_after_claim[candidate]"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_effect_succeeds_but_settlement_is_lost_then_reconciled"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_verification_provider_failure_has_durable_unknown_operation"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_close_keeps_archive_incomplete_when_source_has_a_gap"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_approved_delivery_cannot_redirect_to_another_sink"
+        },
+        {
+          "classname": "tests.p04_delivery.test_effect_regressions",
+          "name": "test_two_connections_close_once_and_keep_one_manifest"
+        }
+      ],
+      "limits": "需第三轮明确 temp DB/WAL/SHM、产物与失败归档路径；缓存和运行数据库不得入库",
+      "judgment": "pending_independent_acceptance"
+    }
+  ]
+}

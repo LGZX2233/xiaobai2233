@@ -1,0 +1,23 @@
+{
+  "mode": "test",
+  "cwd": "D:\\deepseekhannes\\kernel_next",
+  "command": [
+    ".venv/Scripts/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "-m",
+    "pytest",
+    "tests",
+    "-p",
+    "no:cacheprovider",
+    "--tb=short",
+    "--basetemp=.validation-tmp/round3-all",
+    "--junitxml=docs/acceptance/G2-round3/evidence/pytest-final.xml"
+  ],
+  "started_at": "2026-10-09T19:34:15.928284+08:00",
+  "finished_at": "2026-10-09T19:34:45.132178+08:00",
+  "exit_code": 0,
+  "output": "docs/acceptance/G2-round3/evidence/python-all-output.txt",
+  "output_sha256": "811fa7716f0d744b115242201863de659d8caa9e581758d9482ea60bf905e53a"
+}

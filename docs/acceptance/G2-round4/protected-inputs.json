@@ -1,0 +1,272 @@
+{
+  "base_commit": "aca09b044c8138389039783152d0f1e13e58dba8",
+  "files": [
+    {
+      "path": "contracts/generated/ts/types.ts",
+      "sha256": "da1c6c5abf7c2172262ef03f3587f69b3910b351e721408abb5fd5b75883851a",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/README.md",
+      "sha256": "3252511bd0550f64a4c59d527f3e798339287da8f8cf1b06beb0798ad080a891",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/bundle-manifest.json",
+      "sha256": "1fd6a80360ad2d8820e7300df37c582de1472430287ddfd7422d5cae6094f84d",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/command-catalog.json",
+      "sha256": "0ae69a1699a385265bf93c2380fdabee95377bd3a457284ef908a59f573d796b",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/command-envelope.schema.json",
+      "sha256": "a3a39d6a7a679ba95a7b2b4bb539a38a0ffe8e299b013842ec412f1351a7d731",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/command-payloads.schema.json",
+      "sha256": "f71fe049eb2444b8c3c8598d420accb3bd5384ade0293d20a8aafa07b9ba6a8d",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/command-receipt.schema.json",
+      "sha256": "8a25dead71c01e602314ebe5c22234afb91075b83d8068b16b737d43845a68c5",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/common.schema.json",
+      "sha256": "55f375ad9e1e6a6cdd4c8cb939cb5407ef222b944e1874b2ce38f9f8b188c1ea",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/delivery-snapshot.schema.json",
+      "sha256": "c91057cff98e40f3c92976f48ea6841213946733ac383681ea6a8bac6b270733",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/examples.json",
+      "sha256": "23a4016a84d02170bd1643cf2d43bdf7f56f5a7c164b53739abbe853279a3c07",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/golden-digests.json",
+      "sha256": "dc1e205fd5f374f044bf1d27a001779f51ca779f762b54133b4c83b7fde650b8",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/initialize-request.schema.json",
+      "sha256": "8a4a6fcb612421008d57b1237a1cf4355454a2df7b44d3983df7fef2b333bd0b",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/initialize-result.schema.json",
+      "sha256": "028bdc70d21637cd5e674024410e70b7f12ef888774d5e76d4b2ae27067122e0",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/query-envelope.schema.json",
+      "sha256": "94074bffed676d35c248905bbff3deb05874a76245105eb5a2fbd3fbd5d7f8e7",
+      "base_bytes_match": true
+    },
+    {
+      "path": "contracts/v1/query-payloads.schema.json",
+      "sha256": "3cd5768fa94e217f49a04d7f10f6fcbe414128a6d43eb9ecf838da9af274d7cd",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round2/evidence/synthetic-scenarios.zip",
+      "sha256": "e564a1ede6ba863b5173437deb9396ad376f34fe03eb3dca396047f781bd7538",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3-report.md",
+      "sha256": "fb8c7d09fd1e9812010202d56f8cd8faf0ca7710db136ecc4e0eb5c4964805ea",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/artifact-manifest.json",
+      "sha256": "9ab9b7437f5a962f4039724b3daf8c14b8d208eab963ec00d25d5148152a0612",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/checks.json",
+      "sha256": "e3b252bafa2b58c64fc0916ff692758ba01c30194bd32231d95d4103b14be8db",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/commands.md",
+      "sha256": "0e7cd3c100f44773bae08dcbaf067770ffa2d90a4ac02199528e1935ef6027ac",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/node-all-output.txt",
+      "sha256": "5a2903e0f3ebf9a27d24bfdf08e0dab879d21db65a318e3a7ea8d372fab3d1d5",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/node-all-result.json",
+      "sha256": "cf38411a81952504eb097a5858d3b7018c08e23b9126e53937686bed09dc5d9e",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/node-verified-output.txt",
+      "sha256": "453877347445bc2d259dd97553c65893592028ff02cb3d930319c62246725a11",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/node-verified-result.json",
+      "sha256": "16390f021bf2222eec9a500fade773939235c3266669bda610eb1fc71bb9fff2",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/pytest-current.xml",
+      "sha256": "6aeeb048d239b9cf954a89f1c59f4f99a4ab31efc2db80d9ffd965a9e4fb68ee",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/pytest-final.xml",
+      "sha256": "ae4e70ce96c37af4609efc895274c9001fb4569f727f8ea1b9b3b8effeb11917",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/pytest-recovery-target.xml",
+      "sha256": "c404166121d3aa5962cc04a070908e467981d17cb9c77cace986d8fc32045614",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/pytest-verified.xml",
+      "sha256": "970785d0aaf21b74eb73cf76ec229b364270440a06f59ee87c8aaae01d421ac0",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/python-all-output.txt",
+      "sha256": "811fa7716f0d744b115242201863de659d8caa9e581758d9482ea60bf905e53a",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/python-all-result.json",
+      "sha256": "a8ca38a0d2aaeb258d22b4630b8b49acc393946ed2ee0a0961cad1121a22e9c9",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/python-final-output.txt",
+      "sha256": "b82f89c5f4aa6a0fda754a426d0916df53fde853c8b86df255aa19c49c1507eb",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/python-final-result.json",
+      "sha256": "51f84ea42ad186a6f9e074848c331df558e584ab18fca5ca71315c1a5e04ec2f",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/python-verified-output.txt",
+      "sha256": "54fbe723f347d9df10aa08eff1cbca1a9aa30ec8fac89c3745c020c13c78eb47",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/python-verified-result.json",
+      "sha256": "53d0ac9e3807feaa8341815fd67bbd1c2b5bc0cc847300e1f33f71e2cbef4c49",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/recovery-target-output.txt",
+      "sha256": "60620b8b7504559f58a38c1093b0f9951f636fe4b583e327a35cedd30174f240",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/recovery-target-result.json",
+      "sha256": "9ea2eea4c4c9016b6fec4adb48f2499206c64888236f95d5fa9a638aeb9bc913",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/evidence/synthetic-scenario-index.json",
+      "sha256": "c16fefc6dc292c457ab4190e59f87716907132501e189b83fbc2482436c38252",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/failures/recovery-target-sandbox/pytest-recovery-target.xml",
+      "sha256": "d122fe23a8242d22e6f6f5b87a7af55f70e9e445deb5b029c2b69399ff37b202",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/failures/recovery-target-sandbox/recovery-target-output.txt",
+      "sha256": "1541c9d96572b5cc6b6eb90d3b445194af6650ea83cc4dfe0344332834af36fc",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/failures/recovery-target-sandbox/recovery-target-result.json",
+      "sha256": "09ec78ba00b92766b060a332570b08d60835fd8c01cf03110462e7f1067d0c3d",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/failures/round2-manifest-recheck.json",
+      "sha256": "4f87e88bb82691fb1dda82cf8990e2fa2f2b92e1842882b676fe818f9787a208",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/limitations.md",
+      "sha256": "5705532b0c3a744e62cc934444c353d04ac1a50c90fc4583c2a041e1a1131aaf",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/status.json",
+      "sha256": "c60ac2a20b61bbfb3e138f44296722bb4b9febc0fff63f1a4c158f35422af4d7",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2-round3/verification-result.json",
+      "sha256": "f5898dc5cbc86a679b1c3313fa9d3fff20bc8c01d58f1ab56136d2049ec5ec7c",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/acceptance/G2/evidence/synthetic-scenario-artifacts.zip",
+      "sha256": "15b2ed29b4885e12d469fa07dcf6ea67419033b8f0eb9d5c32045198d10c8527",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/reviews/2026-10-09-round3/g2-evidence-map.md",
+      "sha256": "87405670d3244c184f25bc971caa9bbb6c254d7704950f3b4a76a76636c468d1",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/reviews/2026-10-09-round3/platform-g2-assessment.md",
+      "sha256": "0adb74b311287ed49da633eb3f168dcbb8aac9d8090c04e4359471b89ca5338c",
+      "base_bytes_match": true
+    },
+    {
+      "path": "docs/reviews/2026-10-09-round3/provider-independent-review.md",
+      "sha256": "0081c7e1c7b6b13df1f07ecd1ea46b9d87c86aa772612227d16911cbc10f124d",
+      "base_bytes_match": true
+    },
+    {
+      "path": "fixtures/contracts/examples.json",
+      "sha256": "23a4016a84d02170bd1643cf2d43bdf7f56f5a7c164b53739abbe853279a3c07",
+      "base_bytes_match": true
+    },
+    {
+      "path": "fixtures/contracts/golden-digests.json",
+      "sha256": "dc1e205fd5f374f044bf1d27a001779f51ca779f762b54133b4c83b7fde650b8",
+      "base_bytes_match": true
+    },
+    {
+      "path": "fixtures/legacy/README.md",
+      "sha256": "8f1769af2c654514316915d9721694296fd699c8c44e52ebba639c98213d12c1",
+      "base_bytes_match": true
+    },
+    {
+      "path": "fixtures/legacy/legacy.sqlite",
+      "sha256": "c9770a25b05cdd66499a74e656ef151f366b96a1853b8d668668dc9ed3c95daf",
+      "base_bytes_match": true
+    },
+    {
+      "path": "fixtures/legacy/records.jsonl",
+      "sha256": "1b76ce49b56ac1446e1f9cef15b344aa3bb7c8cfb89f23d39f2c5e669a2ad0fe",
+      "base_bytes_match": true
+    }
+  ],
+  "matrix_path": "D:\\deepseekhannes\\kernel\\design-v1-20261008\\acceptance-matrix.json",
+  "matrix_sha256": "cbfd2340e621ad64764921beffd1b64058bdc3c9be56b57d736a40ca44c7d373"
+}

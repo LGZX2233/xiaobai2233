@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "document_version": "1.5.0",
-  "updated_at": "2026-10-13",
+  "document_version": "1.6.0",
+  "updated_at": "2026-10-15",
   "timezone": "Asia/Shanghai",
   "timestamp_precision": "date",
   "source_version": "1.0.0",
   "source_revision": "16410c9fbf4a8507445b4603e371e701614e4499",
-  "source_worktree": "existing consumer, SCM, training and skill documentation; AGH read-only adapter and K-BRIDGE navigation added; no new acceptance",
+  "source_worktree": "existing consumer, SCM, training, skill and kernel design documentation; AGH read-only adapter and K-BRIDGE navigation retained; no new acceptance",
   "relation_definition": "relationships.md",
   "nodes": [
     {

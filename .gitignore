@@ -45,3 +45,12 @@ credentials.json
 
 # Preserve the deterministic, redacted migration fixture documented in-tree.
 !fixtures/legacy/legacy.sqlite
+
+# Rebuildable demo work; retain construction sources and original footage locally.
+.venv-*/
+outputs/video/audio/
+outputs/video/work/
+outputs/video/cards/
+outputs/video/check/
+outputs/video/final*.mp4
+outputs/video/fallback*.mp4

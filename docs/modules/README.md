@@ -88,9 +88,11 @@ flowchart LR
 
 [持续记录](../records/README.md)提供项目与任务总结；[技能成长](../architecture/skill-growth.md)说明如何把工作经验改进为可复用方法。维护节点的具体步骤由[项目 skill](../../.agents/skills/kernel-maintain-records/SKILL.md)拥有，文档不会在后台自动更新。
 
+[内核设计、问题治理与无界面接入计划](../architecture/kernel-design-and-growth.md)集中说明完整设计闭环、模型输出垃圾治理、低耦合/可成长边界和 headless agent 接入分期。它是设计与维护基线，不替代节点的实际实现状态或历史验收。
+
 ## 版本与来源
 
-模块目录版本：1.4.0；更新时间：2026-10-12（Asia/Shanghai，日期精度）。本次 R1 设计参照源码：项目1.0.0、`16410c9fbf4a8507445b4603e371e701614e4499`；RPC 修复和维护的主分支同步事实由 RPC 任务记录拥有。节点各自保留其检查源码版本，未修改源码判断的节点仍可引用原基准；本次只新增详细设计导航。
+模块目录版本：1.5.0；更新时间：2026-10-15（Asia/Shanghai，日期精度）。本次设计补充参照源码：项目1.0.0、`16410c9fbf4a8507445b4603e371e701614e4499`；RPC 修复和维护的主分支同步事实由 RPC 任务记录拥有。节点各自保留其检查源码版本，未修改源码判断的节点仍可引用原基准；本次只新增设计与维护导航。
 
 模块文档的原要求与建立结果见[持续记录需求](../requirements/2026-10-10-continuous-records.md)和[原维护任务](../records/tasks/2026-10-10-kernel-maintenance.md)；当前阅读与布局改进见[新需求](../requirements/2026-10-10-clean-layout-and-skill-growth.md)和[任务记录](../records/tasks/2026-10-10-layout-and-skill-growth.md)。
 
@@ -102,4 +104,4 @@ flowchart LR
 
 ## 从零实现完整目标流程
 
-[R1 总指南](../architecture/reproduction-blueprint.md)组织可供模型独立阅读的详细规格：[数据与事务](../architecture/reproduction/01-data-and-transactions.md)、[执行编排](../architecture/reproduction/02-orchestration.md)、[上下文与评分](../architecture/reproduction/03-context-and-evaluation.md)、[实施与验收](../architecture/reproduction/04-build-and-acceptance.md)。它们给出字段、伪代码、架构图和故障场景；新增能力为参考设计，未实现或行为验收。已有 v1 的实际能力继续由各节点及内核现状定义。
+[R1 总指南](../architecture/reproduction-blueprint.md)组织可供模型独立阅读的详细规格：[数据与事务](../architecture/reproduction/01-data-and-transactions.md)、[执行编排](../architecture/reproduction/02-orchestration.md)、[上下文与评分](../architecture/reproduction/03-context-and-evaluation.md)、[实施与验收](../architecture/reproduction/04-build-and-acceptance.md)。它们给出字段、伪代码、架构图和故障场景；规格建立时新增能力尚未实现；后续独立 R1 S0–S7 切片见任务记录，8 项真实宿主验收仍 not_run，本次发布不包含该参考代码。已有 v1 能力继续由各节点及内核现状定义。

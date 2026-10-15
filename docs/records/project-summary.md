@@ -1,10 +1,10 @@
 ---
 record_id: CCR-PROJECT
-record_version: 11
-updated_at: 2026-10-13
+record_version: 13
+updated_at: 2026-10-15
 timezone: Asia/Shanghai
 source_revision: 16410c9fbf4a8507445b4603e371e701614e4499
-source_worktree: consumer, SCM, training and skill documentation; route A and execution-flow clarification; runtime unchanged
+source_worktree: consumer, SCM, training, skill and kernel design documentation; runtime unchanged
 status: active
 requirement_ids: [REQ-BOUNDARY-01, REQ-BOUNDARY-02, REQ-BOUNDARY-03, REQ-BOUNDARY-04, REQ-BOUNDARY-05, REQ-BOUNDARY-06, REQ-BOUNDARY-07, REQ-BOUNDARY-08, REQ-BOUNDARY-09, REQ-BOUNDARY-10, REQ-BOUNDARY-11, REQ-BOUNDARY-12, REQ-BOUNDARY-13, REQ-CCR-05, REQ-CCR-10, REQ-SG-01, REQ-SG-02, REQ-SG-03, REQ-SG-04, REQ-SG-05, REQ-SG-06, REQ-SG-07, REQ-RPC-01, REQ-RPC-02, REQ-RPC-03, REQ-RPC-04, REQ-RPC-05]
 module_ids: [K-RECORDS, K-RPC, K-ROOT, K-QUERIES, K-KNOWLEDGE, K-DELIVERY, K-CORPUS, K-EXECUTION, K-STORAGE, K-LEDGER, K-DESIGN]
@@ -20,6 +20,7 @@ Project Kernel 保存需求、方案、尝试、验收、审批、交付和证�
 | 主题 | 当前摘要 | 主记录 |
 | --- | --- | --- |
 | 目标与结构 | 执行流、项目数据、纯领域规则和显式 provider 组合；维护目标是保持内核干净、职责清晰 | [架构](../architecture/kernel-architecture.md)、[模块树](../modules/README.md) |
+| 完整设计与成长路线 | 八阶段执行闭环、L0/L1、模型输出垃圾治理、低耦合边界和无可视化 agent 接入计划 | [设计与成长](../architecture/kernel-design-and-growth.md)、[本次任务](tasks/2026-10-15-kernel-cleanup.md) |
 | 独立核心接受 | 冻结25项87条件为 `accepted_g2`；`release_approved=false` | [G2 第四轮报告](../acceptance/G2-round4-report.md)、[条件与证据](../acceptance/G2-round4/checks.json) |
 | 当前能力 | 显式组合、版本账本、执行和交付事实、来源证据、查询、test 范围恢复 | [内核现状](../architecture/current-state.md) |
 | RPC 修复与剩余问题 | RPC 深度、Unicode/id 和序列化兜底修复已提交并推送 main，仅静态审查、未行为验证；knowledge 提升缺口仍未修复，且未接入核心 RPC | [RPC 修复记录](tasks/2026-10-10-rpc-resilience.md)、[静态设计审查](../reviews/2026-10-10-design-review.md) |
@@ -35,7 +36,7 @@ Project Kernel 保存需求、方案、尝试、验收、审批、交付和证�
 
 ## 当前限制与维护方向
 
-运行仍依赖完整源码树中的 `contracts/v1`，尚无已接受的独立 wheel 部署方式。knowledge 未接入核心 RPC，corpus 默认关闭，恢复只开放指定 test 范围。记录及 skill 由当前 Codex 工作流使用，尚无内核自动同步或学习画像运行服务。
+运行仍依赖完整源码树中的 `contracts/v1`，尚无已接受的独立 wheel 部署方式。knowledge 未接入核心 RPC，corpus 默认关闭，恢复只开放指定 test 范围。记录及 skill 由当前 Codex 工作流使用，尚无内核自动同步或学习画像运行服务。模型输出的 staging/manifest/digest/批准闭环已有基础，但 output kind/路径预算、quarantine 扫描、自动引用检查和 OS 级沙盒仍待实现；无可视化 agent 接入处于 H0-H2 计划阶段。
 
 [RPC 修复](tasks/2026-10-10-rpc-resilience.md)及前期维护已普通提交并推送 main；修复源码是 `c364539`，随后同步资料以 `62bb5d7` 交付。具体远端回执与读取结果见[同步记录](../handoffs/2026-10-10-rpc-fix-main-sync.md)。[README](../../README.md)现按项目用途、当前进度、能力与阅读入口介绍内核；本次描述修订不改变运行源码。原发现与 knowledge 开放条件见[静态设计审查](../reviews/2026-10-10-design-review.md)和[后续计划](../plans/2026-10-09-kernel-remediation-next.md)。[布局与技能成长任务](tasks/2026-10-10-layout-and-skill-growth.md)及[原内核维护任务](tasks/2026-10-10-kernel-maintenance.md)保留各自阶段的建立记录。
 
@@ -59,6 +60,9 @@ Project Kernel 保存需求、方案、尝试、验收、审批、交付和证�
 | 8 | 2026-10-12 | 记录 R1 从零复现总指南与四章参考规格，明确用户决定与 R1 实现选择分界 |
 | 9 | 2026-10-13 | 同日会话总结：确认执行流与双层存储思路，归档未决项，无新实现或验收 |
 | 10 | 2026-10-13 | 完成 R1 设计评价：确认不变式/六层完成分层为最强部分；钉死 host_work 归属、表单暂态、问答唤醒、评分防混、计量模式与并发增长验收六项前置，见 R1 设计评价与任务记录 |
+| 11 | 2026-10-13 | 记录 AGH 独立适配及既有检查，详情由当时任务拥有 |
+| 12 | 2026-10-15 | 新增完整设计与治理/成长路线入口 |
+| 13 | 2026-10-15 | 重写内核 README、整合设计与问题映射、记录持续整洁/headless 计划及视频成果 |
 
 ## 2026-10-12 当前补充
 
@@ -75,3 +79,7 @@ Project Kernel 保存需求、方案、尝试、验收、审批、交付和证�
 记录版本 10（2026-10-13）：完成 [R1 设计评价](../reviews/2026-10-13-r1-design-review.md)。确认 12 不变式、六层完成分层与 R1/v1 显式隔离为设计最强部分；提出六项实施前置：host_work 移出内核 DDL（宿主自管队列、内核只留不可变审计事件）、表单暂态生命周期、model_exchange 唤醒机制、评分三套 schema 防混、exact 计量 provider capability 声明、并发增长验收项。修订 01/02/03 章后再按 S0→S7 分发实施；无实现或行为验收，`release_approved=false` 不变。
 
 记录版本 11（2026-10-13）：[AGH 只读前端接入](tasks/2026-10-13-agh-frontend.md) 按用户要求分发三个代理实施，校对真实 RPC、保留查询信封及历史水位，增加总览与九个指定视图。隔离 AGH 实例已完成安装、信任、启用并运行；p15/p14 共 5 项通过，浏览器检查通过。未改日常实例、AGH 源码或历史 G2 接受，`release_approved=false` 不变；活动会话限制由任务记录拥有。
+
+记录版本 12（2026-10-15）：新增[内核设计、问题治理与无界面接入计划](../architecture/kernel-design-and-growth.md)，明确模型输出治理、模块边界与无 UI agent 路线。
+
+记录版本 13（2026-10-15）：README 聚焦独立内核，整合设计图、问题映射和实现边界；19 张图、3分53秒成片以及目录审计归于[本轮任务](tasks/2026-10-15-kernel-cleanup.md)。模型无主输出治理、模块耦合整改和 headless H0–H5 均为计划，未改内核运行源码或历史接受。

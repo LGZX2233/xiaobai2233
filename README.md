@@ -1,306 +1,230 @@
-# Project Kernel：给 AGH 的外置项目账本
+# Project Kernel：Agent 项目交付治理内核
 
-把 agent 的记忆和过程从上下文里搬出来，存成一份结构化账本。模型去查，程序去验，人来放行。
+把项目事实、执行过程和交付依据从对话中取出来，交给可追溯账本：模型提出方案，独立程序验收，人确认具体版本，provider 执行并观察真实效果。
 
-[English](README.en.md) ｜ 代码仓库 https://github.com/LGZX2233/xiaobai2233 ｜ 落地页 https://lgzx2233.github.io/xiaobai2233/ （部署后可用） ｜ 演示视频 {{VIDEO_URL}}
+[English](README.en.md) ｜ [演示视频 · 3分53秒](docs/assets/demo.mp4) ｜ [设计全文](docs/architecture/kernel-design-and-growth.md) ｜ [模块导航](docs/modules/README.md) ｜ [当前实现](docs/architecture/current-state.md)
+
+## 定位与职责
+
+内核独立于前端和具体 agent 框架，只承担两部分：**执行流**与**项目数据及统计**。DSH、AGH 等宿主继续提供模型循环、工具调用、会话、压缩、skill 加载、子任务和沙箱；内核通过显式端口使用它们。可视化是可选消费者，不是核心运行前提。
+
+执行流把需求、方案、派发、尝试、验收、比较、批准和交付连接起来；数据层保存精确版本、来源、制品摘要、审计、回执和读水位。内核不替模型规划，也不因模型说“完成”而宣布外部动作成功。
+
+## 解决什么问题
+
+| 问题 | 设计机制 | 当前边界 |
+| --- | --- | --- |
+| 长对话遗忘、换会话重来 | 不可变账本、按水位查询、上下文清单与分层记忆 | v1 账本与水位已有实现；R1 上下文有独立参考实现，尚需真实宿主接线；成本收益未量化 |
+| 超时被当失败、重复执行 | 幂等回执、持久 attempt、unknown 保留、只观察对账 | 已有 v1 实现与历史测试；真实宿主 flush 和进程生命周期仍需验收 |
+| 模型自报结果不可核对 | 独立 checker、固定验收版本、真实字节摘要 | 热传导案例可拒绝伪造结果；其他领域需对应 checker |
+| 批准对象含糊、机器越权 | 人审专属入口、冻结快照、候选变化使旧批准失效 | v1 已实现；真实身份安全边界由宿主建立 |
+| 过程黑箱、失败被抹掉 | revision、事件、审计、回执、失败与未选方案留存 | v1 已实现；缺失用量保留未知，不冒充零成本 |
+| 模型乱写临时文件、重复总结和无主产物 | 独立执行 root、staging/ready、制品归属、路径预算、quarantine、可审查清理 | **持续任务**：已有制品基础，但完整输出策略、隔离扫描、引用检查与保留期尚未闭环 |
+| 大项目模块纠缠、扩展越做越重 | 事实单一所有者、纯领域、显式端口、可替换 provider、模块 L1 | 当前仍有 application 直接 SQL、端口签名偏差和能力汇总缺口，按切片整改 |
+| 非可视化能力难以接入模型 | 标准 skills + 宿主适配 + 版本化协议 | **计划**：先做无 UI 契约矩阵与读写 skills，再逐框架验收 |
+
+这里的收益来自事实组织与治理边界，不声称改变模型本身。历史测试不能替代真实部署或本次验收。
+
+## 设计与实现路径
+
+设计模型读项目整体、澄清需求、拆出模块与验收；执行模型只读被分配的模块资料，在独立 root 中尝试实现；收尾模型比较实现包、组合候选、整理依赖并提出采用建议。宿主管调度，人通过可信入口确认。多个模块可以共同采用，不要求全项目只剩一个胜者。
+
+八阶段为：**设计 → 拆分 → 分发 → 执行 → 打包验收 → 收尾 → 人工确认 → 执行并发布采用记录**。范围变化产生新基线并返回拆分；同一请求用原幂等键补查；外部效果不明则保持 unknown，只观察或显式对账。
+
+L0 保存项目整体架构、需求与模块关系；L1 保存模块独立范围、接口、方案和验收。R1 参考实现采用单项目 SQLite 的逻辑分层，不把“双层”宣称为已经部署的物理双库。合回主库前需验收、打包、去耦及人审。
+
+上下文按“身份与约束 → 需求、验收与设计 → 环境、错误与依赖 → 项目资料 → 共享经验”装配。ContextManifest 保存实际来源版本、选择与排除原因及预算；超预算明确报告。问答引用读取时的版本；实时表单暂态归宿主，有意提交后才成为事实。
+
+方案评分、知识使用评分、skill 四维评价分别记录。已选路线 A 是“模型审阅证据并提出采用建议，人确认固定版本”；高分不能替代验收、授权或真实执行成功。机器检查、代理审查、人类批准、外部效果四类事实不混用；“完成”分命令回执、持久化、候选验收、人审、外部效果、采用记录发布六层。
+
+三层记忆为原始过程、带来源与适用条件的项目记忆、显式晋升的共享记忆。有效方法沉淀为版本化 skill，以正确性、适用性、复用收益、可维护性评价；错误与复盘保留根因、证据、修正和回滚，未知根因保持未知。评价方法，不给用户能力打分。
+
+进行中的项目可以先扫描、冻结匹配结果、形成模块/需求映射、由人确认后建立版本初始与备份；迁移不补造旧验收、旧批准或成本记录。完整对象与事务规格见 [R1 复现蓝图](docs/architecture/reproduction-blueprint.md)。
+
+## 模块化、低耦合、可成长
+
+| 边界 | 所有权与约束 |
+| --- | --- |
+| contracts / domain | 契约、版本、状态和纯规则；领域不访问 SQLite、文件、进程或模型 SDK |
+| application | 用例、授权与事务编排；一项原子业务语义保持一个 UnitOfWork |
+| data | revision/head、查询水位、来源、事件与回执；事实只有一个主人 |
+| provider / adapter | 执行、环境、制品、备份、交付等副作用，通过组合根显式注入 |
+| bridge / host | 协议映射、调用身份、工具生命周期；复用宿主，不复制业务状态机 |
+| records / skills | 文档维护与模型使用方法；不因此获得内核运行能力或人审权限 |
+
+成长采用稳定核心加可选能力。新模块先明确事实主人、输入输出、失败/未知语义及验收条件，再声明依赖和 capability；能力缺失要明确拒绝。Context、知识、实验、SCM、整理和展示按边界扩展。低耦合必须由依赖检查与行为验收证明，不能只靠目录命名。
+
+当前优先修正调用方端口与实现签名、集中 capability 汇总，再逐步抽取 application 中的 SQL；不以一次大搬迁破坏冻结协议、事务或历史证据。[设计与成长全文](docs/architecture/kernel-design-and-growth.md)记录边界与缺口。
+
+## 项目整洁治理是持续任务
+
+派发时声明输出类型、相对路径、数量/大小预算与保留策略；输出先进入 staging，由真实摘要、attempt 和来源版本建立归属；无主输出进入 quarantine；验收与去耦后生成固定交付清单，经人确认才写目标。任务关闭时列出已采用、未采用、失败、临时及待清理文件，清理前检查引用与保留期，留下可恢复清单和审计。
+
+现有 staging/ready、manifest、digest 和 unknown 是基础，**当前实现还不足以阻止模型任意乱写**。目录隔离不是 OS 沙箱，skill 约定也不是强制访问控制。路径与输出预算、quarantine、引用扫描、保留期、清理 dry-run 和宿主限制统一列入[持续维护任务](docs/plans/kernel-hygiene-and-headless.md)，每个实现切片单独验收。
+
+## 无可视化插件接入 Agent 框架（计划）
+
+模型通过 `project_context`、`design_dispatch`、`execute_verify`、`compare_select`、`delivery_review`、`records_reconcile` 等标准 skills 使用内核。每个 skill 声明触发条件、最小参数、可调用命令、scope、版本引用、失败和 unknown 处理；授权与审计仍归内核，人审仍经独立可信入口。
+
+调用链为 **skill → 宿主 adapter → 版本化 Kernel contract → 内核**。保留自有 stdio JSON-RPC 基线，再为 MCP、tool calling、HTTP 编写薄桥；每种框架分别验收重连、取消、超时、幂等、来源 flush 与可信身份。当前协议不是 MCP，不宣称已经通用兼容。
+
+H0 盘点 skill/command/capability；H1 打通只读状态、上下文、事件与追溯；H2 打通受控设计、派发、执行和验收；H3 接通审阅与交付；H4 逐宿主桥接；H5 根据真实使用改进 skill。优先 H0–H2，详细验收见[接入计划](docs/architecture/kernel-design-and-growth.md#52-计划阶段与验收)。
 
 ## 设计与创新一图看懂
 
-**我们发现的问题 → 对应的机制**
+
+下面展示完整设计，按定位、执行结构、数据边界、记忆复用和宿主接入展开。实现范围另见本文现状表与内核现状文档。
+
+### 01 · 项目交付治理内核
+
+定位：Agent 运行时旁边的项目交付治理内核。宿主负责循环、工具、会话和沙箱，内核聚焦执行流以及项目数据与统计。
+
+![项目交付治理内核](docs/assets/design/vision.png)
+
+### 02 · 问题与机制对应
+
+把长流程中的遗忘、重跑、黑箱和耦合逐项对应到可追溯账本、按需装配、未知保留和模块边界。
 
 ![问题与机制对应](docs/assets/design/map.png)
 
-**架构：模型规划，内核记账**：模型在 AGH 里规划并选工具；插件提供 pk_* 工具和侧边面板；内核只记录、校验、拦截。
+### 03 · 三类模型的分工
 
-![架构](docs/assets/design/arch.png)
+设计模型读整体并拆模块，执行模型在沙盒中并行实现，收尾模型比较候选并整理依赖，宿主管编排和交互。
 
-**执行流：一次任务的完整流程**：多策略并列，独立校验，选定写理由，人工批准后才交付，最后对账。
+![三类模型的分工](docs/assets/design/roles.png)
 
-![执行流](docs/assets/design/flow.png)
+### 04 · 八阶段执行流
 
-**数据流：只进不改的一本账**：所有写入在同一事务进账本，读取标明读水位；面板给人看，模型按需查，不靠回忆。
+从设计、拆分、分发、执行到打包验收、收尾、人工确认和发布采用记录，范围变化回到拆分并建立新版本。
 
-![数据流](docs/assets/design/dataflow.png)
+![八阶段执行流](docs/assets/design/stages.png)
 
-**双层存储：项目整体 + 模块独立**：执行模型只读自己模块那份，上下文不用背整段历史；并回主库要验收、打包、去耦并由人确认。
+### 05 · 项目与模块双层资料
 
-![双层存储](docs/assets/design/duallayer.png)
+L0 保存项目整体，L1 保存模块独立资料；执行模型只读自己的模块，回到主库需经过验收、打包、去耦和人工确认。
 
-**过程留存 → 复用，避免再犯**：skill 按四个维度评分复用，错误分类登记并附事后分析。
+![项目与模块双层资料](docs/assets/design/duallayer.png)
 
-![skill 评分复用与错误记录](docs/assets/design/reuse.png)
+### 06 · 可重放的上下文装配
 
-**四个支柱**
+上下文工厂按身份约束、需求验收、环境依赖、项目资料和共享经验的优先级装配，每次留下可重放的 ContextManifest。
 
-![四个支柱](docs/assets/design/pillars.png)
+![可重放的上下文装配](docs/assets/design/context.png)
 
-**异常处理：账本里留下了什么**
+### 07 · 有版本的问答与表单
 
-![异常处理](docs/assets/design/verdict.png)
+模型之间交换问题和回答时引用当时读取的库版本；表单暂态由宿主管理，有意提交后才成为有版本的事实。
 
-**AGH 实机画面**（官方 AGH 构建，DeepSeek 真实运行）
+![有版本的问答与表单](docs/assets/design/exchange.png)
 
-![AGH 审批](docs/assets/agh-approvals.png)
+### 08 · 多方案与组合候选
 
-![AGH 执行](docs/assets/agh-execution.png)
+多个实现包可以并存，收尾阶段组合候选做集成验收；未采用的方案仍保留，便于比较和回看。
 
+![多方案与组合候选](docs/assets/design/combo.png)
 
-## 为什么要做这个
+### 09 · 三套评分与收尾路线 A
 
-让一个 LLM agent 做真正的长流程任务，比如反演一个物理参数、换三种算法、挑一个交给人，它会反复撞上同几堵墙：
+方案、知识使用和 skill 分开评分，收尾走路线 A：先审阅证据，再提交入库方案，最后由人确认采用。
 
-- 注意力会丢。对话越长，早期事实越容易被忽略。第 40 轮时，模型可能已经"忘了"第 3 轮那次网格搜索没通过验收。
-- 记忆会断。关掉会话再打开，"试过哪些方案、结果如何、为什么选了这个"全部归零，只能重跑，或者重新读一大段聊天记录。
-- 错误会重复。卡死的求解器被当成"没跑"再启动一次，超时的写入被当成"没写"再写一次，外部效果被悄悄翻倍。
-- 过程是黑箱。模型说"α=0.9，已验证"，人无从核对；谁批准了交付、批准时看到的是哪份结果，没有记录。
-- 记录是散的。每个对话各记各的，要回头看项目全貌、查技术债、看模型哪里理解错了，只能翻聊天记录。
+![三套评分与收尾路线 A](docs/assets/design/scoring.png)
 
-更大的模型能缓解一部分，但"事实放在哪里、由谁裁决"不是模型能力问题。我们的定位是**绕开**模型的局限，不是**修好**它：这个项目不改 Transformer，也不声称提升了模型能力。
+### 10 · 四类事实分别留档
 
-做法是把事实和过程放进一份只追加、可按时间点回查的账本。模型规划，并用工具查询账本；内核只记录、校验、拦截，不规划；结果由独立程序重算；交付只能由人从模型够不到的入口放行。
+机器检查、代理审查、人类批准和真实执行成功四类事实分别记录，批注绑定冻结快照，内容变化后重新申请。
 
-一次热传导反演在账本里是这样的（每一句都有对应测试，见下文）：卡死的 s3 记为 `unknown` 并保留，永不自动重跑；s1 自报 α=0.3500，被独立闭式重算判失败，作为证据保留；s2 α=0.37286 通过；模型写下选择理由；交付停在 pending，直到人在终端输入快照摘要的前 8 位。把 α 改成 0.9 再提交会被拒；机器通道想自己批准，返回 `UNSUPPORTED_COMMAND`。
+![四类事实分别留档](docs/assets/design/facts.png)
 
-**当前状态**：内核历史状态 `accepted_g2`，`release_approved=false`（没有发布批准）；证据模式 `test`；执行隔离是 `directory_only`，不是操作系统沙盒；自有 stdio JSON-RPC 不是 MCP；只在 AGH 上验证过；演示数据是合成的、确定的，不是材料数据库。
+### 11 · 完成的六个层次
 
-## 痛点 → 机制 → 证据 → 状态
+“完成”分为命令回执、对象持久化、固定候选验收、人类批准、外部效果证实和采用记录发布六层。
 
-"证据"列是仓库里能打开的代码或测试。没有机制的条目标"方向"或"目标"，不当作已完成。
+![完成的六个层次](docs/assets/design/done.png)
 
-| 痛点 | 机制 | 证据（代码 / 测试） | 状态 |
-| --- | --- | --- | --- |
-| agent 执行记录不清晰，是黑箱 | 每个命令在一个 UnitOfWork 里同时写入不可变 revision、head 历史、事件、审计和回执；面板"事件""执行"视图读取 | `src/project_kernel/data/store/uow.py`、`store.py`；`tests/p15_innovation_showcase/test_innovation_showcase.py`（步骤 A：`events.read` 按序，重启后可读） | 已实现并测试 |
-| 长对话注意力丢失，跨会话记忆归零，成本上升 | 事实不放在上下文里：模型按需调用 `pk_state`、`pk_compare`、`pk_events` 读账本；`as_of_seq` 读水位可回看历史 | `adapters/agh-plugin/index.mjs`（工具）；showcase 步骤 A（冻结水位在重启后读到同一份旧事实，并标为 `incomplete`、`projection_stale`） | 读账本：已实现并测试。"降低 token 成本"：**未测量**。上下文预算（KnowledgeService）：已实现但未接入 RPC |
-| 重复犯错：卡死的任务被重跑 | 轮询超时结算为 `unknown`，保留可查；同一幂等键返回原回执；查询和比较不会再次启动 | `tests/p14_science_demo/science_executor.py`；showcase 步骤 B、D（`executor.launches` 不变） | 已实现并测试 |
-| 模型自报的结果不可信 | 独立 checker 用闭式解重算，并核对读数与固定种子数据集逐项一致 | `tests/p14_science_demo/science_checker.py`；`test_heat_inversion_flow.py` 第 86–91 行（伪造 α=0.9 被拒） | 已实现并测试 |
-| 没有探索和比较方案 | 一个任务可派发多个策略，各自独立 attempt 与执行目录；`attempts.compare` 并列展示，失败和未知不丢；`attempt.select` 保存比较对象与理由 | `tests/p14_science_demo/test_heat_inversion_flow.py`；showcase 中 `failures_retained`、`missing_usage_is_not_zero` 断言 | 已实现并测试。是否主动探索取决于 AGH 里的模型 |
-| 缺少公司式治理（审批、隔离） | 审批命令只存在于独立人工入口，机器通道返回 `UNSUPPORTED_COMMAND`；批准绑定快照摘要，候选变化后旧批准作废；规则只能收紧 | `src/project_kernel/interfaces/rpc/policy.py`（`HUMAN_ONLY_COMMANDS`）、`bootstrap.py`（`build_human_server`）；showcase 步骤 C、E | 审批：已实现并测试。隔离：`directory_only`，**不是**操作系统沙盒 |
-| 外部效果是否发生不确定 | 交付状态 `prepared → claimed → applying → applied / failed / unknown`；`reconcile` 只观察，不重放写入 | `src/project_kernel/application/delivery/service.py`、`domain/delivery/effect.py`；showcase 步骤 F（对账时把 `export` 换成"再调用即失败"） | 已实现并测试 |
-| 模型不了解环境，重复造轮子 | `environment.report` 把环境事实分为 satisfied / missing / unknown / too_old / not_checked | `src/project_kernel/application/environment_service.py`；showcase 步骤 G | 已实现并测试。"减少重复造轮子"本身**未测量** |
-| 需求不清，不知道用户的知识与能力边界 | 需求与验收项精确版本化，`requirements.coverage` 计算覆盖；用户画像是描述式文档，不打分 | `src/project_kernel/application/design/`；`docs/records/user-learning-profile.md` | 需求与覆盖：已实现并测试。用户知识与能力边界：**仅文档**，没有运行服务 |
-| 程序结构混乱，技术债看不见 | 23 节点模块树（需求、源码、版本、实现状态）加追溯、覆盖、时间线视图，在 AGH 面板"结构"里展示 | `docs/modules/registry.json`；`adapters/agh-plugin/client/src/views/Structure.jsx`；`test_module_tree_registry_is_a_tree_with_resolvable_relations` | 模块树：已实现并测试，但它是文档声明，不是运行时自动生成。耦合度量：**设计**（`docs/architecture/coupling-metric-boundary.md`，未实现） |
-| 过程数据留存，供后续调优 | KnowledgeService（上下文预算、评分、提升）和 corpus（数据集、审核、导出授权） | `tests/p08_knowledge`、`tests/p09_corpus`；`docs/architecture/training-data-boundary.md` | KnowledgeService：已实现，有单测，**未接入 RPC**。corpus：已实现，`enable_corpus` 默认关闭 |
-| 多模型、大项目交互困难 | 项目、需求、方案、派发包都是精确版本的对象；模型间交换（`model_exchange`）只有设计 | `src/project_kernel/application/design/`；`docs/architecture/agent-exchange-and-live-forms.md` | 版本化对象：已实现并测试。模型间交换：**设计** |
-| 每个对话各记各的，耦合高 | 模块节点预留 `conversation_refs`，让版本对得上对话 | `docs/modules/registry.json`（全部为空，测试断言"没有编造对话关联"） | **方向**，没有映射 |
-| 记录能在不同 agent 框架间互通 | 版本化 stdio JSON-RPC 加冻结 JSON Schema；Node 客户端 | `contracts/v1/`、`src/project_kernel/interfaces/rpc/`、`bridge/protocol/`、`tests/p10_protocol` | 协议：已实现并测试。互通：**设计目标**，只在 AGH 上验证过；自有协议不是 MCP |
-| 人与模型沟通随意，没有标准表单 | 表单化交换格式、实时表单 | `docs/architecture/agent-exchange-and-live-forms.md`（文档写明"未实现 `model_exchange` 或实时表单通道"） | **方向** |
+### 12 · 十二条不变式
 
-## 架构
+十二条不变式约束历史不可覆盖、权限入口、幂等语义、未知结果和并行隔离，让每次判断都能追溯依据。
 
-```mermaid
-flowchart LR
-  subgraph AGH[Agnes Harness 运行时]
-    M[模型<br/>规划 · 选工具 · 读结果]
-    P[AGH 插件 @project-kernel/agh-plugin<br/>8 个 pk_* 工具 · 13 个只读服务 · 面板]
-    M -- tool call --> P
-  end
-  P -- stdio JSON-RPC 机器通道 --> H[演示宿主<br/>tests/p14_science_demo/agh_host.py]
-  H --> K[内核服务<br/>design · attempt · verification · delivery · queries]
-  K --> X[外部求解器子进程<br/>heat_worker.py · directory_only]
-  K --> C[独立 checker<br/>science_checker.py]
-  K --> DB[(SQLite 账本<br/>revisions · heads · events · receipts)]
-  U[人] -- tools/pk-human-approve.ps1 --> A[tools/pk_human_approve.py] --> HS[build_human_server] --> DB
-```
+![十二条不变式](docs/assets/design/invariants.png)
 
-人工审批不经过 AGH 的工具通道，也不经过模型。插件里没有审批工具（`adapters/agh-plugin/test/tools.test.mjs` 断言工具名里不含 approve 或 decide）。
+### 13 · 三层记忆与效果评估
 
-执行流程（各状态分别持久化，不是一个虚构的全局状态机）：
+记忆分为原始过程记录、带来源和条件的项目记忆、显式晋升的共享记忆，并以验证、复发和回滚来评估效果。
 
-```mermaid
-flowchart LR
-  D[dispatch.confirm<br/>冻结派发包] --> A[attempt.start]
-  A -->|completed| V[verification.run<br/>独立重算]
-  A -->|轮询超时| UN[unknown<br/>保留 · 不重跑]
-  A -->|退出码非 0| F[failed<br/>保留]
-  V -->|fail| R[失败保留<br/>模型可另选策略<br/>新 attempt]
-  R --> A
-  V -->|pass| S[attempt.select<br/>带比较与理由]
-  S --> Q[delivery.request<br/>冻结快照 + pending 审批]
-  Q --> HA[人工批准<br/>绑定 snapshot_digest]
-  HA --> AP[delivery.apply]
-  AP -->|applied| OK[完成]
-  AP -->|效果未证实| DU[unknown] --> RC[delivery.reconcile<br/>只观察] --> OK
-  AP -->|证实无效果| DF[failed]
-  Q -.候选或依据变化.-> SU[旧批准 superseded]
-```
+![三层记忆与效果评估](docs/assets/design/memory.png)
 
-## 四个支柱与创新点
+### 14 · Skill 复用与错误复盘
 
-每一项给出一句价值和代码位置。状态不是"已实现并测试"的，在括号里写明。
+有效方法沉淀为带版本的 skill，按正确性、适用性、复用收益和可维护性评分；错误目录保留复盘，帮助避开同类问题。
 
-| 支柱 | 一句话价值 |
-| --- | --- |
-| 记忆与记录 | 事实在账本里，不在上下文里；历史可按水位回看，重启不丢 |
-| 信任与治理 | 模型说了不算：独立重算、只有人能批准、批准绑定快照、规则只能收紧 |
-| 结构与可视 | 模块树、追溯、覆盖、时间线、环境报告，在 AGH 面板里给人审阅 |
-| 集成 | 冻结 Schema 的版本化 JSON-RPC，作为 AGH 插件运行，不改 AGH 源码 |
+![Skill 复用与错误复盘](docs/assets/design/reuse.png)
 
-<details>
-<summary>记忆与记录：6 项</summary>
+### 15 · 事实所有权与数据流
 
-- 不可变账本。revision、head 历史、事件、审计、回执在同一 UnitOfWork 里提交或回滚，没有半截记录。`src/project_kernel/data/store/uow.py`
-- 读水位 `as_of_seq`。可以回看任意提交序号时的事实；落后的水位如实标 `completeness=incomplete`、`projection_stale=true`，不冒充当前。showcase 在任何 attempt 出现之前冻结水位，最后读到的仍是 0 个 attempt，关库重开后结果相同。`src/project_kernel/data/queries/watermarks.py`、`service.py`
-- `unknown` 保留且不重跑。轮询超时的任务落为 `unknown`，之后的查询、比较、同键重放都不再启动它。`tests/p14_science_demo/science_executor.py`、`src/project_kernel/application/attempt/service.py`
-- 幂等回执。同一 `idempotency_key` 重放返回原回执，不产生第二次效果。`uow.py`
-- 失败不删，缺失不当零。`attempts.compare` 返回 `failures_retained`；没有用量数据时 `total=None`、`missing_usage_is_not_zero=true`。`src/project_kernel/data/queries/service.py`
-- 备份与恢复。一致备份、校验、隔离副本恢复有实现与测试（`src/project_kernel/evidence/backup.py`、`tests/p05_evidence`），生产恢复未启用。
-</details>
+每类事实只有一个主人：宿主管对话，治理库管任务与交付，知识库管提炼结论，工作台负责投影。
 
-<details>
-<summary>信任与治理：7 项</summary>
+![事实所有权与数据流](docs/assets/design/dataflow.png)
 
-- 独立复算验收。checker 不信求解器自报的数字，用闭式解 `α = −ln(y/sin x)/T` 对 9 个读数取中位数重算，并要求读数与固定种子数据集逐项一致（误差 ≤1e-12）。`tests/p14_science_demo/science_checker.py`
-- 人工专属命令。`approval.decide`、`approval.revoke`、`decision.record`、`verification.record_review`、`dataset.review`、`knowledge.promote` 只能走人工入口，机器通道返回 `UNSUPPORTED_COMMAND`。`src/project_kernel/interfaces/rpc/policy.py`
-- 快照绑定的审批。批准的是冻结快照的摘要；候选内容变化后重新验收，旧批准变为 `superseded`，需要重新申请。`src/project_kernel/application/delivery/service.py`；showcase 步骤 E
-- 规则只收紧。`rules.save` 只接受 `deny`；`allow` 和白名单之外的路径（如 `os.environ.SECRET`）返回 `INVALID_INPUT`；未知事实阻断而不是放行。`src/project_kernel/application/design/service.py`；showcase 步骤 C
-- 交付状态与只观察的对账。`reconcile` 只查询真实目标，不重放写入。`src/project_kernel/domain/delivery/effect.py`
-- 终端人工确认。`tools/pk_human_approve.py` 列出待批的交付，要求人亲手输入快照摘要前 8 位，检测不到终端就拒绝。这是"有人看过"的交互证明，**不是安全边界**：能登录这台机器的人也能运行它。`tests/p14_science_demo/test_human_approve_cli.py`
-- 目录隔离。不同策略的执行目录不能相同或互为父子。这是 `directory_only`，不是操作系统沙盒。`tests/p14_science_demo/science_executor.py` 的 `capabilities()`
-</details>
+### 16 · 按能力拆分插件
 
-<details>
-<summary>结构与可视：5 项</summary>
+能力按插件拆分：治理、宿主桥接、上下文、记忆、环境、方案实验、产物整理和工作台按需启用，缺失时明确禁用。
 
-- 23 节点模块树，单根、无环，依赖可解析（有测试）。`pk.tree` 只提取节点文档里写明的事实。`docs/modules/registry.json`
-- 只读视图的数据来自内核查询：追溯 `project.trace`、覆盖 `requirements.coverage`、时间线 `project.timeline`、环境 `environment.report`。`src/project_kernel/data/queries/`；showcase 步骤 G
-- AGH 面板共 14 个视图：总览、设计、工作区、结构、需求、执行、审批、环境、版本、事件、错误、文档、Skill、知识。源码在 `adapters/agh-plugin/client/src/views/`。
-- 数据来源分四类标注：实时、文档声明、派生、设计预览，避免把设计预览读成事实。其中"知识"视图全部是设计预览示例，两项项目技能的当前版本均为 `not_validated`。
-- "设计"视图把每个痛点对应到机制、代码位置和状态，与本文的表同源。
-</details>
+![按能力拆分插件](docs/assets/design/plugins.png)
 
-<details>
-<summary>集成：5 项</summary>
+### 17 · 进行中项目的迁移
 
-- 协议。换行分帧的 JSON-RPC 2.0（`kernel.initialize`、`kernel.command`、`kernel.query`），载荷由 `contracts/v1` 冻结 Schema 校验；解析递归上限、不可编码字符串、响应编码失败都有兜底。`src/project_kernel/interfaces/rpc/`
-- 两个入口分开。机器通道 `build_server`，人工入口 `build_human_server`，权限集不同。`src/project_kernel/bootstrap.py`
-- AGH 插件。8 个工具：`pk_state`、`pk_run_strategy {strategy_id}`、`pk_verify {strategy_id}`、`pk_compare`、`pk_select {strategy_id, reason}`、`pk_request_delivery {}`、`pk_apply_delivery {}`、`pk_events`；13 个只读浏览器服务（`pk.*`）；面板挂在 `workbench.panel`。`adapters/agh-plugin/index.mjs`
-- 短参数。模型只传 `strategy_id` 和 `reason`，对象引用由插件按会话记住，减少模型抄写长 JSON 出错的机会；`pk_state` 返回的 `guide` 写明推荐顺序和"你不能批准"。`index.mjs` 的 `WORKFLOW_GUIDE`
-- 平台范围。只在 AGH 上验证。其它框架（MCP、其他 IDE agent）是后续适配，不能据此称为已兼容。
-</details>
+进行中的项目可以先扫描、冻结匹配结果、由模型与人归纳映射，再以版本初始与备份接入执行流，过程不覆盖原记录。
 
-## 案例：一维热传导反问题
+![进行中项目的迁移](docs/assets/design/migration.png)
 
-问题：`u_t = α u_xx`，区间 `[0, π]`，两端为 0，初值 `sin x`，解析解 `u = e^{−αt} sin x`。在 T=0.5 处 9 个传感器读数，叠加固定种子（20261013）σ=0.005 的高斯噪声。真值 α=0.37，相对容差 5%。数据合成且确定。求解器 `heat_worker.py` 是显式 FTCS 有限差分（NX=41，dt=0.002），作为独立子进程运行。
+### 18 · AGH 宿主适配案例
 
-| 策略 | 方法 | α 拟合值 | 闭式参考 | 距闭式参考 | 距真值 | 结论 |
-| --- | --- | --- | --- | --- | --- | --- |
-| s1 | 网格搜索，步长 0.05 | 0.35000 | 0.37859 | 7.55% | 5.41% | 失败：超出 5% |
-| s2 | 黄金分割，30 次迭代 | 0.37286 | 0.37859 | 1.51% | 0.77% | 通过 |
-| s3 | 求解器卡死（sleep） | — | — | — | — | 轮询超时，`unknown`，保留，不重跑 |
-| 伪造 | 保留真实读数，把 s2 的 α 改成 0.9 | 0.9 | 0.37859 | — | — | 拒绝 |
+当前落点是 AGH 插件：AGH 与模型规划工具，插件提供 pk_* 工具和面板，Project Kernel 记录、校验、拦截并写入账本。
 
-以上数值是 2026-10-15 在 Linux 沙盒里直接运行 `heat_worker.py` 并调用 `science_checker.judge` 得到的，输出在 [测试样例](docs/submission/测试样例.md)。
+![AGH 宿主适配案例](docs/assets/design/arch.png)
 
-## 三类测试样例
+### 19 · 热传导反演的治理闭环
 
-| 类别 | 内容 | 期望 |
+热传导反演示例沿着派发策略、独立校验、并列比较、选定理由、申请交付、人工批准、执行交付和只观察对账推进。
+
+![热传导反演的治理闭环](docs/assets/design/flow.png)
+
+## 当前代码与证据
+
+| 轨道 | 范围 | 限制 |
 | --- | --- | --- |
-| 正常 | 黄金分割通过；粗网格 s1 完成但没达到容差；选择 s2 并写理由；人工批准后交付 | s2 `passed=True`；s1 `passed=False`；交付 `applied` |
-| 边界 | 伪造 α=0.9；机器通道尝试批准；批准后候选变化；`allow` 规则；跨项目查询 | 验收失败；`UNSUPPORTED_COMMAND`；旧批准 `superseded`；`INVALID_INPUT`；`SCOPE_MISMATCH` |
-| 失败 | s3 卡死；同键重放；反复查询比较；`reconcile`；重启 | `unknown` 保留且启动次数不变；返回原回执；不重放写入；水位读取结果不变 |
+| v1 `src/project_kernel/` | 版本账本、派发/attempt、独立验收、人工审批、交付效果、查询与 stdio JSON-RPC | 历史 accepted_g2；release_approved=false；证据模式 test；directory_only；需要完整源码树与显式 provider |
+| 本地独立 R1 参考轨道 | S0–S7 独立参考实现：项目/模块分层、多方案、ContextManifest、采用与 SCM 规则 | 本次文档/媒体发布不包含该参考代码；已有独立切片及 synthetic 测试，真实宿主 8 项仍 not_run，未自动合入 v1 |
+| AGH adapter | 已有宿主工具与实机运行证据 | 仅作为一个接入案例；不把 AGH 通过外推到其他框架 |
+| 可选能力 | KnowledgeService、corpus、文档与 skill 工作流 | KnowledgeService 未接核心 RPC；corpus 默认关闭；文档 skill 不等于运行时自动加载 |
+| 后续计划 | 完整垃圾治理、低耦合整改、无 UI 标准 skills、OS 沙箱、真实效果与成本验证 | 不继承历史接受，不记为已完成 |
 
-命令（在仓库根目录，已 `pip install -e ".[test]"`）：
+热传导反演案例使用固定种子的合成数据：粗网格 s1 未达容差；黄金分割 s2 的 α≈0.37286 通过独立重算；卡住的 s3 保留 unknown；篡改 α=0.9 被拒。模型比较并写选择理由，交付先 pending，经人确认固定摘要后才执行；对账只观察、不重复写入。[样例与历史输出](docs/submission/测试样例.md)、[实机证据](docs/submission/运行证据.md)分别保留来源。
 
-```bash
-python -m pytest -q tests/p14_science_demo tests/p15_innovation_showcase   # 2026-10-15 实测：7 passed
-python -m pytest -q tests                                                  # 2026-10-15 实测：627 passed（约 80–90 s）
-```
+本轮整理检查：导入边界 **3 passed**、278 个 Python 文件内存编译通过；README 图片/文档链接、模块 registry 和视频摘要另有整理记录。扩展 R1 测试受沙箱写权限限制，不能据此声称本轮全套通过。详见[本次任务](docs/records/tasks/2026-10-15-kernel-cleanup.md)。
 
-插件的 node 测试（在 `adapters/agh-plugin` 下，需要 `PK_PYTHON` 和 `PK_HOST_SCRIPT`）：`node --test test/tools.test.mjs test/services.test.mjs test/polling.test.mjs`，2026-10-15 实测 16 项通过。`test/panel.test.mjs` 需要本地 AGH 源码里的 esbuild 和 React（`AGH_ROOT`），面板正在改版，它的结果以提交前重跑为准。详细断言、行号和输出见 [测试样例](docs/submission/测试样例.md)。
+## 从源码验证
 
-## AGH 的作用与模型的位置
-
-- AGH 是核心任务循环里的 agent 运行时：加载插件，把 `pk_*` 工具交给模型，执行工具调用，把结果返回给模型，渲染面板。规划、能力调用、反馈处理三步都在 AGH 里完成。
-- 模型负责：读 `pk_state` 了解任务 → 决定跑哪些策略、什么顺序 → 读 `pk_verify` 的结果（失败也是结果）→ `pk_compare` → `pk_select` 选通过的策略并写理由 → `pk_request_delivery` 发起审批并停下 → 人批准后 `pk_apply_delivery` → `pk_events` 核对。顺序由模型决定。注意：内核支持"s1 失败后模型改跑别的策略"这条路径，但目前留下的预演记录里，提示词要求"把可用策略都跑一遍"，模型是先跑完三个再逐个校验的，所以记录**不能**证明"模型因失败而改变策略"；AGH 实机记录里是否出现，以 `evidence/agh-run/` 为准。
-- 内核负责：记录、校验、拦截。不规划，不替模型决定下一步。
-
-**用到了哪些模型（以证据为准）**
-
-| 模型 | 状态 | 证据 |
-| --- | --- | --- |
-| DeepSeek（队长为 AGH 运行选定）。API `/models` 列出的 id 是 `deepseek-flash` 和 `deepseek-v4-pro`；队长使用的版本标签"DeepSeek V4.1 Flash"API 没有确认，**待队长确认** | AGH 实机运行用。AGH 之外已有两次预演：`deepseek-flash` 经聊天补全 API 驱动同一组 `pk_*` 工具和同一个内核，每次 9 次接口调用，总 token 29727 和 30515，两次都选 s2、α=0.37286、交付 `applied`；其中人工批准一步由操作员脚本调用 `decide()` 完成，不是模型 | 预演：`evidence/rehearsal/`（`prompt.md`、`summary.md`、`*.jsonl`）。AGH 实机：`evidence/agh-run/`，以仓库实际内容为准，没有就是还没有 |
-| Agnes 3.0 Flash，id `agnes-3.0-flash`，AGH 内 provider `agnes-ai` | 已用 API 验证能返回工具调用。AGH 之外的预演里有两次 `agnes-3.0-flash` 记录（总 token 29393 和 30985，均选 s2、`applied`；第一次模型对卡住的 s3 调用 `pk_verify` 拿到宿主原始错误，之后改的是工具而不是提示词，见 `evidence/rehearsal/notes.md`）。是否参与过 AGH 运行，只看 `evidence/agh-run/` 里有没有对应记录 | 模型定义：AGH 源码 `packages/ai/src/adapters/pi/providers/agnes-ai.ts` |
-
-密钥只由用户在 AGH 设置页填写，不进任何文件。内核测试不需要模型或密钥。
-
-## 快速开始
-
-需要 Python 3.12+，以及完整源码树（`contracts/v1` 没有打进 wheel，不能脱离源码树运行）。下面的 `<kernel_next>` 是你电脑上的仓库目录。
-
-**Windows PowerShell**
+需要 Python 3.12+，在完整源码树内执行；`contracts/v1` 尚未作为 wheel 资源打包。
 
 ```powershell
-cd <kernel_next>
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[test]"
-.\.venv\Scripts\python.exe -m pytest -q tests\p14_science_demo tests\p15_innovation_showcase
+.\.venv\Scripts\python.exe -B -m pytest -p no:cacheprovider tests/p00_contracts/test_import_boundaries.py -q
+.\.venv\Scripts\python.exe -B -m pytest -p no:cacheprovider tests/p14_science_demo tests/p15_innovation_showcase -q
 ```
 
-在 AGH 里跑（需要 Node.js 24+ 和构建好的 AGH；三个脚本都在 `tools\`，脚本默认的 AGH 路径是作者电脑上的，可用 `-Runtime`、`-AghHome`、`-Port` 覆盖）：
+最后一条是供复验的命令，不是本轮新增运行结论。AGH 案例配置与可信人工入口见[适配器说明](adapters/agh-plugin/README.md)；内核测试不需要模型 API 密钥。
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File tools\install-agh-plugin.ps1   # 只需一次；AGH 问 Install ...? [y/N] 时亲自输入 y
-powershell -NoProfile -ExecutionPolicy Bypass -File tools\start-agh.ps1            # 窗口保持打开；浏览器无痕窗口访问 http://127.0.0.1:5186
-powershell -NoProfile -ExecutionPolicy Bypass -File tools\pk-human-approve.ps1     # 模型请求交付后，在另一个 PowerShell 窗口里亲自批准
-```
+## 文档入口
 
-在 AGH 设置里添加模型账号后，粘贴 `evidence/rehearsal/prompt.md` 里的提示词。批准后回到 AGH，告诉模型"已批准，请执行交付"。完整步骤见 [录屏清单](docs/submission/录屏清单.md)。这三个 `.ps1` 脚本，本文作者只读过源码，没有在 Windows 上执行过，以实机为准。
-
-**Linux / macOS**
-
-```bash
-cd <kernel_next>
-python3.12 -m venv .venv && . .venv/bin/activate
-pip install -e ".[test]"
-python -m pytest -q tests/p14_science_demo tests/p15_innovation_showcase
-python -m pytest -q tests
-```
-
-手动把插件装进 AGH（建议用隔离的 AGH 实例，不动日常实例）：把 `adapters/agh-plugin/docs/local-dev.profile.yaml` 放到该实例的 `profiles/local-dev/profile.yaml`（能力上限需含 `services`），在仓库根目录用 AGH 的 `package add file:./adapters/agh-plugin`，再 `package trust`（核对 integrity 与 capability hash）、`package enable`、`package status`。插件不在仓库内运行时，设置 `PK_KERNEL_ROOT`、`PK_PYTHON`，必要时 `PK_HOST_SCRIPT`、`PK_ROOT`（必须在系统临时目录或 `.validation-tmp` 下）、`PK_REGISTRY`、`PK_SKILLS_REGISTRY`。AGH 的具体命令行写法以所用 AGH 版本为准。
-
-## 与现有方案的关系
-
-这里只做一般性比较，不评价具体产品。
-
-- 通用 agent 框架里的记忆功能，常见做法是对话摘要或向量检索，回答"模型记得什么"。本项目回答"项目里实际发生了什么"：精确版本、来源、审批和效果，可按时间点回查。两者可以并存。
-- 工作流和 CI 系统擅长调度与重试。本项目刻意不自动重跑 `unknown`，因为外部效果是否发生没有证实时，重跑可能造成重复写入。
-- 实验跟踪和可观测性工具记录参数、指标和调用链。本项目额外把"谁选了哪个方案、为什么、谁批准的、批准时看到的是哪份快照"作为一等记录，并让模型自己通过工具查询它。
-- 本项目不是模型能力的提升，也不是通用工作流引擎；它是挂在 agent 运行时旁边的账本和闸门。
-
-## 现状矩阵
-
-| 已实现并测试 | 已实现，未接通 | 设计 / 方向 / 未实现 |
-| --- | --- | --- |
-| 不可变账本、读水位、重启后可读 | KnowledgeService（有单测 `tests/p08_knowledge`，未装配进 RPC） | 模型间交换、表单化人机交互 |
-| 多策略 attempt、比较、显式选择 | corpus 数据集与导出（`enable_corpus` 默认 false） | 版本与对话关联（`conversation_refs` 全空） |
-| `unknown` 保留且不重跑；幂等回执 | 两项项目技能（当前版本均为 `not_validated`） | 跨 agent 框架互通（只验证过 AGH） |
-| 独立验收、伪造拒绝 | 描述式用户画像（仅 Markdown，无运行服务） | 操作系统级沙盒（现为 `directory_only`） |
-| 人工专属审批、快照绑定、批准作废 | | 耦合度量；用户知识与能力边界的运行服务 |
-| 交付状态与只观察的对账 | | 生产模式证据、生产恢复、真实试点、MCP 传输 |
-| 只收紧的规则 | | token 与成本节省的量化测量 |
-| AGH 插件 8 个工具与 13 个只读服务；14 视图面板 | | |
-
-其它说明：证据模式 `test`；演示数据是合成数据；内核历史状态 `accepted_g2`、`release_approved=false`；面板截图 `docs/assets/panel-*.png` 是独立渲染（真实内核数据），不是 AGH 内截图；是否已有 AGH 内截图以 `docs/assets/agh-*.png` 是否存在为准。
-
-## 路线图
-
-1. 把 AGH 实机运行的会话记录、截图归档到 `evidence/agh-run/`（DeepSeek；Agnes 3.0 Flash 若补录）。
-2. 把 KnowledgeService 装配进 RPC，先处理提升授权的缺口再开放。
-3. 为第二个 agent 框架写宿主适配，并单独验收。
-4. 用真实数据源（材料或实验数据库）替换合成数据。
-5. 提供操作系统级隔离的执行 provider。
-6. 量化"读账本 vs 长上下文"的 token 与正确率差异，样本数如实标注。
-7. 给 `conversation_refs` 做真实的版本到对话映射。
-
-## 提交材料索引
-
-| 材料 | 位置 |
+| 需要了解 | 入口 |
 | --- | --- |
-| 提交表单文本（按赛方模板） | [docs/submission/提交材料.md](docs/submission/提交材料.md) |
-| 测试样例（正常 / 边界 / 失败，含实测输出） | [docs/submission/测试样例.md](docs/submission/测试样例.md) |
-| 运行证据与工具调用链 | [docs/submission/运行证据.md](docs/submission/运行证据.md) |
-| 视频脚本、录屏清单 | [docs/submission/视频脚本.md](docs/submission/视频脚本.md)、[docs/submission/录屏清单.md](docs/submission/录屏清单.md) |
-| 落地页 | [docs/index.html](docs/index.html)（GitHub Pages 部署后为 https://lgzx2233.github.io/xiaobai2233/ ） |
-| 架构与现状 | [docs/architecture/kernel-architecture.md](docs/architecture/kernel-architecture.md)、[docs/architecture/current-state.md](docs/architecture/current-state.md) |
-| 插件说明 | [adapters/agh-plugin/README.md](adapters/agh-plugin/README.md) |
-| 演示视频 | {{VIDEO_URL}} |
+| 完整设计、问题映射、模块边界与无 UI 计划 | [设计与成长](docs/architecture/kernel-design-and-growth.md) |
+| 当前可调用能力、部署前提与缺口 | [内核现状](docs/architecture/current-state.md) |
+| 对象、事务、不变式、编排、上下文与迁移规格 | [R1 复现蓝图](docs/architecture/reproduction-blueprint.md) |
+| 源码所有者与依赖关系 | [模块树](docs/modules/README.md)、[目录分工](docs/development/repository-layout.md) |
+| 持续治理和接入待办 | [整洁治理与 headless 计划](docs/plans/kernel-hygiene-and-headless.md) |
+| 项目进展与本次清理 | [项目总结](docs/records/project-summary.md)、[整理记录](docs/records/tasks/2026-10-15-kernel-cleanup.md) |
+| 设计图与演示 | [3分53秒视频](docs/assets/demo.mp4)、[素材与构建说明](docs/development/demo-build.md) |
+| 历史证据 | [验收报告](docs/acceptance/G2-round4-report.md)、[运行证据](docs/submission/运行证据.md) |

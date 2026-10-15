@@ -1,0 +1,21 @@
+{
+  "mode": "test",
+  "cwd": "D:\\deepseekhannes\\kernel_next",
+  "command": [".venv/Scripts/python.exe", "-X", "utf8", "-B", "tools/verify_g2_evidence.py"],
+  "exit_code": 1,
+  "evidence_dir": "docs/acceptance/G2-round2",
+  "files_checked": 247,
+  "historical_distinct_python_tests": 530,
+  "interpretation": "The immutable round2 manifest describes an earlier source revision. The delivery-provider extraction and candidate EOF formatting changed source bytes. This is an expected historical-source mismatch, not a result for round3 behavior tests. The round2 manifest is preserved.",
+  "problems": [
+    "hash changed: README.md",
+    "hash changed: src/project_kernel/application/attempt/service.py",
+    "hash changed: src/project_kernel/application/delivery/service.py",
+    "hash changed: src/project_kernel/interfaces/rpc/__init__.py",
+    "hash changed: tests/p02_design/helpers.py",
+    "hash changed: tests/p04_delivery/helpers.py",
+    "hash changed: tests/p04_delivery/test_effect_regressions.py",
+    "hash changed: tests/p04_delivery/test_reconcile.py",
+    "hash changed: tests/p06_queries/test_typed_reads.py"
+  ]
+}

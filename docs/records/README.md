@@ -1,7 +1,7 @@
 ---
 record_id: CCR-INDEX
-record_version: 7
-updated_at: 2026-10-13
+record_version: 9
+updated_at: 2026-10-15
 timezone: Asia/Shanghai
 source_revision: 16410c9fbf4a8507445b4603e371e701614e4499
 source_worktree: consumer, SCM, training and skill documentation; runtime unchanged
@@ -19,6 +19,8 @@ acceptance_status: not_behaviorally_validated
 
 | 入口 | 适合查找什么 | 稳定 ID |
 | --- | --- | --- |
+| [本轮内核与材料整理](tasks/2026-10-15-kernel-cleanup.md) | README、设计图、视频、目录整理与发布检查 | KERNEL-CLEANUP-20261015 |
+| [持续整洁与 headless 计划](../plans/kernel-hygiene-and-headless.md) | 输出治理、低耦合整改与无 UI skills 待办 | KERNEL-GROWTH-20261015 |
 | [项目总结](project-summary.md) | 当前目标、能力位置、重要限制和维护方向 | CCR-PROJECT |
 | [RPC 修复与交付](tasks/2026-10-10-rpc-resilience.md) | 当前 RPC 修复、文档同步及主分支交付结果 | RPC-TASK-20261010 |
 | [布局与技能成长任务](tasks/2026-10-10-layout-and-skill-growth.md) | 当前文档、目录与可复用技能的改进结果 | SG-TASK-20261010 |
@@ -55,6 +57,7 @@ acceptance_status: not_behaviorally_validated
 | 6 | 2026-10-13 | 增加 R1 参考实现 S0–S5 落地任务记录入口 |
 | 7 | 2026-10-13 | 增加 R1 S6/S7 落地与验收矩阵登记任务记录入口；S0–S7 全切片落盘，8 项 host 行保持 not_run |
 | 8 | 2026-10-13 | 增加 AGH 适配与前端进度任务记录入口；前端设计规格已写成，浏览器验证与视频合成未完成 |
+| 9 | 2026-10-15 | 整合设计与问题治理，记录输出清理及无界面计划，更新材料与本轮结果入口 |
 
 ## 2026-10-12 当前补充
 

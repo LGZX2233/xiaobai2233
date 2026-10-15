@@ -4,8 +4,8 @@
 | --- | --- |
 | node_id | K-ROOT |
 | node_kind | aggregate |
-| document_version | 1.4.0 |
-| updated_at | 2026-10-12 Asia/Shanghai |
+| document_version | 1.5.0 |
+| updated_at | 2026-10-15 Asia/Shanghai |
 | source_version | 1.0.0 |
 | source_revision | `c36453981a2151c7652b54301c0cb5a7a1840856` |
 | source_worktree_changes | RPC 修复及维护已提交并推送 main；后续变动为同步文档 |
@@ -46,4 +46,6 @@
 
 ## R1 从零复现规格
 
-文档版本 1.4.0：[详细规格](../../architecture/reproduction-blueprint.md)补充R1 总体职责、参考选择、章节和验收入口，对应 [REQ-BOUNDARY-13](../../requirements/2026-10-12-kernel-boundaries.md)。R1 参照源码 `16410c9fbf4a8507445b4603e371e701614e4499`，新增字段、接口与流程尚未实现或行为验收；实际本轮交付由[任务记录](../../records/tasks/2026-10-12-kernel-boundaries.md)拥有，不改变本节点的既有运行依赖或历史接受。
+文档版本 1.4.0：[详细规格](../../architecture/reproduction-blueprint.md)补充R1 总体职责、参考选择、章节和验收入口，对应 [REQ-BOUNDARY-13](../../requirements/2026-10-12-kernel-boundaries.md)。R1 参照源码 `16410c9fbf4a8507445b4603e371e701614e4499`，规格建立时新增字段、接口与流程尚未实现；后续独立 R1 S0–S7 切片见[任务](../../records/tasks/2026-10-13-r1-s6-s7-acceptance.md)，不等于 v1 新增能力或真实宿主验收；规格建立时的交付由[任务记录](../../records/tasks/2026-10-12-kernel-boundaries.md)拥有，不改变本节点的既有运行依赖或历史接受。
+
+文档版本 1.5.0：[设计、问题治理与无界面接入计划](../../architecture/kernel-design-and-growth.md)补充完整目标流程、模型输出垃圾治理、模块化低耦合和 headless agent 路线。该文档是设计与维护基线，不能把计划或静态判断当成新运行能力；本轮记录见[内核目录整理任务](../../records/tasks/2026-10-15-kernel-cleanup.md)。

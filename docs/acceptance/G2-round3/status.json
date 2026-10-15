@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "as_of": "2026-10-09",
+  "timezone": "Asia/Shanghai",
+  "round": 3,
+  "gate": "G2",
+  "status": "pending_g2_acceptance",
+  "implementation_status": "delivery_provider_integrated_and_scoped_independent_checks_passed",
+  "release_approved": false,
+  "scope": "D:\\deepseekhannes\\kernel_next",
+  "contract_digest": "d5fe5816356b0731e78790e997857ea18668cbec16f68673da1f433da07c97cc",
+  "python_tests": {
+    "distinct_passed": 555,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": [
+      "docs/acceptance/G2-round3/evidence/pytest-verified.xml"
+    ]
+  },
+  "node_tests": {
+    "passed": 14,
+    "failed": 0,
+    "output": "docs/acceptance/G2-round3/evidence/node-verified-output.txt"
+  },
+  "validation_runs": [
+    {
+      "capture": "docs/acceptance/G2-round3/evidence/python-verified-result.json",
+      "require_fingerprints": true
+    },
+    {
+      "capture": "docs/acceptance/G2-round3/evidence/node-verified-result.json",
+      "require_fingerprints": true
+    }
+  ],
+  "independent_reviewer": {
+    "completed_for_provider_scope": true,
+    "focused_passed": 17,
+    "overlaps_full_suite": true,
+    "overall_g2_signoff": false,
+    "reports": [
+      "docs/reviews/2026-10-09-round3/provider-independent-review.md"
+    ]
+  },
+  "required_next": [
+    "independently adjudicate every frozen G2 condition with sufficient public-entry and actual artifact evidence",
+    "keep optional knowledge/corpus activation under separate G2-K review"
+  ],
+  "capabilities": {
+    "sandbox_guarantee": "directory_only",
+    "human_identity": "synthetic verified test proof",
+    "controlled_restore": "explicit test-store maintenance with cooperating writer fence",
+    "host_flush_proof": "not configured",
+    "corpus_default": "disabled",
+    "delivery_provider": "explicit injected implementation; bundle exporter optionally wrapped",
+    "background_reconciliation": "not configured; explicit read-only reconciliation"
+  },
+  "git": {
+    "remote": "https://github.com/LGZX2233/xiaobai.git",
+    "branch": "codex/kernel-independent",
+    "candidate_commit": "b2f0de2eb7ecf2e40d9c1ae299fa8824850184af",
+    "main_commit": "1d9e82bae2b740e884c2ecc5639d124bb829f47f",
+    "history_rewritten": false
+  },
+  "evidence": {
+    "directory": "docs/acceptance/G2-round3",
+    "commands": "commands.md",
+    "checks": "checks.json",
+    "manifest": "artifact-manifest.json",
+    "limitations": "limitations.md"
+  },
+  "not_performed": [
+    "DSH install/build/launch",
+    "real host or platform acceptance",
+    "workbench acceptance",
+    "paid model calls",
+    "production restore/import",
+    "training/upload",
+    "kernel Git provider implementation"
+  ]
+}

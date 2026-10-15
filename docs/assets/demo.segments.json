@@ -1,0 +1,262 @@
+[
+ {
+  "id": "x01_opening",
+  "type": "card",
+  "start": 0.0,
+  "dur": 14.13,
+  "src": "opening",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X01"
+  ]
+ },
+ {
+  "id": "x02_vision",
+  "type": "card",
+  "start": 14.13,
+  "dur": 12.31,
+  "src": "vision",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X02"
+  ]
+ },
+ {
+  "id": "x03_map",
+  "type": "card",
+  "start": 26.44,
+  "dur": 14.01,
+  "src": "map",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X03"
+  ]
+ },
+ {
+  "id": "x04_roles",
+  "type": "card",
+  "start": 40.45,
+  "dur": 16.4,
+  "src": "roles",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X04"
+  ]
+ },
+ {
+  "id": "x05_stages",
+  "type": "card",
+  "start": 56.85,
+  "dur": 11.6,
+  "src": "stages",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X05"
+  ]
+ },
+ {
+  "id": "x06_duallayer",
+  "type": "card",
+  "start": 68.45,
+  "dur": 14.87,
+  "src": "duallayer",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X06"
+  ]
+ },
+ {
+  "id": "x07_context",
+  "type": "card",
+  "start": 83.31,
+  "dur": 11.73,
+  "src": "context",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X07"
+  ]
+ },
+ {
+  "id": "x08_exchange",
+  "type": "card",
+  "start": 95.05,
+  "dur": 10.0,
+  "src": "exchange",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X08"
+  ]
+ },
+ {
+  "id": "x09_memory",
+  "type": "card",
+  "start": 105.05,
+  "dur": 12.67,
+  "src": "memory",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X09"
+  ]
+ },
+ {
+  "id": "x10_reuse",
+  "type": "card",
+  "start": 117.72,
+  "dur": 11.23,
+  "src": "reuse",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X10"
+  ]
+ },
+ {
+  "id": "x11_dataflow",
+  "type": "card",
+  "start": 128.95,
+  "dur": 10.73,
+  "src": "dataflow",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X11"
+  ]
+ },
+ {
+  "id": "x12_arch",
+  "type": "card",
+  "start": 139.68,
+  "dur": 8.71,
+  "src": "arch",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "X12"
+  ]
+ },
+ {
+  "id": "y01_run",
+  "type": "clip",
+  "start": 148.39,
+  "dur": 16.47,
+  "src": "../agh-run/footage/06-deepseek-final.webm",
+  "label": "AGH",
+  "cut": [
+   3,
+   31,
+   1.7
+  ],
+  "lines": [
+   "W08"
+  ]
+ },
+ {
+  "id": "y02_gate",
+  "type": "clip",
+  "start": 164.86,
+  "dur": 13.2,
+  "src": "../agh-run/footage/06-deepseek-final.webm",
+  "label": "AGH",
+  "cut": [
+   30.5,
+   47,
+   1.25
+  ],
+  "lines": [
+   "V07"
+  ]
+ },
+ {
+  "id": "y03_term",
+  "type": "clip",
+  "start": 178.06,
+  "dur": 9.5,
+  "src": "../agh-run/footage/06-terminal-approval.webm",
+  "label": "人工审批终端（真实会话回放）",
+  "cut": [
+   0,
+   9.5,
+   1
+  ],
+  "lines": [
+   "V08"
+  ]
+ },
+ {
+  "id": "y04_apply",
+  "type": "clip",
+  "start": 187.56,
+  "dur": 10.73,
+  "src": "../agh-run/footage/06-deepseek-final.webm",
+  "label": "AGH",
+  "cut": [
+   52,
+   71,
+   2
+  ],
+  "lines": [
+   "V09"
+  ]
+ },
+ {
+  "id": "y05_tree",
+  "type": "image",
+  "start": 198.29,
+  "dur": 9.87,
+  "src": "../agh-run/screens/final/25-panel-structure-light.png",
+  "label": "AGH 面板 · 模块结构树",
+  "cut": null,
+  "lines": [
+   "W13"
+  ]
+ },
+ {
+  "id": "y06_verify",
+  "type": "clip",
+  "start": 208.16,
+  "dur": 10.13,
+  "src": "work/term_pytest.mp4",
+  "label": "验证运行（真实输出）",
+  "cut": [
+   0,
+   24.3,
+   2.4
+  ],
+  "lines": [
+   "X13"
+  ]
+ },
+ {
+  "id": "y07_approve",
+  "type": "image",
+  "start": 218.29,
+  "dur": 5.57,
+  "src": "../agh-run/screens/final/11-panel-permissions-pending-light.png",
+  "label": "AGH 面板 · 审批",
+  "cut": null,
+  "lines": [
+   "M02"
+  ]
+ },
+ {
+  "id": "y08_outro",
+  "type": "card",
+  "start": 223.86,
+  "dur": 9.38,
+  "src": "outro",
+  "label": null,
+  "cut": null,
+  "lines": [
+   "W16"
+  ]
+ }
+]
