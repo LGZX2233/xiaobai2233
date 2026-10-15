@@ -4,6 +4,47 @@
 
 [English](README.en.md) ｜ 代码仓库 https://github.com/LGZX2233/xiaobai2233 ｜ 落地页 https://lgzx2233.github.io/xiaobai2233/ （部署后可用） ｜ 演示视频 {{VIDEO_URL}}
 
+## 设计与创新一图看懂
+
+**我们发现的问题 → 对应的机制**
+
+![问题与机制对应](docs/assets/design/map.png)
+
+**架构：模型规划，内核记账**：模型在 AGH 里规划并选工具；插件提供 pk_* 工具和侧边面板；内核只记录、校验、拦截。
+
+![架构](docs/assets/design/arch.png)
+
+**执行流：一次任务的完整流程**：多策略并列，独立校验，选定写理由，人工批准后才交付，最后对账。
+
+![执行流](docs/assets/design/flow.png)
+
+**数据流：只进不改的一本账**：所有写入在同一事务进账本，读取标明读水位；面板给人看，模型按需查，不靠回忆。
+
+![数据流](docs/assets/design/dataflow.png)
+
+**双层存储：项目整体 + 模块独立**：执行模型只读自己模块那份，上下文不用背整段历史；并回主库要验收、打包、去耦并由人确认。
+
+![双层存储](docs/assets/design/duallayer.png)
+
+**过程留存 → 复用，避免再犯**：skill 按四个维度评分复用，错误分类登记并附事后分析。
+
+![skill 评分复用与错误记录](docs/assets/design/reuse.png)
+
+**四个支柱**
+
+![四个支柱](docs/assets/design/pillars.png)
+
+**异常处理：账本里留下了什么**
+
+![异常处理](docs/assets/design/verdict.png)
+
+**AGH 实机画面**（官方 AGH 构建，DeepSeek 真实运行）
+
+![AGH 审批](docs/assets/agh-approvals.png)
+
+![AGH 执行](docs/assets/agh-execution.png)
+
+
 ## 为什么要做这个
 
 让一个 LLM agent 做真正的长流程任务，比如反演一个物理参数、换三种算法、挑一个交给人，它会反复撞上同几堵墙：
