@@ -8,11 +8,13 @@
 
 ## 视频演示
 
-**60 秒精华版 · 普通话合成讲解**
+**60 秒精华 · v4 普通话讲解**
 
-https://github.com/user-attachments/assets/409e607f-0b61-405a-8d9d-ee5d11db22ec
+https://github.com/user-attachments/assets/690a2e16-ca1d-43ce-ac36-573eaa2d2e87
 
-[精华版 1080p 原片](media/xiaobai-v0.50-teaser-60s-zh-voice.mp4) · [完整讲解](#完整讲解) · [解说词](media/transcript.md)
+从一条营业日规则看懂模块分工、双文档、对话交接与人工采用。
+
+[仓库内 1080p60 原片](media/xiaobai-v0.50-teaser-v4-zh-voice.mp4) · [Release 下载](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50-teaser-v4-zh-voice.mp4) · [双语解说词](media/transcript-v4.md) · [分镜与实测口径](media/storyboard-v4.md) · [观看完整讲解](#完整讲解)
 
 ## 为什么需要项目账本
 
@@ -177,12 +179,12 @@ python -m pip install "project_kernel-0.50.0-cp312-cp312-win_amd64.whl[mcp]"
 
 ## 完整讲解
 
-**2 分 45 秒 · 普通话讲解**
+**165 秒主片 · v4 普通话讲解**
 
-从需求联动拓扑、版本交接，到人工打回与采用、经验复盘，四个问题各由一段真实工作台操作回答。
+一笔跨午夜订单串起订单、日报与财务三个模块。沿时间线可以看到换版前后谁负责哪份文档、多人怎样留下反例，以及模型还需要哪些证据才能判断下一步。
 
-https://github.com/user-attachments/assets/449fe43c-5691-475b-8302-968afc5d019b
+https://github.com/user-attachments/assets/f3ed2938-e918-4e83-9aa5-e5ef3a0b5a90
 
-[主片 1080p 原片](media/xiaobai-v0.50-launch-1080p60-zh-voice.mp4) · [解说词](media/transcript.md) · [查看 12 格分镜](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/storyboard-contact-sheet.png)
+[仓库内 1080p60 原片](media/xiaobai-v0.50-launch-v4-zh-voice.mp4) · [Release 下载](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50-launch-v4-zh-voice.mp4) · [双语解说词](media/transcript-v4.md) · [分镜与实测口径](media/storyboard-v4.md) · [分镜图](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-video-v4-storyboard.png)
 
 本公开仓的契约、Skill 与文档采用 MIT 许可。完整编译版的使用条件见发行 ZIP 根目录的 `RELEASE-LICENSE.txt`。[MIT 许可全文](LICENSE)
