@@ -2,9 +2,15 @@
 
 让跨模块的 AI 协作有一本可以核对的项目账。保留现有助手，从一条需求追到模块、对话、版本、核验样本和最终采用决定。
 
-[观看 165 秒介绍](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50-launch-1080p60.mp4) · [下载 Windows x64 发行包](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50.0-win-x64.zip) · [项目公开仓](https://github.com/LGZX2233/xiaobai2233) · [本地 MCP 接入](docs/integration.md)
+[下载 Windows x64 发行包](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50.0-win-x64.zip) · [本地 MCP 接入](docs/integration.md)
 
-![深色项目首页。项目目标、验收条款与模块依赖显示在同一工作区。](screenshots/stage2-2-home-dark.png)
+## 视频演示
+
+**60 秒精华版 · 普通话合成讲解**
+
+https://github.com/user-attachments/assets/409e607f-0b61-405a-8d9d-ee5d11db22ec
+
+[精华版 1080p 原片](media/xiaobai-v0.50-teaser-60s-zh-voice.mp4) · [完整讲解](#完整讲解) · [解说词](media/transcript.md)
 
 ## 为什么需要项目账本
 
@@ -30,6 +36,8 @@
 **知识回到下一次工作能找到的位置。** 模块现状写明已经证实的结论、证据与待验边界。Skill 分开记录正确性、适用性、复用收益和可维护性，缺失对照时保留空项。错误记录可回到产生它的具体对话。[项目记录 Skill](skills/kernel-maintain-records/SKILL.md)
 
 ## 工作台画廊
+
+![深色项目首页。项目目标、验收条款与模块依赖显示在同一工作区。](screenshots/stage2-2-home-dark.png)
 
 顶部为深色项目首页。以下为同一版工作台的高清实拍截图，点击可查看原图。
 
@@ -71,10 +79,14 @@ python -m pip install "project_kernel-0.50.0-cp312-cp312-win_amd64.whl[mcp]"
 
 在支持 MCP stdio 的客户端，将命令指向该虚拟环境的 Python，加载宿主控制的项目配置，完成 initialize 后调用 tools/list。授权范围决定可见工具。DSH 用户可从原生项目入口登记项目并打开工作台。[MCP 配置与 DSH 插件入口](docs/integration.md) · [完整安装说明](docs/release.md) · [v0.50.0 Release](https://github.com/LGZX2233/xiaobai2233/releases/tag/v0.50.0)
 
-## 宣传视频
+## 完整讲解
 
-[![播放 165 秒主片《人定边界，内核守账，AI 全力推进》](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/poster-v0.50.png)](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50-launch-1080p60.mp4)
+**2 分 45 秒 · 普通话讲解**
 
-**165 秒主片**从三个问题开始。四组工作台实拍分别回答如何按需供给上下文、固定版本依据、由人裁决和复用已有经验，最后展示 T1 实测与安装步骤。**60 秒精华版**保留四支柱、实机采用与实测总账。[主片 MP4](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50-launch-1080p60.mp4) · [精华版 MP4](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/xiaobai-v0.50-teaser-60s.mp4) · [12 格分镜](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/storyboard-contact-sheet.png)
+从需求联动拓扑、版本交接，到人工打回与采用、经验复盘，四个问题各由一段真实工作台操作回答。
+
+https://github.com/user-attachments/assets/449fe43c-5691-475b-8302-968afc5d019b
+
+[主片 1080p 原片](media/xiaobai-v0.50-launch-1080p60-zh-voice.mp4) · [解说词](media/transcript.md) · [查看 12 格分镜](https://github.com/LGZX2233/xiaobai2233/releases/download/v0.50.0/storyboard-contact-sheet.png)
 
 本公开仓的契约、Skill 与文档采用 MIT 许可。完整编译版的使用条件见发行 ZIP 根目录的 `RELEASE-LICENSE.txt`。[MIT 许可全文](LICENSE)
