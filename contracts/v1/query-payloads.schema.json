@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/query-payloads.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "project.overview"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {},
+          "required": []
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "project.timeline"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "object_type": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "project.trace"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "root_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "incoming",
+                "outgoing",
+                "both"
+              ]
+            },
+            "max_depth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          },
+          "required": [
+            "root_ref",
+            "direction",
+            "max_depth"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "requirements.coverage"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "attempts.compare"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "task_ref"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "approvals.queue"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "approved",
+                "rejected",
+                "expired",
+                "superseded",
+                "revoked"
+              ]
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "environment.report"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "task_ref"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "archive.status"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "manifest_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "manifest_ref"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "command.receipt"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "idempotency_key": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+            },
+            "receipt_domain": {
+              "type": "string",
+              "enum": [
+                "identity",
+                "project"
+              ]
+            }
+          },
+          "required": [
+            "idempotency_key",
+            "receipt_domain"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "operation.status"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          },
+          "required": [
+            "operation_id"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "events.read"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "after": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/cursor"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          "required": [
+            "after",
+            "limit"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "context.resolve"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "attempt_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "purpose": {
+              "type": "string",
+              "minLength": 1
+            },
+            "token_budget": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "model_context_limit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "output_reserve": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "mandatory_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              },
+              "minItems": 0
+            },
+            "query": {
+              "type": "string"
+            },
+            "allowed_shared_scopes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "task_ref",
+            "purpose",
+            "token_budget",
+            "model_context_limit",
+            "output_reserve",
+            "mandatory_refs",
+            "query",
+            "allowed_shared_scopes"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "knowledge.search"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1
+            },
+            "allow_shared": {
+              "type": "boolean"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "query",
+            "allow_shared",
+            "limit"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "dataset.preview"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "policy_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "purpose_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            }
+          },
+          "required": [
+            "policy_ref",
+            "purpose_ref"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    }
+  ]
+}

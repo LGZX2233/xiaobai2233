@@ -1,0 +1,28 @@
+{
+  "matrix_version": "1.0.0",
+  "protocol_version": "1.0.0",
+  "deprecated": true,
+  "superseded_by": "headless/capability-matrix.v2.json",
+  "note": "Historical H0-H1 record. The thin client loads only the v2 matrix (interfaces/headless/client.py); this file no longer describes the served surface and is kept so its digests in historical evidence stay explainable.",
+  "surface": "headless",
+  "transport_state_owner": "project_kernel",
+  "capabilities": {
+    "project.read": {
+      "status": "available",
+      "queries": ["project.overview", "project.timeline", "project.trace", "events.read", "operation.status", "command.receipt", "requirements.coverage", "attempts.compare", "approvals.queue", "environment.report", "archive.status"],
+      "scope": "bound_project"
+    },
+    "context.read": {"status": "available", "queries": ["context.resolve"], "scope": "bound_project", "persistence": "read_only_preview"},
+    "knowledge.read": {"status": "available", "queries": ["context.resolve"], "scope": "bound_project", "persistence": "ledger_revisions_only"},
+    "knowledge.search": {"status": "unavailable", "queries": ["knowledge.search"], "reason": "no versioned search contract or RPC handler is wired"},
+    "headless.write": {"status": "planned", "commands": ["design.save", "dispatch.confirm", "attempt.start", "verification.run"], "phase": "H2"}
+  },
+  "skills": {
+    "state.read": {"status": "available", "queries": ["project.overview", "project.timeline"], "required_capabilities": ["project.read"], "replay": ["as_of_seq", "source_watermarks", "freshness"]},
+    "context.read": {"status": "available", "queries": ["context.resolve"], "required_capabilities": ["project.read"], "replay": ["as_of_seq", "manifest.digest", "source_ref"]},
+    "events.read": {"status": "available", "queries": ["events.read"], "required_capabilities": ["project.read"], "replay": ["after", "as_of_seq"]},
+    "trace.read": {"status": "available", "queries": ["project.trace"], "required_capabilities": ["project.read"], "replay": ["root_ref", "direction", "max_depth", "as_of_seq"]},
+    "design.dispatch": {"status": "planned", "phase": "H2", "required_capabilities": ["design.write", "dispatch.confirm"]},
+    "execute.verify": {"status": "planned", "phase": "H2", "required_capabilities": ["attempt.execute", "verification.review"]}
+  }
+}

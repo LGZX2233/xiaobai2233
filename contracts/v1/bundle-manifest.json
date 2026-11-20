@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "canonicalization": "rfc8785",
+  "files": {
+    "command-catalog.json": "0ae69a1699a385265bf93c2380fdabee95377bd3a457284ef908a59f573d796b",
+    "command-envelope.schema.json": "a3a39d6a7a679ba95a7b2b4bb539a38a0ffe8e299b013842ec412f1351a7d731",
+    "command-payloads.schema.json": "f71fe049eb2444b8c3c8598d420accb3bd5384ade0293d20a8aafa07b9ba6a8d",
+    "command-receipt.schema.json": "8a25dead71c01e602314ebe5c22234afb91075b83d8068b16b737d43845a68c5",
+    "common.schema.json": "55f375ad9e1e6a6cdd4c8cb939cb5407ef222b944e1874b2ce38f9f8b188c1ea",
+    "delivery-snapshot.schema.json": "c91057cff98e40f3c92976f48ea6841213946733ac383681ea6a8bac6b270733",
+    "examples.json": "23a4016a84d02170bd1643cf2d43bdf7f56f5a7c164b53739abbe853279a3c07",
+    "golden-digests.json": "dc1e205fd5f374f044bf1d27a001779f51ca779f762b54133b4c83b7fde650b8",
+    "initialize-request.schema.json": "8a4a6fcb612421008d57b1237a1cf4355454a2df7b44d3983df7fef2b333bd0b",
+    "initialize-result.schema.json": "028bdc70d21637cd5e674024410e70b7f12ef888774d5e76d4b2ae27067122e0",
+    "query-envelope.schema.json": "94074bffed676d35c248905bbff3deb05874a76245105eb5a2fbd3fbd5d7f8e7",
+    "query-payloads.schema.json": "3cd5768fa94e217f49a04d7f10f6fcbe414128a6d43eb9ecf838da9af274d7cd"
+  }
+}

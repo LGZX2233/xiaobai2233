@@ -1,0 +1,638 @@
+{
+  "canonicalization": "rfc8785",
+  "protocol_version": "2.0.0",
+  "note": "Known expected canonical bytes for restricted vectors; this generator does not implement general JCS. Implementers must test maintained RFC8785 libraries against these vectors. Each vector is the JCS canonical UTF-8 form of `value` and its SHA-256, independent of the v1 golden-digests.json file.",
+  "vectors": [
+    {
+      "id": "v2-query-envelope-context-render-full",
+      "value": {
+        "jsonrpc": "2.0",
+        "id": "rpc-ctx-render-001",
+        "method": "kernel.query",
+        "params": {
+          "protocol_version": "2.0.0",
+          "invocation_context_id": "ctx-test-reader",
+          "selector": {
+            "project_id": "project-demo",
+            "task_id": "task-demo"
+          },
+          "query": "context.render",
+          "payload": {
+            "task_ref": {
+              "project_id": "project-demo",
+              "object_type": "task",
+              "object_id": "task-demo",
+              "revision_id": "rev-2"
+            },
+            "attempt_ref": {
+              "project_id": "project-demo",
+              "object_type": "attempt",
+              "object_id": "attempt-demo",
+              "revision_id": "rev-3"
+            },
+            "purpose": "implement",
+            "token_budget": 1200,
+            "model_context_limit": 1000000,
+            "output_reserve": 8192,
+            "include": [
+              "header",
+              "task",
+              "requirement",
+              "acceptance",
+              "design",
+              "scope",
+              "verification",
+              "changes",
+              "decisions"
+            ],
+            "mandatory_refs": [
+              {
+                "project_id": "project-demo",
+                "object_type": "requirement",
+                "object_id": "requirement-demo",
+                "revision_id": "rev-2"
+              }
+            ],
+            "since": {
+              "commit_seq": "41",
+              "render_digest": "6a99da1e44a5aaed245a36649b020c4f66efbb4361f659d7e97383c9ea6453f6"
+            },
+            "query": "",
+            "allowed_shared_scopes": [
+              "shared-default"
+            ]
+          },
+          "as_of_seq": "42"
+        }
+      },
+      "canonical_utf8": "{\"id\":\"rpc-ctx-render-001\",\"jsonrpc\":\"2.0\",\"method\":\"kernel.query\",\"params\":{\"as_of_seq\":\"42\",\"invocation_context_id\":\"ctx-test-reader\",\"payload\":{\"allowed_shared_scopes\":[\"shared-default\"],\"attempt_ref\":{\"object_id\":\"attempt-demo\",\"object_type\":\"attempt\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-3\"},\"include\":[\"header\",\"task\",\"requirement\",\"acceptance\",\"design\",\"scope\",\"verification\",\"changes\",\"decisions\"],\"mandatory_refs\":[{\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}],\"model_context_limit\":1000000,\"output_reserve\":8192,\"purpose\":\"implement\",\"query\":\"\",\"since\":{\"commit_seq\":\"41\",\"render_digest\":\"6a99da1e44a5aaed245a36649b020c4f66efbb4361f659d7e97383c9ea6453f6\"},\"task_ref\":{\"object_id\":\"task-demo\",\"object_type\":\"task\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"},\"token_budget\":1200},\"protocol_version\":\"2.0.0\",\"query\":\"context.render\",\"selector\":{\"project_id\":\"project-demo\",\"task_id\":\"task-demo\"}}}",
+      "sha256": "bf69f03653aeb065d2dc71faa246f433332247279d594e911f757b01f44ce30e"
+    },
+    {
+      "id": "v2-context-render-request-payload-full",
+      "value": {
+        "task_ref": {
+          "project_id": "project-demo",
+          "object_type": "task",
+          "object_id": "task-demo",
+          "revision_id": "rev-2"
+        },
+        "attempt_ref": {
+          "project_id": "project-demo",
+          "object_type": "attempt",
+          "object_id": "attempt-demo",
+          "revision_id": "rev-3"
+        },
+        "purpose": "implement",
+        "token_budget": 1200,
+        "model_context_limit": 1000000,
+        "output_reserve": 8192,
+        "include": [
+          "header",
+          "task",
+          "requirement",
+          "acceptance",
+          "design",
+          "scope",
+          "verification",
+          "changes",
+          "decisions"
+        ],
+        "mandatory_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "requirement",
+            "object_id": "requirement-demo",
+            "revision_id": "rev-2"
+          }
+        ],
+        "since": {
+          "commit_seq": "41",
+          "render_digest": "6a99da1e44a5aaed245a36649b020c4f66efbb4361f659d7e97383c9ea6453f6"
+        },
+        "query": "",
+        "allowed_shared_scopes": [
+          "shared-default"
+        ]
+      },
+      "canonical_utf8": "{\"allowed_shared_scopes\":[\"shared-default\"],\"attempt_ref\":{\"object_id\":\"attempt-demo\",\"object_type\":\"attempt\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-3\"},\"include\":[\"header\",\"task\",\"requirement\",\"acceptance\",\"design\",\"scope\",\"verification\",\"changes\",\"decisions\"],\"mandatory_refs\":[{\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}],\"model_context_limit\":1000000,\"output_reserve\":8192,\"purpose\":\"implement\",\"query\":\"\",\"since\":{\"commit_seq\":\"41\",\"render_digest\":\"6a99da1e44a5aaed245a36649b020c4f66efbb4361f659d7e97383c9ea6453f6\"},\"task_ref\":{\"object_id\":\"task-demo\",\"object_type\":\"task\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"},\"token_budget\":1200}",
+      "sha256": "47297dd99882b36810758221ed1d28e6a61191bd47320c6dc9884bb4f4e4e4a5"
+    },
+    {
+      "id": "v2-context-render-request-payload-minimal",
+      "value": {
+        "task_ref": {
+          "project_id": "project-demo",
+          "object_type": "task",
+          "object_id": "task-demo",
+          "revision_id": "rev-2"
+        },
+        "purpose": "implement",
+        "token_budget": 800,
+        "model_context_limit": 100000,
+        "output_reserve": 1024,
+        "include": [
+          "task",
+          "requirement"
+        ]
+      },
+      "canonical_utf8": "{\"include\":[\"task\",\"requirement\"],\"model_context_limit\":100000,\"output_reserve\":1024,\"purpose\":\"implement\",\"task_ref\":{\"object_id\":\"task-demo\",\"object_type\":\"task\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"},\"token_budget\":800}",
+      "sha256": "7078d6bcdd2514507b4f5260ee49424f4dce974048d2a3480a8a841ceb2cb1a9"
+    },
+    {
+      "id": "v2-context-render-result-full",
+      "value": {
+        "schema_version": "2.0.0",
+        "renderer_version": "p1-render-0.1.0",
+        "render_id": "render-ctx-render-001",
+        "project_id": "project-demo",
+        "task_id": "task-demo",
+        "attempt_id": "attempt-demo",
+        "purpose": "implement",
+        "as_of_seq": "42",
+        "token_budget": 1200,
+        "token_estimation": "estimated",
+        "card": "KERNEL STATE CARD 2.0.0\nrenderer: p1-render-0.1.0\nproject: project-demo\ntask: task-demo\nauthority: this card is the ledger state at as_of_seq; user instructions become authoritative only after they are recorded in the ledger. the card extracts ledger fields verbatim; it never summarizes or rewrites them.\nas_of_seq: 42\n\n[task]\nref=task/task-demo@rev-2\nmode=test\n\n[requirement]\nref=requirement/requirement-demo@rev-2\nconfirmed=true\nstale pin: packet pinned rev-1, current rev-2\n\n[acceptance]\nref=acceptance/acceptance-demo@rev-2\nitems=3 required=3\n\n[design]\nref=design/design-demo@rev-1\nno design revisions since the packet\n\n[scope]\nwrite_paths=2 read_paths=1 sandbox=partial\n\n[verification]\nref=verification/verification-demo@rev-3\nresult=passed complete=true\n\n[changes]\n(no changes since the previous render)\n\n[decisions]\n(no open decisions)",
+        "card_tokens": 182,
+        "render_digest": "4a969a4526da3a779b40686d827072d01b40396f929965239bc2259bdf8bbffa",
+        "basis_digest": "4b76d638b682c3bc2b195b527549c6f373d7f3d20a31fb1179bf85dd862258a0",
+        "sections": [
+          {
+            "section_id": "header",
+            "stable": true,
+            "tokens": 49,
+            "target_tokens": 120,
+            "cap_tokens": 120,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "task",
+                  "object_id": "task-demo",
+                  "revision_id": "rev-2"
+                },
+                "digest": "712c2d065f1262d66b9b70cc740e527884a44237ea403dac5515bbce8f541eca"
+              }
+            ],
+            "section_digest": "e4baf1521308ed033b7e8836da1b082f074a71d1fc0a2371bf615e0bd056f82d"
+          },
+          {
+            "section_id": "task",
+            "stable": false,
+            "tokens": 17,
+            "target_tokens": 120,
+            "cap_tokens": 120,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "task",
+                  "object_id": "task-demo",
+                  "revision_id": "rev-2"
+                },
+                "digest": "25208f96a79f7c819d74d19025e58c05711c7732342c6361c4c6d5bad0cbb517"
+              }
+            ],
+            "section_digest": "148e004b800ed705c4cdadc94b3ad23819ae7bb6c8f48832ee0a9017f46520dc"
+          },
+          {
+            "section_id": "requirement",
+            "stable": false,
+            "tokens": 17,
+            "target_tokens": 400,
+            "cap_tokens": 400,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "requirement",
+                  "object_id": "requirement-demo",
+                  "revision_id": "rev-2"
+                },
+                "digest": "6223d84ee5c03d15a6c2da1f3b7efe2b22a12dc932889155827e87f57eef9c41"
+              }
+            ],
+            "section_digest": "a402c25a837a4d21898ffd8eef75fb30da8b87fc8dfca137e6431a9707eb8eaa"
+          },
+          {
+            "section_id": "acceptance",
+            "stable": false,
+            "tokens": 15,
+            "target_tokens": 300,
+            "cap_tokens": 300,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "acceptance",
+                  "object_id": "acceptance-demo",
+                  "revision_id": "rev-2"
+                },
+                "digest": "f51f0574b34a2f84da77a294eee136c8fa5d8dda515db4e040e85e14da71fce4"
+              }
+            ],
+            "section_digest": "ba9f3da1a20f7cd4226801e162cb27bcf4b1d8a08ac5f08aaa04deef85d02744"
+          },
+          {
+            "section_id": "design",
+            "stable": false,
+            "tokens": 16,
+            "target_tokens": 200,
+            "cap_tokens": 200,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "design",
+                  "object_id": "design-demo",
+                  "revision_id": "rev-1"
+                },
+                "digest": "6d2fcb72b0f74947b1d7d359ee87172dcf322d1a8dfd364304f1c0c1e46456df"
+              }
+            ],
+            "section_digest": "70b30ec36a8758cb2a7ec9ad045eb3bdd7f4eb312584a10c00bf245472aa8f49"
+          },
+          {
+            "section_id": "scope",
+            "stable": false,
+            "tokens": 35,
+            "target_tokens": 150,
+            "cap_tokens": 150,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "environment",
+                  "object_id": "environment-demo",
+                  "revision_id": "rev-1"
+                },
+                "digest": "fe145a7212c717fa5e7a007c523b1791bbbb6e3ef98d3aba387289884f0147cb"
+              }
+            ],
+            "section_digest": "8484db1547eb8d085796e07f37d97a7f504a0644de9a5a5b320b6b816263da60"
+          },
+          {
+            "section_id": "verification",
+            "stable": false,
+            "tokens": 17,
+            "target_tokens": 150,
+            "cap_tokens": 150,
+            "truncated": false,
+            "omitted": [],
+            "refs": [
+              {
+                "object_ref": {
+                  "project_id": "project-demo",
+                  "object_type": "verification",
+                  "object_id": "verification-demo",
+                  "revision_id": "rev-3"
+                },
+                "digest": "a4d055d77ed8fb403d125460072a5b97c5d43d169030cc77cfaae5ed73285b61"
+              }
+            ],
+            "section_digest": "25b40d883978ebffaadbf9158f7bf860b16ed2660b5f69a315cef777dda6e2ea"
+          },
+          {
+            "section_id": "changes",
+            "stable": false,
+            "tokens": 8,
+            "target_tokens": 200,
+            "cap_tokens": 200,
+            "truncated": false,
+            "omitted": [],
+            "refs": [],
+            "section_digest": "7fa30e197993a9055393989216f921db2f6526fcd3cfcbbb8ae9ea90577dc737"
+          },
+          {
+            "section_id": "decisions",
+            "stable": false,
+            "tokens": 8,
+            "target_tokens": 100,
+            "cap_tokens": 100,
+            "truncated": false,
+            "omitted": [],
+            "refs": [],
+            "section_digest": "f2f032062cf55b41d3993b4c3b1daa4a9f7b8c0293cd0210fae5f8d98823a2fd"
+          }
+        ],
+        "envelope": {
+          "envelope_id": "card-env-v2-20261019",
+          "epoch": 1,
+          "stable_prefix": "KERNEL STATE CARD 2.0.0\nrenderer: p1-render-0.1.0\nproject: project-demo\ntask: task-demo\nauthority: this card is the ledger state at as_of_seq; user instructions become authoritative only after they are recorded in the ledger. the card extracts ledger fields verbatim; it never summarizes or rewrites them.",
+          "stable_prefix_digest": "d28df291b1abd69c19d2ebc7ab648fedcb322801a5dfe437d2daae750d65c068",
+          "tail": "[changes]\n(no changes since the previous render)\n\n[decisions]\n(no open decisions)",
+          "tail_digest": "efbb0308034d97e5fc025b7f408f7e2f5a8f55c3efa2415f109bf1d8ac66adc1"
+        },
+        "freshness": {
+          "stale_refs": [
+            {
+              "source": "packet.requirement_ref",
+              "object_type": "requirement",
+              "object_id": "requirement-demo",
+              "pinned_revision_id": "rev-1",
+              "current_revision_id": "rev-2"
+            }
+          ],
+          "omitted_refs": [
+            {
+              "section": "section:verification",
+              "reason": "budget_exceeded"
+            }
+          ],
+          "mandatory_missing": [],
+          "unrecorded_change": false,
+          "unknown_verification_ops": [
+            {
+              "object_ref": {
+                "project_id": "project-demo",
+                "object_type": "verification_operation",
+                "object_id": "verification_operation-demo",
+                "revision_id": "rev-1"
+              },
+              "status": "unknown",
+              "message": "verification operation result is not settled"
+            }
+          ]
+        },
+        "stale_pins": [
+          {
+            "source": "packet.requirement_ref",
+            "object_type": "requirement",
+            "object_id": "requirement-demo",
+            "pinned_revision_id": "rev-1",
+            "current_revision_id": "rev-2"
+          }
+        ],
+        "unknown_verification_ops": [
+          {
+            "object_ref": {
+              "project_id": "project-demo",
+              "object_type": "verification_operation",
+              "object_id": "verification_operation-demo",
+              "revision_id": "rev-1"
+            },
+            "status": "unknown",
+            "message": "verification operation result is not settled"
+          }
+        ],
+        "render_meta": {
+          "scale_step": 40,
+          "scale_steps": 40,
+          "scale": "40/40",
+          "resolver_rounds": 1,
+          "min_card_tokens": 166,
+          "card_tokens_128_aligned": 256,
+          "sections_requested": [
+            "header",
+            "task",
+            "requirement",
+            "acceptance",
+            "design",
+            "scope",
+            "verification",
+            "changes",
+            "decisions"
+          ],
+          "sections_rendered": [
+            "header",
+            "task",
+            "requirement",
+            "acceptance",
+            "design",
+            "scope",
+            "verification",
+            "changes",
+            "decisions"
+          ],
+          "token_estimation": "estimated"
+        },
+        "mandatory_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "requirement",
+            "object_id": "requirement-demo",
+            "revision_id": "rev-2"
+          }
+        ],
+        "forbidden": {
+          "timestamp_in_card": false,
+          "uuid_in_card": false
+        }
+      },
+      "canonical_utf8": "{\"as_of_seq\":\"42\",\"attempt_id\":\"attempt-demo\",\"basis_digest\":\"4b76d638b682c3bc2b195b527549c6f373d7f3d20a31fb1179bf85dd862258a0\",\"card\":\"KERNEL STATE CARD 2.0.0\\nrenderer: p1-render-0.1.0\\nproject: project-demo\\ntask: task-demo\\nauthority: this card is the ledger state at as_of_seq; user instructions become authoritative only after they are recorded in the ledger. the card extracts ledger fields verbatim; it never summarizes or rewrites them.\\nas_of_seq: 42\\n\\n[task]\\nref=task/task-demo@rev-2\\nmode=test\\n\\n[requirement]\\nref=requirement/requirement-demo@rev-2\\nconfirmed=true\\nstale pin: packet pinned rev-1, current rev-2\\n\\n[acceptance]\\nref=acceptance/acceptance-demo@rev-2\\nitems=3 required=3\\n\\n[design]\\nref=design/design-demo@rev-1\\nno design revisions since the packet\\n\\n[scope]\\nwrite_paths=2 read_paths=1 sandbox=partial\\n\\n[verification]\\nref=verification/verification-demo@rev-3\\nresult=passed complete=true\\n\\n[changes]\\n(no changes since the previous render)\\n\\n[decisions]\\n(no open decisions)\",\"card_tokens\":182,\"envelope\":{\"envelope_id\":\"card-env-v2-20261019\",\"epoch\":1,\"stable_prefix\":\"KERNEL STATE CARD 2.0.0\\nrenderer: p1-render-0.1.0\\nproject: project-demo\\ntask: task-demo\\nauthority: this card is the ledger state at as_of_seq; user instructions become authoritative only after they are recorded in the ledger. the card extracts ledger fields verbatim; it never summarizes or rewrites them.\",\"stable_prefix_digest\":\"d28df291b1abd69c19d2ebc7ab648fedcb322801a5dfe437d2daae750d65c068\",\"tail\":\"[changes]\\n(no changes since the previous render)\\n\\n[decisions]\\n(no open decisions)\",\"tail_digest\":\"efbb0308034d97e5fc025b7f408f7e2f5a8f55c3efa2415f109bf1d8ac66adc1\"},\"forbidden\":{\"timestamp_in_card\":false,\"uuid_in_card\":false},\"freshness\":{\"mandatory_missing\":[],\"omitted_refs\":[{\"reason\":\"budget_exceeded\",\"section\":\"section:verification\"}],\"stale_refs\":[{\"current_revision_id\":\"rev-2\",\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"pinned_revision_id\":\"rev-1\",\"source\":\"packet.requirement_ref\"}],\"unknown_verification_ops\":[{\"message\":\"verification operation result is not settled\",\"object_ref\":{\"object_id\":\"verification_operation-demo\",\"object_type\":\"verification_operation\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"status\":\"unknown\"}],\"unrecorded_change\":false},\"mandatory_refs\":[{\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}],\"project_id\":\"project-demo\",\"purpose\":\"implement\",\"render_digest\":\"4a969a4526da3a779b40686d827072d01b40396f929965239bc2259bdf8bbffa\",\"render_id\":\"render-ctx-render-001\",\"render_meta\":{\"card_tokens_128_aligned\":256,\"min_card_tokens\":166,\"resolver_rounds\":1,\"scale\":\"40/40\",\"scale_step\":40,\"scale_steps\":40,\"sections_rendered\":[\"header\",\"task\",\"requirement\",\"acceptance\",\"design\",\"scope\",\"verification\",\"changes\",\"decisions\"],\"sections_requested\":[\"header\",\"task\",\"requirement\",\"acceptance\",\"design\",\"scope\",\"verification\",\"changes\",\"decisions\"],\"token_estimation\":\"estimated\"},\"renderer_version\":\"p1-render-0.1.0\",\"schema_version\":\"2.0.0\",\"sections\":[{\"cap_tokens\":120,\"omitted\":[],\"refs\":[{\"digest\":\"712c2d065f1262d66b9b70cc740e527884a44237ea403dac5515bbce8f541eca\",\"object_ref\":{\"object_id\":\"task-demo\",\"object_type\":\"task\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}}],\"section_digest\":\"e4baf1521308ed033b7e8836da1b082f074a71d1fc0a2371bf615e0bd056f82d\",\"section_id\":\"header\",\"stable\":true,\"target_tokens\":120,\"tokens\":49,\"truncated\":false},{\"cap_tokens\":120,\"omitted\":[],\"refs\":[{\"digest\":\"25208f96a79f7c819d74d19025e58c05711c7732342c6361c4c6d5bad0cbb517\",\"object_ref\":{\"object_id\":\"task-demo\",\"object_type\":\"task\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}}],\"section_digest\":\"148e004b800ed705c4cdadc94b3ad23819ae7bb6c8f48832ee0a9017f46520dc\",\"section_id\":\"task\",\"stable\":false,\"target_tokens\":120,\"tokens\":17,\"truncated\":false},{\"cap_tokens\":400,\"omitted\":[],\"refs\":[{\"digest\":\"6223d84ee5c03d15a6c2da1f3b7efe2b22a12dc932889155827e87f57eef9c41\",\"object_ref\":{\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}}],\"section_digest\":\"a402c25a837a4d21898ffd8eef75fb30da8b87fc8dfca137e6431a9707eb8eaa\",\"section_id\":\"requirement\",\"stable\":false,\"target_tokens\":400,\"tokens\":17,\"truncated\":false},{\"cap_tokens\":300,\"omitted\":[],\"refs\":[{\"digest\":\"f51f0574b34a2f84da77a294eee136c8fa5d8dda515db4e040e85e14da71fce4\",\"object_ref\":{\"object_id\":\"acceptance-demo\",\"object_type\":\"acceptance\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-2\"}}],\"section_digest\":\"ba9f3da1a20f7cd4226801e162cb27bcf4b1d8a08ac5f08aaa04deef85d02744\",\"section_id\":\"acceptance\",\"stable\":false,\"target_tokens\":300,\"tokens\":15,\"truncated\":false},{\"cap_tokens\":200,\"omitted\":[],\"refs\":[{\"digest\":\"6d2fcb72b0f74947b1d7d359ee87172dcf322d1a8dfd364304f1c0c1e46456df\",\"object_ref\":{\"object_id\":\"design-demo\",\"object_type\":\"design\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}}],\"section_digest\":\"70b30ec36a8758cb2a7ec9ad045eb3bdd7f4eb312584a10c00bf245472aa8f49\",\"section_id\":\"design\",\"stable\":false,\"target_tokens\":200,\"tokens\":16,\"truncated\":false},{\"cap_tokens\":150,\"omitted\":[],\"refs\":[{\"digest\":\"fe145a7212c717fa5e7a007c523b1791bbbb6e3ef98d3aba387289884f0147cb\",\"object_ref\":{\"object_id\":\"environment-demo\",\"object_type\":\"environment\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}}],\"section_digest\":\"8484db1547eb8d085796e07f37d97a7f504a0644de9a5a5b320b6b816263da60\",\"section_id\":\"scope\",\"stable\":false,\"target_tokens\":150,\"tokens\":35,\"truncated\":false},{\"cap_tokens\":150,\"omitted\":[],\"refs\":[{\"digest\":\"a4d055d77ed8fb403d125460072a5b97c5d43d169030cc77cfaae5ed73285b61\",\"object_ref\":{\"object_id\":\"verification-demo\",\"object_type\":\"verification\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-3\"}}],\"section_digest\":\"25b40d883978ebffaadbf9158f7bf860b16ed2660b5f69a315cef777dda6e2ea\",\"section_id\":\"verification\",\"stable\":false,\"target_tokens\":150,\"tokens\":17,\"truncated\":false},{\"cap_tokens\":200,\"omitted\":[],\"refs\":[],\"section_digest\":\"7fa30e197993a9055393989216f921db2f6526fcd3cfcbbb8ae9ea90577dc737\",\"section_id\":\"changes\",\"stable\":false,\"target_tokens\":200,\"tokens\":8,\"truncated\":false},{\"cap_tokens\":100,\"omitted\":[],\"refs\":[],\"section_digest\":\"f2f032062cf55b41d3993b4c3b1daa4a9f7b8c0293cd0210fae5f8d98823a2fd\",\"section_id\":\"decisions\",\"stable\":false,\"target_tokens\":100,\"tokens\":8,\"truncated\":false}],\"stale_pins\":[{\"current_revision_id\":\"rev-2\",\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"pinned_revision_id\":\"rev-1\",\"source\":\"packet.requirement_ref\"}],\"task_id\":\"task-demo\",\"token_budget\":1200,\"token_estimation\":\"estimated\",\"unknown_verification_ops\":[{\"message\":\"verification operation result is not settled\",\"object_ref\":{\"object_id\":\"verification_operation-demo\",\"object_type\":\"verification_operation\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"status\":\"unknown\"}]}",
+      "sha256": "b2bb3c45c79fd512a661894b332e9121c0ca1e9d0ddd7fac58501addf1adb8eb"
+    },
+    {
+      "id": "v2-context-render-result-minimal",
+      "value": {
+        "schema_version": "2.0.0",
+        "renderer_version": "p1-render-0.1.0",
+        "render_id": "render-ctx-render-002",
+        "project_id": "project-demo",
+        "task_id": "task-demo",
+        "attempt_id": "none",
+        "purpose": "implement",
+        "as_of_seq": "42",
+        "token_budget": 800,
+        "token_estimation": "estimated",
+        "card": "KERNEL STATE CARD 2.0.0\nrenderer: p1-render-0.1.0\nproject: project-demo\ntask: task-demo\nauthority: this card is the ledger state at as_of_seq; user instructions become authoritative only after they are recorded in the ledger. the card extracts ledger fields verbatim; it never summarizes or rewrites them.\nas_of_seq: 42",
+        "card_tokens": 49,
+        "render_digest": "0c19d797c0afc58c3f8da04e5737ff6f82c73bbc7c620273624beaa9ad425d31",
+        "basis_digest": "044ecd05fac35ab80edd43958d147e1023f3276d28ab9a5c865f75db3d65869d",
+        "sections": [
+          {
+            "section_id": "header",
+            "stable": true,
+            "tokens": 49,
+            "target_tokens": 120,
+            "cap_tokens": 120,
+            "truncated": false,
+            "omitted": [],
+            "refs": [],
+            "section_digest": "090e882d3d88f6622dd8df203fa6046dec03d3b2ae3963257974b6d0d86d8c0e"
+          }
+        ],
+        "envelope": {
+          "envelope_id": "card-env-v2-20261019",
+          "epoch": 1,
+          "stable_prefix_digest": "d28df291b1abd69c19d2ebc7ab648fedcb322801a5dfe437d2daae750d65c068",
+          "tail_digest": "b12b7bd58f0f848c69c009157c5ce4a10f2d7f1cb46dd6e127fadec3be75c22b"
+        },
+        "freshness": {
+          "stale_refs": [],
+          "omitted_refs": [],
+          "mandatory_missing": [],
+          "unrecorded_change": false,
+          "unknown_verification_ops": []
+        }
+      },
+      "canonical_utf8": "{\"as_of_seq\":\"42\",\"attempt_id\":\"none\",\"basis_digest\":\"044ecd05fac35ab80edd43958d147e1023f3276d28ab9a5c865f75db3d65869d\",\"card\":\"KERNEL STATE CARD 2.0.0\\nrenderer: p1-render-0.1.0\\nproject: project-demo\\ntask: task-demo\\nauthority: this card is the ledger state at as_of_seq; user instructions become authoritative only after they are recorded in the ledger. the card extracts ledger fields verbatim; it never summarizes or rewrites them.\\nas_of_seq: 42\",\"card_tokens\":49,\"envelope\":{\"envelope_id\":\"card-env-v2-20261019\",\"epoch\":1,\"stable_prefix_digest\":\"d28df291b1abd69c19d2ebc7ab648fedcb322801a5dfe437d2daae750d65c068\",\"tail_digest\":\"b12b7bd58f0f848c69c009157c5ce4a10f2d7f1cb46dd6e127fadec3be75c22b\"},\"freshness\":{\"mandatory_missing\":[],\"omitted_refs\":[],\"stale_refs\":[],\"unknown_verification_ops\":[],\"unrecorded_change\":false},\"project_id\":\"project-demo\",\"purpose\":\"implement\",\"render_digest\":\"0c19d797c0afc58c3f8da04e5737ff6f82c73bbc7c620273624beaa9ad425d31\",\"render_id\":\"render-ctx-render-002\",\"renderer_version\":\"p1-render-0.1.0\",\"schema_version\":\"2.0.0\",\"sections\":[{\"cap_tokens\":120,\"omitted\":[],\"refs\":[],\"section_digest\":\"090e882d3d88f6622dd8df203fa6046dec03d3b2ae3963257974b6d0d86d8c0e\",\"section_id\":\"header\",\"stable\":true,\"target_tokens\":120,\"tokens\":49,\"truncated\":false}],\"task_id\":\"task-demo\",\"token_budget\":800,\"token_estimation\":\"estimated\"}",
+      "sha256": "1051488e989e75a8a4cffb8fb9fd35e80070987903e6fa719254f06c44ed0010"
+    },
+    {
+      "id": "v2-structure-recipe-path-allowlist",
+      "value": {
+        "recipe_id": "scope-write-paths",
+        "kind": "path_allowlist",
+        "severity": "deny",
+        "required": true,
+        "params": {
+          "allow": {
+            "source": "packet.scope.write_paths"
+          },
+          "ignore": [
+            "**/__pycache__/**"
+          ],
+          "baseline_ref": {
+            "project_id": "project-demo",
+            "object_type": "workspace_baseline",
+            "object_id": "baseline-demo",
+            "revision_id": "rev-1"
+          }
+        },
+        "reason": "candidate changes must stay inside the dispatched write scope（写范围）"
+      },
+      "canonical_utf8": "{\"kind\":\"path_allowlist\",\"params\":{\"allow\":{\"source\":\"packet.scope.write_paths\"},\"baseline_ref\":{\"object_id\":\"baseline-demo\",\"object_type\":\"workspace_baseline\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"ignore\":[\"**/__pycache__/**\"]},\"reason\":\"candidate changes must stay inside the dispatched write scope（写范围）\",\"recipe_id\":\"scope-write-paths\",\"required\":true,\"severity\":\"deny\"}",
+      "sha256": "af87a9046a7d0175688aa7d72466133ceff54ebd5a8cee6f920fe55d590778e5"
+    },
+    {
+      "id": "v2-structure-recipe-tests-frozen",
+      "value": {
+        "recipe_id": "frozen-tests",
+        "kind": "tests_frozen",
+        "severity": "deny",
+        "required": true,
+        "params": {
+          "protected": [
+            "tests/**"
+          ],
+          "baseline_ref": {
+            "project_id": "project-demo",
+            "object_type": "workspace_baseline",
+            "object_id": "baseline-demo",
+            "revision_id": "rev-1"
+          },
+          "authorization_refs": [
+            {
+              "project_id": "project-demo",
+              "object_type": "scope_waiver",
+              "object_id": "waiver-demo",
+              "revision_id": "rev-1"
+            }
+          ]
+        },
+        "reason": "protected tests may only change with an explicit ledger authorization"
+      },
+      "canonical_utf8": "{\"kind\":\"tests_frozen\",\"params\":{\"authorization_refs\":[{\"object_id\":\"waiver-demo\",\"object_type\":\"scope_waiver\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}],\"baseline_ref\":{\"object_id\":\"baseline-demo\",\"object_type\":\"workspace_baseline\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"protected\":[\"tests/**\"]},\"reason\":\"protected tests may only change with an explicit ledger authorization\",\"recipe_id\":\"frozen-tests\",\"required\":true,\"severity\":\"deny\"}",
+      "sha256": "135dc7c9fc2448abed11361054bf10aeed2759dbd971e1a45eb579b2176a8b86"
+    },
+    {
+      "id": "v2-structure-recipe-import-direction",
+      "value": {
+        "recipe_id": "import-direction",
+        "kind": "import_direction",
+        "severity": "deny",
+        "required": true,
+        "params": {
+          "rules": [
+            {
+              "path_glob": "src/core/**",
+              "forbidden_prefixes": [
+                "src.adapters"
+              ]
+            }
+          ]
+        },
+        "reason": "core must not depend on adapters"
+      },
+      "canonical_utf8": "{\"kind\":\"import_direction\",\"params\":{\"rules\":[{\"forbidden_prefixes\":[\"src.adapters\"],\"path_glob\":\"src/core/**\"}]},\"reason\":\"core must not depend on adapters\",\"recipe_id\":\"import-direction\",\"required\":true,\"severity\":\"deny\"}",
+      "sha256": "5c0d21adf00008076df9c7a8a42ee67a41b74d1776cb284b26aa52d742024129"
+    },
+    {
+      "id": "v2-structure-recipe-no-new-files",
+      "value": {
+        "recipe_id": "no-new-modules",
+        "kind": "no_new_files",
+        "severity": "require_human",
+        "required": true,
+        "params": {
+          "baseline_ref": {
+            "project_id": "project-demo",
+            "object_type": "workspace_baseline",
+            "object_id": "baseline-demo",
+            "revision_id": "rev-1"
+          },
+          "allowed_prefixes": [
+            "src/core/**"
+          ],
+          "max_new_files": 0
+        },
+        "reason": "new modules need human sign-off"
+      },
+      "canonical_utf8": "{\"kind\":\"no_new_files\",\"params\":{\"allowed_prefixes\":[\"src/core/**\"],\"baseline_ref\":{\"object_id\":\"baseline-demo\",\"object_type\":\"workspace_baseline\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"max_new_files\":0},\"reason\":\"new modules need human sign-off\",\"recipe_id\":\"no-new-modules\",\"required\":true,\"severity\":\"require_human\"}",
+      "sha256": "8e6bac773d0e88b0bb9ba1384f98ee9e911fb2be355c16d828f9a90af73190cc"
+    },
+    {
+      "id": "v2-structure-recipe-forbidden-patterns",
+      "value": {
+        "recipe_id": "forbidden-markers",
+        "kind": "forbidden_patterns",
+        "severity": "warn",
+        "required": false,
+        "params": {
+          "baseline_ref": {
+            "project_id": "project-demo",
+            "object_type": "workspace_baseline",
+            "object_id": "baseline-demo",
+            "revision_id": "rev-1"
+          },
+          "patterns": [
+            "TODO",
+            {
+              "pattern": "FIXME",
+              "reason": "unresolved marker"
+            }
+          ],
+          "ignore": [
+            "docs/**"
+          ]
+        },
+        "reason": "markers indicate unfinished work"
+      },
+      "canonical_utf8": "{\"kind\":\"forbidden_patterns\",\"params\":{\"baseline_ref\":{\"object_id\":\"baseline-demo\",\"object_type\":\"workspace_baseline\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"ignore\":[\"docs/**\"],\"patterns\":[\"TODO\",{\"pattern\":\"FIXME\",\"reason\":\"unresolved marker\"}]},\"reason\":\"markers indicate unfinished work\",\"recipe_id\":\"forbidden-markers\",\"required\":false,\"severity\":\"warn\"}",
+      "sha256": "827469bc9df383730975c30662682ae6afe5032b000ab5ddc7ab0c797fe6a97a"
+    },
+    {
+      "id": "v2-structure-recipe-api-surface",
+      "value": {
+        "recipe_id": "public-api-surface",
+        "kind": "api_surface",
+        "severity": "require_human",
+        "required": true,
+        "params": {
+          "required_symbols": {
+            "src/core/util.py": [
+              "helper",
+              "Widget"
+            ]
+          }
+        },
+        "reason": "documented public symbols must not disappear"
+      },
+      "canonical_utf8": "{\"kind\":\"api_surface\",\"params\":{\"required_symbols\":{\"src/core/util.py\":[\"helper\",\"Widget\"]}},\"reason\":\"documented public symbols must not disappear\",\"recipe_id\":\"public-api-surface\",\"required\":true,\"severity\":\"require_human\"}",
+      "sha256": "fdeee8f03f5a76a435fe6978cb7a850ab342c42981d8417452d0ac1c175b0c85"
+    }
+  ]
+}

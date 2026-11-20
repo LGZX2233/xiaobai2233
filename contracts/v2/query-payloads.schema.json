@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v2/query-payloads.schema.json",
+  "title": "Query-specific payload schema for protocol 2.0.0 (additive)",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "const": "context.render"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "task_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "attempt_ref": {
+              "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+            },
+            "purpose": {
+              "type": "string",
+              "minLength": 1
+            },
+            "token_budget": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "model_context_limit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "output_reserve": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "include": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "header",
+                  "task",
+                  "requirement",
+                  "acceptance",
+                  "design",
+                  "scope",
+                  "verification",
+                  "changes",
+                  "decisions"
+                ]
+              }
+            },
+            "mandatory_refs": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+              }
+            },
+            "since": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "commit_seq": {
+                  "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/seq"
+                },
+                "render_digest": {
+                  "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+                }
+              },
+              "required": [
+                "commit_seq"
+              ]
+            },
+            "query": {
+              "type": "string"
+            },
+            "allowed_shared_scopes": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+              }
+            }
+          },
+          "required": [
+            "task_ref",
+            "purpose",
+            "token_budget",
+            "model_context_limit",
+            "output_reserve",
+            "include"
+          ]
+        }
+      },
+      "required": [
+        "query",
+        "payload"
+      ]
+    },
+    {
+      "$ref": "https://project-kernel.invalid/design/v1/query-payloads.schema.json"
+    }
+  ]
+}

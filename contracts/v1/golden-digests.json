@@ -1,0 +1,135 @@
+{
+  "canonicalization": "rfc8785",
+  "note": "Known expected bytes for restricted vectors; this generator does not implement general JCS. Implementers must test maintained RFC8785 libraries against these vectors and full library test suites.",
+  "vectors": [
+    {
+      "id": "restricted-basic",
+      "value": {
+        "z": "中文",
+        "a": "9007199254740993",
+        "list": [
+          "b",
+          "a"
+        ],
+        "nothing": null,
+        "enabled": true
+      },
+      "canonical_utf8": "{\"a\":\"9007199254740993\",\"enabled\":true,\"list\":[\"b\",\"a\"],\"nothing\":null,\"z\":\"中文\"}",
+      "note": "Expected canonical bytes for this restricted example: ASCII object keys, no JSON numeric values. This is not a general JCS implementation.",
+      "sha256": "d423008c5f91e2ed62858f293a720643a8c6bb541643d814bfed5e20fcfd3e77"
+    },
+    {
+      "id": "snapshot-test-body",
+      "value": {
+        "schema_version": "1.0.0",
+        "canonicalization": "rfc8785",
+        "evidence_mode": "test",
+        "project_id": "project-demo",
+        "task_ref": {
+          "project_id": "project-demo",
+          "object_type": "task",
+          "object_id": "task-demo",
+          "revision_id": "rev-1"
+        },
+        "selected_attempt_ref": {
+          "project_id": "project-demo",
+          "object_type": "attempt",
+          "object_id": "attempt-demo",
+          "revision_id": "rev-1"
+        },
+        "packet_ref": {
+          "project_id": "project-demo",
+          "object_type": "execution_packet",
+          "object_id": "execution_packet-demo",
+          "revision_id": "rev-1"
+        },
+        "requirement_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "requirement",
+            "object_id": "requirement-demo",
+            "revision_id": "rev-1"
+          }
+        ],
+        "design_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "design",
+            "object_id": "design-demo",
+            "revision_id": "rev-1"
+          }
+        ],
+        "acceptance_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "acceptance",
+            "object_id": "acceptance-demo",
+            "revision_id": "rev-1"
+          }
+        ],
+        "rule_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "rules",
+            "object_id": "rules-demo",
+            "revision_id": "rev-1"
+          }
+        ],
+        "scope_ref": {
+          "project_id": "project-demo",
+          "object_type": "scope",
+          "object_id": "scope-demo",
+          "revision_id": "rev-1"
+        },
+        "input_manifest_ref": {
+          "project_id": "project-demo",
+          "object_type": "input_manifest",
+          "object_id": "input_manifest-demo",
+          "revision_id": "rev-1"
+        },
+        "context_manifest_ref": {
+          "project_id": "project-demo",
+          "object_type": "context_manifest",
+          "object_id": "context_manifest-demo",
+          "revision_id": "rev-1"
+        },
+        "environment_ref": {
+          "project_id": "project-demo",
+          "object_type": "environment",
+          "object_id": "environment-demo",
+          "revision_id": "rev-1"
+        },
+        "verification_refs": [
+          {
+            "project_id": "project-demo",
+            "object_type": "verification",
+            "object_id": "verification-demo",
+            "revision_id": "rev-1"
+          }
+        ],
+        "candidate_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "delivery": {
+          "method": "bundle",
+          "target_ref": {
+            "project_id": "project-demo",
+            "object_type": "delivery_target",
+            "object_id": "delivery_target-demo",
+            "revision_id": "rev-1"
+          }
+        },
+        "artifacts": [
+          {
+            "artifact_id": "artifact-demo",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "size_bytes": "128",
+            "media_type": "text/plain",
+            "required": true
+          }
+        ]
+      },
+      "canonical_utf8": "{\"acceptance_refs\":[{\"object_id\":\"acceptance-demo\",\"object_type\":\"acceptance\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}],\"artifacts\":[{\"artifact_id\":\"artifact-demo\",\"media_type\":\"text/plain\",\"required\":true,\"sha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"size_bytes\":\"128\"}],\"candidate_digest\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"canonicalization\":\"rfc8785\",\"context_manifest_ref\":{\"object_id\":\"context_manifest-demo\",\"object_type\":\"context_manifest\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"delivery\":{\"method\":\"bundle\",\"target_ref\":{\"object_id\":\"delivery_target-demo\",\"object_type\":\"delivery_target\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}},\"design_refs\":[{\"object_id\":\"design-demo\",\"object_type\":\"design\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}],\"environment_ref\":{\"object_id\":\"environment-demo\",\"object_type\":\"environment\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"evidence_mode\":\"test\",\"input_manifest_ref\":{\"object_id\":\"input_manifest-demo\",\"object_type\":\"input_manifest\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"packet_ref\":{\"object_id\":\"execution_packet-demo\",\"object_type\":\"execution_packet\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"project_id\":\"project-demo\",\"requirement_refs\":[{\"object_id\":\"requirement-demo\",\"object_type\":\"requirement\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}],\"rule_refs\":[{\"object_id\":\"rules-demo\",\"object_type\":\"rules\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}],\"schema_version\":\"1.0.0\",\"scope_ref\":{\"object_id\":\"scope-demo\",\"object_type\":\"scope\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"selected_attempt_ref\":{\"object_id\":\"attempt-demo\",\"object_type\":\"attempt\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"task_ref\":{\"object_id\":\"task-demo\",\"object_type\":\"task\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"},\"verification_refs\":[{\"object_id\":\"verification-demo\",\"object_type\":\"verification\",\"project_id\":\"project-demo\",\"revision_id\":\"rev-1\"}]}",
+      "note": "Expected canonical bytes for this restricted example: ASCII object keys, no JSON numeric values. This is not a general JCS implementation.",
+      "sha256": "2fc37df76c280840b69beddfa5ac7b802b776d676aa3ae98def09c7ad32da8d7"
+    }
+  ]
+}

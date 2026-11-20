@@ -1,0 +1,265 @@
+{
+  "version": "1.0.0",
+  "notice": "结构样例仅验证schema，不授予权限，不代表对象或文件真实存在；test evidence不能进入production交付或正式语料。",
+  "valid_commands": [
+    {
+      "jsonrpc": "2.0",
+      "id": "rpc-001",
+      "method": "kernel.command",
+      "params": {
+        "protocol_version": "1.0.0",
+        "invocation_context_id": "ctx-test-machine",
+        "idempotency_key": "cmd-create-task-001",
+        "command": "task.create",
+        "selector": {
+          "project_id": "project-demo"
+        },
+        "expected_heads": [],
+        "payload": {
+          "title": "方案验证",
+          "goal": "在隔离测试目录比较两种方案",
+          "requirement_refs": [],
+          "mode": "test"
+        }
+      }
+    },
+    {
+      "jsonrpc": "2.0",
+      "id": "rpc-002",
+      "method": "kernel.command",
+      "params": {
+        "protocol_version": "1.0.0",
+        "invocation_context_id": "ctx-example-untrusted-until-resolved",
+        "idempotency_key": "cmd-approve-001",
+        "command": "approval.decide",
+        "selector": {
+          "project_id": "project-demo"
+        },
+        "expected_heads": [
+          {
+            "object_ref": {
+              "project_id": "project-demo",
+              "object_type": "approval",
+              "object_id": "approval-demo",
+              "revision_id": "rev-1"
+            },
+            "pointer_name": "current",
+            "expected_head_version": "2"
+          }
+        ],
+        "payload": {
+          "approval_id": "approval-demo",
+          "decision": "approved",
+          "snapshot_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "reason": "已在可信交互入口查看完整交付材料"
+        }
+      }
+    }
+  ],
+  "valid_queries": [
+    {
+      "jsonrpc": "2.0",
+      "id": "rpc-003",
+      "method": "kernel.query",
+      "params": {
+        "protocol_version": "1.0.0",
+        "invocation_context_id": "ctx-test-reader",
+        "selector": {
+          "project_id": "project-demo"
+        },
+        "query": "project.overview",
+        "payload": {},
+        "as_of_seq": "9007199254740993"
+      }
+    }
+  ],
+  "valid_snapshot_body": {
+    "schema_version": "1.0.0",
+    "canonicalization": "rfc8785",
+    "evidence_mode": "test",
+    "project_id": "project-demo",
+    "task_ref": {
+      "project_id": "project-demo",
+      "object_type": "task",
+      "object_id": "task-demo",
+      "revision_id": "rev-1"
+    },
+    "selected_attempt_ref": {
+      "project_id": "project-demo",
+      "object_type": "attempt",
+      "object_id": "attempt-demo",
+      "revision_id": "rev-1"
+    },
+    "packet_ref": {
+      "project_id": "project-demo",
+      "object_type": "execution_packet",
+      "object_id": "execution_packet-demo",
+      "revision_id": "rev-1"
+    },
+    "requirement_refs": [
+      {
+        "project_id": "project-demo",
+        "object_type": "requirement",
+        "object_id": "requirement-demo",
+        "revision_id": "rev-1"
+      }
+    ],
+    "design_refs": [
+      {
+        "project_id": "project-demo",
+        "object_type": "design",
+        "object_id": "design-demo",
+        "revision_id": "rev-1"
+      }
+    ],
+    "acceptance_refs": [
+      {
+        "project_id": "project-demo",
+        "object_type": "acceptance",
+        "object_id": "acceptance-demo",
+        "revision_id": "rev-1"
+      }
+    ],
+    "rule_refs": [
+      {
+        "project_id": "project-demo",
+        "object_type": "rules",
+        "object_id": "rules-demo",
+        "revision_id": "rev-1"
+      }
+    ],
+    "scope_ref": {
+      "project_id": "project-demo",
+      "object_type": "scope",
+      "object_id": "scope-demo",
+      "revision_id": "rev-1"
+    },
+    "input_manifest_ref": {
+      "project_id": "project-demo",
+      "object_type": "input_manifest",
+      "object_id": "input_manifest-demo",
+      "revision_id": "rev-1"
+    },
+    "context_manifest_ref": {
+      "project_id": "project-demo",
+      "object_type": "context_manifest",
+      "object_id": "context_manifest-demo",
+      "revision_id": "rev-1"
+    },
+    "environment_ref": {
+      "project_id": "project-demo",
+      "object_type": "environment",
+      "object_id": "environment-demo",
+      "revision_id": "rev-1"
+    },
+    "verification_refs": [
+      {
+        "project_id": "project-demo",
+        "object_type": "verification",
+        "object_id": "verification-demo",
+        "revision_id": "rev-1"
+      }
+    ],
+    "candidate_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "delivery": {
+      "method": "bundle",
+      "target_ref": {
+        "project_id": "project-demo",
+        "object_type": "delivery_target",
+        "object_id": "delivery_target-demo",
+        "revision_id": "rev-1"
+      }
+    },
+    "artifacts": [
+      {
+        "artifact_id": "artifact-demo",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "size_bytes": "128",
+        "media_type": "text/plain",
+        "required": true
+      }
+    ]
+  },
+  "invalid_commands": [
+    {
+      "name": "caller-cannot-set-actor",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "rpc-001",
+        "method": "kernel.command",
+        "params": {
+          "protocol_version": "1.0.0",
+          "invocation_context_id": "ctx-test-machine",
+          "idempotency_key": "cmd-create-task-001",
+          "command": "task.create",
+          "selector": {
+            "project_id": "project-demo"
+          },
+          "expected_heads": [],
+          "payload": {
+            "title": "方案验证",
+            "goal": "在隔离测试目录比较两种方案",
+            "requirement_refs": [],
+            "mode": "test"
+          },
+          "actor_id": "admin"
+        }
+      },
+      "expected_stage": "envelope"
+    },
+    {
+      "name": "undeclared-role-in-payload",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "rpc-001",
+        "method": "kernel.command",
+        "params": {
+          "protocol_version": "1.0.0",
+          "invocation_context_id": "ctx-test-machine",
+          "idempotency_key": "cmd-create-task-001",
+          "command": "task.create",
+          "selector": {
+            "project_id": "project-demo"
+          },
+          "expected_heads": [],
+          "payload": {
+            "title": "方案验证",
+            "goal": "在隔离测试目录比较两种方案",
+            "requirement_refs": [],
+            "mode": "test",
+            "role": "approver"
+          }
+        }
+      },
+      "expected_stage": "payload"
+    }
+  ],
+  "valid_initialize_request": {
+    "jsonrpc": "2.0",
+    "id": "rpc-init",
+    "method": "kernel.initialize",
+    "params": {
+      "client_id": "test-client",
+      "supported_protocol_versions": [
+        "1.0.0"
+      ]
+    }
+  },
+  "valid_initialize_result": {
+    "protocol_version": "1.0.0",
+    "schema_bundle_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "server_instance_id": "test-instance",
+    "mode": "test",
+    "supported_commands": [
+      "task.create"
+    ],
+    "supported_queries": [
+      "project.overview"
+    ],
+    "provider_capabilities": [],
+    "limits": {
+      "max_frame_bytes": 1048576,
+      "max_inflight": 4
+    }
+  }
+}

@@ -1,0 +1,680 @@
+{
+  "schema": "public-benchmark/1",
+  "measurement_started_utc": "2026-11-20T05:59:26.494155+00:00",
+  "collector_sha256": "f0a1a312aa33606e45bb85e903816bef44418cc58196d1cc53a87d5cef3bd7ff",
+  "suite_evidence": "provided same-batch logs",
+  "host": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "python": "3.12.10",
+    "sqlite": "3.49.1",
+    "mcp_sdk": "2.3.0",
+    "node": "v24.18.1"
+  },
+  "suite_scope": {
+    "kernel": "Full configured Kernel pytest suite",
+    "hannes": "All workbench Node tests",
+    "dsh": "All DSH adapter Node tests",
+    "bridge": "All Node protocol bridge tests",
+    "edge": "Complete 20-scenario Edge fault injection matrix"
+  },
+  "size_method": "UTF-8 compact JSON, sorted keys, unescaped Unicode; transport framing excluded. Estimated tokens use the runtime DeterministicTokenMeter on the exact serialized text, not a model tokenizer or a billing measure.",
+  "suites": {
+    "kernel": {
+      "passed": 1967,
+      "total": 1967,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": {
+        "file": "kernel.log",
+        "sha256": "38fcf0f8bdeca0137416f4b0f88377a73e41e08661910314076a84d121aef3dd",
+        "bytes": 2302,
+        "modified_utc": "2026-11-20T05:50:31.229140+00:00"
+      }
+    },
+    "hannes": {
+      "total": 558,
+      "passed": 558,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": {
+        "file": "hannes.log",
+        "sha256": "bcf857e647ae4fdb6e42b25bc1e57bb996dc32017652186ee11231f1dde89a0d",
+        "bytes": 54135,
+        "modified_utc": "2026-11-20T05:58:30.606866+00:00"
+      }
+    },
+    "dsh": {
+      "total": 71,
+      "passed": 71,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": {
+        "file": "dsh.log",
+        "sha256": "7770af4b6790c95c0f8e39decdc4b55603888b12c1b9673d3885da21d78a0cac",
+        "bytes": 6914,
+        "modified_utc": "2026-11-20T05:57:51.164791+00:00"
+      }
+    },
+    "bridge": {
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": {
+        "file": "bridge.log",
+        "sha256": "ab5078069144cd4f3f9e8d87abfc2e95af4fa1c2f763c615ff63e0330a75bafe",
+        "bytes": 1655,
+        "modified_utc": "2026-11-20T05:47:37.883003+00:00"
+      }
+    },
+    "edge": {
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "evidence": {
+        "file": "edge.json",
+        "sha256": "2b221afff12b0516318f4b2b520c3fc2332efe18b9e787d0a2b6ee275b181ca3",
+        "bytes": 3643,
+        "modified_utc": "2026-11-20T05:58:45.066619+00:00"
+      }
+    }
+  },
+  "edge_faults": {
+    "conditions": "Mounted production workbench with an injected host. Each 409 scenario asserts recovery UI and write behavior; the independent SQLite race is reported separately.",
+    "pageCrashes": 0,
+    "uncaughtPageErrors": 0,
+    "consoleErrors": 0,
+    "injected_409": 3,
+    "handled_409": 3,
+    "handled_percent": 100.0,
+    "cas_scenarios": [
+      "cas",
+      "module-cas",
+      "upgrade-cas"
+    ],
+    "checks": [
+      {
+        "scenario": "offline-retry",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "expired",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "dirty",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "read-only",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "external",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "repeat",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "module-cas",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 1
+      },
+      {
+        "scenario": "upgrade-cas",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 1
+      },
+      {
+        "scenario": "cas",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 1
+      },
+      {
+        "scenario": "unknown-502",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "unknown-503",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "unknown-timeout",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "forbidden",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "capacity",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "create",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "record",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "evidence",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "race",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "honest",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      },
+      {
+        "scenario": "boundary",
+        "passed": true,
+        "uncaughtPageErrors": 0,
+        "consoleErrors": 0,
+        "pageCrashes": 0,
+        "injected409": 0
+      }
+    ]
+  },
+  "mcp": {
+    "compact": {
+      "tools": 6,
+      "names": [
+        "sync",
+        "pull",
+        "commit",
+        "discover",
+        "query",
+        "command"
+      ],
+      "input_schemas": {
+        "bytes": 6662,
+        "estimated_tokens": 1666
+      },
+      "tool_descriptors": {
+        "bytes": 10032,
+        "estimated_tokens": 2549
+      }
+    },
+    "legacy": {
+      "tools": 56,
+      "names": [
+        "kernel_query_project_overview",
+        "kernel_query_project_timeline",
+        "kernel_query_requirements_coverage",
+        "kernel_query_capabilities_describe",
+        "kernel_query_skills_relevant",
+        "kernel_query_supervisor_report",
+        "kernel_query_supervisor_events",
+        "kernel_query_context_resolve",
+        "kernel_query_events_read",
+        "kernel_query_project_trace",
+        "kernel_query_evidence_read",
+        "kernel_query_execution_records",
+        "kernel_query_environment_report",
+        "kernel_query_module_describe",
+        "kernel_query_module_validate",
+        "kernel_query_operation_status",
+        "kernel_query_execution_flow_task_workflow",
+        "kernel_query_knowledge_search",
+        "kernel_query_attempts_compare",
+        "kernel_query_approvals_queue",
+        "kernel_query_archive_status",
+        "kernel_query_command_receipt",
+        "kernel_command_task_create",
+        "kernel_command_requirement_save",
+        "kernel_command_requirement_confirm",
+        "kernel_command_design_save",
+        "kernel_command_design_confirm",
+        "kernel_command_environment_probe",
+        "kernel_command_dispatch_draft",
+        "kernel_command_dispatch_confirm",
+        "kernel_command_dispatch_revoke",
+        "kernel_command_task_complete_scoped",
+        "kernel_command_resources_save",
+        "kernel_command_attempt_start",
+        "kernel_command_attempt_cancel",
+        "kernel_command_verification_run",
+        "kernel_command_attempt_register_candidate",
+        "kernel_command_execution_flow_compare",
+        "kernel_command_execution_flow_capture_root",
+        "kernel_command_execution_flow_check",
+        "kernel_command_execution_flow_task_form_freeze",
+        "kernel_command_execution_flow_dispatch_create",
+        "kernel_command_execution_flow_dispatch_send",
+        "kernel_command_execution_flow_dispatch_reconcile",
+        "kernel_command_execution_flow_host_consume",
+        "kernel_command_attempt_select",
+        "kernel_command_delivery_request",
+        "kernel_command_delivery_apply",
+        "kernel_command_delivery_reconcile",
+        "kernel_command_task_close",
+        "kernel_command_task_terminate",
+        "kernel_command_archive_export",
+        "kernel_command_attempt_reconcile",
+        "kernel_host_sync",
+        "kernel_host_pull",
+        "kernel_host_commit_batch"
+      ],
+      "input_schemas": {
+        "bytes": 86095,
+        "estimated_tokens": 21524
+      },
+      "tool_descriptors": {
+        "bytes": 115497,
+        "estimated_tokens": 29303
+      }
+    },
+    "reduction_percent": {
+      "tools": 89.286,
+      "bytes": 92.262,
+      "estimated_tokens": 92.26
+    },
+    "descriptor_reduction_percent": {
+      "bytes": 91.314,
+      "estimated_tokens": 91.301
+    },
+    "conditions": {
+      "transport": "Official MCP SDK, in-memory initialize + tools/list; no role filter",
+      "aggregate_tools": true,
+      "allow_commands": true,
+      "capabilities": [
+        "approval.decide",
+        "attempt.execute",
+        "delivery.apply",
+        "design.write",
+        "dispatch.confirm",
+        "project.read",
+        "verification.review"
+      ],
+      "schema_payload": "Array of inputSchema values in returned discovery order"
+    }
+  },
+  "context_loading": {
+    "conditions": "One disposable project; F1 verified task plus eight full repository module documents. The workload requests the orchestration architecture and the F1 task card by explicit IDs. Both paths receive the same overview, module catalog and entire context.render response at one watermark. The selected route reads its module directory and architecture; the eager route reads all eight directories and documents.",
+    "sources": {
+      "orchestration": {
+        "source": "project-package/docs/modules/nodes/orchestration.md",
+        "sha256": "39f97b7246d8742cb9a00af4b7da1cfe7d053dbdc9b53cb87604b6d8a3dc32cf"
+      },
+      "core": {
+        "source": "project-package/docs/modules/nodes/core.md",
+        "sha256": "1d5209ac3d1302bf1deacfc80c4620a1591d6464bc09544b8b54a0a7bd0c431c"
+      },
+      "storage": {
+        "source": "project-package/docs/modules/nodes/storage.md",
+        "sha256": "6b7c2b86411623722349cd9c2d2134e3925aae4b9c3c1cf2d970b30e924fb9eb"
+      },
+      "bridge": {
+        "source": "project-package/docs/modules/nodes/bridge.md",
+        "sha256": "90cc80a30882550fabfa04f77ec866a60c120712819a9cff4a009b746aa93015"
+      },
+      "data": {
+        "source": "project-package/docs/modules/nodes/data.md",
+        "sha256": "ec07f932e4553c0c2074c2416c650356dc17abfef35b870af418a695d75f161f"
+      },
+      "recovery": {
+        "source": "project-package/docs/modules/nodes/recovery.md",
+        "sha256": "fa6a223c2c7403de083dbd206489619aacd0747ea22616b7c1827762c42452b6"
+      },
+      "environment": {
+        "source": "project-package/docs/modules/nodes/environment.md",
+        "sha256": "7958066214c2511c6cfc5d5917e6f7130f66f4f4aaafbc7fa4b5664481508c44"
+      },
+      "identity": {
+        "source": "project-package/docs/modules/nodes/identity.md",
+        "sha256": "84177c990b75b1340790fd8d80ef1ea0314239500770bf2be1f50f403774d242"
+      }
+    },
+    "selected_module": "orchestration",
+    "selected_module_id": "bm_78a1c11d544b463f98918735240be226",
+    "module_count": 8,
+    "as_of_seq": 36,
+    "l0_project_overview": {
+      "bytes": 1731,
+      "estimated_tokens": 433
+    },
+    "module_catalog": {
+      "bytes": 4537,
+      "estimated_tokens": 1104
+    },
+    "selected_directory_and_architecture": {
+      "bytes": 18435,
+      "estimated_tokens": 4548
+    },
+    "card_budget_tokens": 1200,
+    "card_returned_tokens": 429,
+    "card_response_including_metadata": {
+      "bytes": 7845,
+      "estimated_tokens": 1968
+    },
+    "progressive": {
+      "bytes": 32637,
+      "estimated_tokens": 8075
+    },
+    "full": {
+      "bytes": 118203,
+      "estimated_tokens": 29757
+    },
+    "reduction_percent": {
+      "bytes": 72.389,
+      "estimated_tokens": 72.864
+    }
+  },
+  "sqlite_latency": {
+    "conditions": "One warm file-backed SQLite connection, one thread, alternating committed module CAS write and latest module-context directory read. Includes application validation and projection. Five warmup pairs excluded; nearest-rank quantiles. Ambient machine load uncontrolled.",
+    "journal_mode": "wal",
+    "synchronous": 2,
+    "read": {
+      "samples": 100,
+      "p50_ms": 0.0713,
+      "p95_ms": 0.083,
+      "durations_ns": [
+        70800,
+        72000,
+        71700,
+        71800,
+        76000,
+        72800,
+        73200,
+        70700,
+        67600,
+        87500,
+        74800,
+        80200,
+        83100,
+        79700,
+        72900,
+        66800,
+        71500,
+        65400,
+        73400,
+        71000,
+        73600,
+        66100,
+        70400,
+        64900,
+        65400,
+        69500,
+        68500,
+        67700,
+        71300,
+        61600,
+        65500,
+        69100,
+        64000,
+        126300,
+        79200,
+        64800,
+        69300,
+        70500,
+        75800,
+        71700,
+        68100,
+        72800,
+        74000,
+        72300,
+        73100,
+        70200,
+        81900,
+        75300,
+        71000,
+        73800,
+        71700,
+        74800,
+        70800,
+        77200,
+        81400,
+        81400,
+        71600,
+        73100,
+        80000,
+        74900,
+        69400,
+        63000,
+        60800,
+        65300,
+        58300,
+        58700,
+        58900,
+        58500,
+        62100,
+        58200,
+        58400,
+        90100,
+        67000,
+        59100,
+        74400,
+        71300,
+        58600,
+        71300,
+        72900,
+        70300,
+        60900,
+        67600,
+        63700,
+        58600,
+        59700,
+        78200,
+        73800,
+        71200,
+        75000,
+        68900,
+        72800,
+        72600,
+        74500,
+        69200,
+        77300,
+        67000,
+        67900,
+        87900,
+        83000,
+        75400
+      ]
+    },
+    "write": {
+      "samples": 100,
+      "p50_ms": 0.6206,
+      "p95_ms": 1.0158,
+      "durations_ns": [
+        669300,
+        597900,
+        657800,
+        628400,
+        670300,
+        688500,
+        603000,
+        624600,
+        1059700,
+        1002500,
+        1047800,
+        1016200,
+        760300,
+        616300,
+        650400,
+        625000,
+        657800,
+        616500,
+        600600,
+        699800,
+        584800,
+        649900,
+        618800,
+        688100,
+        712000,
+        805900,
+        717100,
+        610700,
+        588000,
+        629600,
+        641600,
+        612100,
+        581200,
+        699600,
+        688000,
+        678100,
+        644700,
+        739500,
+        600800,
+        670400,
+        647800,
+        648300,
+        700700,
+        630600,
+        671600,
+        598400,
+        1721600,
+        1015800,
+        576300,
+        612100,
+        592000,
+        700100,
+        577700,
+        609600,
+        602000,
+        622600,
+        601500,
+        627100,
+        608900,
+        580400,
+        634500,
+        640500,
+        647200,
+        635100,
+        569000,
+        588800,
+        516500,
+        558500,
+        551900,
+        553800,
+        536400,
+        620600,
+        595100,
+        588800,
+        604900,
+        632100,
+        583600,
+        1059600,
+        1006400,
+        908200,
+        897300,
+        865900,
+        587800,
+        552600,
+        563300,
+        619800,
+        607000,
+        668800,
+        574700,
+        584500,
+        570100,
+        568100,
+        577300,
+        573400,
+        505300,
+        573300,
+        596300,
+        640200,
+        590400,
+        569000
+      ]
+    }
+  },
+  "concurrent_cas": {
+    "conditions": "Two independent SQLite connections, two threads released by one barrier, one exact module head. Reopened the Store to verify the winner.",
+    "outcomes": [
+      {
+        "writer": 0,
+        "status": "STALE_REVISION",
+        "label": "Concurrent writer 0"
+      },
+      {
+        "writer": 1,
+        "status": "committed",
+        "label": "Concurrent writer 1"
+      }
+    ],
+    "winner_read_back": true
+  },
+  "measurement_completed_utc": "2026-11-20T05:59:27.149848+00:00"
+}

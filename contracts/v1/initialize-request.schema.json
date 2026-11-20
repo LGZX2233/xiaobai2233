@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/initialize-request.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "jsonrpc": {
+      "const": "2.0"
+    },
+    "id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "method": {
+      "const": "kernel.initialize"
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "client_id": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        },
+        "supported_protocol_versions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "client_id",
+        "supported_protocol_versions"
+      ]
+    }
+  },
+  "required": [
+    "jsonrpc",
+    "id",
+    "method",
+    "params"
+  ]
+}

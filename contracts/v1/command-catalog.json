@@ -1,0 +1,385 @@
+{
+  "version": "1.0.0",
+  "commands": [
+    {
+      "name": "project.provision",
+      "owner": "P01",
+      "capability": "project.admin",
+      "input": "display_name, canonical_root, host/workspace候选ID",
+      "postcondition": "registry provisioning＋project stamp＋manifest；active前不可写"
+    },
+    {
+      "name": "project.reconcile",
+      "owner": "P01",
+      "capability": "project.admin",
+      "input": "provision_request_id",
+      "postcondition": "恢复初始化/绑定步骤，不重建已存在项目"
+    },
+    {
+      "name": "project.bind",
+      "owner": "P01",
+      "capability": "project.admin",
+      "input": "project_id, host_id, binding_kind, canonical_key",
+      "postcondition": "registry CAS，不允许同binding归多项目"
+    },
+    {
+      "name": "requirement.save",
+      "owner": "P02",
+      "capability": "design.write",
+      "input": "object_id?, draft_payload, parent_ref?",
+      "postcondition": "新草稿revision，不发布current"
+    },
+    {
+      "name": "requirement.confirm",
+      "owner": "P02",
+      "capability": "design.write",
+      "input": "draft_ref, acceptance_items, assumptions",
+      "postcondition": "发布current、记录head_history"
+    },
+    {
+      "name": "design.save",
+      "owner": "P02",
+      "capability": "design.write",
+      "input": "design/options/decision, requirement_refs",
+      "postcondition": "版本化方案与选择理由"
+    },
+    {
+      "name": "dispatch.draft",
+      "owner": "P02",
+      "capability": "design.write",
+      "input": "task_ref, strategies, scope, requirements, rules, budget",
+      "postcondition": "草稿和冲突预览，不执行"
+    },
+    {
+      "name": "dispatch.confirm",
+      "owner": "P02",
+      "capability": "dispatch.confirm",
+      "input": "draft_ref, expected_baseline_digest",
+      "postcondition": "固定ExecutionPacket，dispatch_ready"
+    },
+    {
+      "name": "dispatch.revoke",
+      "owner": "P02",
+      "capability": "dispatch.confirm",
+      "input": "packet_ref, reason",
+      "postcondition": "尚未启动则撤销；活动者先取消/结算"
+    },
+    {
+      "name": "attempt.start",
+      "owner": "P03",
+      "capability": "attempt.execute",
+      "input": "packet_ref, strategy_id, execution_root_ref",
+      "postcondition": "starting→真实provider回执"
+    },
+    {
+      "name": "attempt.cancel",
+      "owner": "P03",
+      "capability": "attempt.execute",
+      "input": "attempt_ref, reason",
+      "postcondition": "取消请求，真实停止后终态"
+    },
+    {
+      "name": "attempt.settle",
+      "owner": "P03",
+      "capability": "system.ingest",
+      "input": "execution_handle_id, source_result_ref",
+      "postcondition": "验证来源；不可模型自报pass"
+    },
+    {
+      "name": "attempt.select",
+      "owner": "P04",
+      "capability": "verification.review",
+      "input": "attempt_ref, comparison_refs, purpose, reason",
+      "postcondition": "交付选择须current passed；经验选择单独purpose"
+    },
+    {
+      "name": "verification.run",
+      "owner": "P04",
+      "capability": "verification.review",
+      "input": "attempt_ref, candidate_manifest_ref, acceptance_refs",
+      "postcondition": "固定输入、运行检查、保存报告"
+    },
+    {
+      "name": "delivery.request",
+      "owner": "P04",
+      "capability": "dispatch.confirm",
+      "input": "selection_ref, candidate_ref, target_ref",
+      "postcondition": "快照冻结＋pending审批"
+    },
+    {
+      "name": "approval.decide",
+      "owner": "P04",
+      "capability": "approval.decide",
+      "input": "approval_id, decision, snapshot_digest, reason",
+      "postcondition": "仅可信human；pending CAS"
+    },
+    {
+      "name": "delivery.apply",
+      "owner": "P04",
+      "capability": "delivery.apply",
+      "input": "approval_id, snapshot_digest",
+      "postcondition": "claim/apply-start→真实provider"
+    },
+    {
+      "name": "delivery.reconcile",
+      "owner": "P04",
+      "capability": "delivery.apply",
+      "input": "operation_id",
+      "postcondition": "查询真实效果，不盲重放"
+    },
+    {
+      "name": "task.close",
+      "owner": "P04",
+      "capability": "delivery.apply",
+      "input": "task_ref, applied_operation_ref",
+      "postcondition": "closed/delivered＋归档任务"
+    },
+    {
+      "name": "task.terminate",
+      "owner": "P04",
+      "capability": "dispatch.confirm",
+      "input": "task_ref, outcome, reason, unsettled_refs",
+      "postcondition": "必须已结算；保留失败"
+    },
+    {
+      "name": "artifact.register",
+      "owner": "P05",
+      "capability": "system.ingest",
+      "input": "trusted_staged_locator_ref, digest, source_ref",
+      "postcondition": "校验文件与根范围→ready"
+    },
+    {
+      "name": "archive.export",
+      "owner": "P05",
+      "capability": "project.read",
+      "input": "manifest_ref, sink_id",
+      "postcondition": "持久导出任务；写出需配置允许sink"
+    },
+    {
+      "name": "archive.repair",
+      "owner": "P05",
+      "capability": "project.admin",
+      "input": "manifest_ref, sink_id, original_effect_id",
+      "postcondition": "只补同digest sink"
+    },
+    {
+      "name": "backup.create",
+      "owner": "P05",
+      "capability": "project.admin",
+      "input": "store_ref, policy_ref",
+      "postcondition": "SQLite backup＋完整manifest"
+    },
+    {
+      "name": "restore.plan",
+      "owner": "P05",
+      "capability": "project.admin",
+      "input": "revision_or_backup_ref, restore_kind",
+      "postcondition": "业务恢复/灾备明确区分"
+    },
+    {
+      "name": "restore.apply",
+      "owner": "P05",
+      "capability": "project.admin",
+      "input": "restore_plan_ref, human_decision_ref",
+      "postcondition": "具体审阅后执行；灾备fence"
+    },
+    {
+      "name": "source.ingest",
+      "owner": "P10",
+      "capability": "system.ingest",
+      "input": "source_stream, events, observed_range",
+      "postcondition": "连续cursor、冲突/缺口显式"
+    },
+    {
+      "name": "legacy.import",
+      "owner": "P07",
+      "capability": "project.admin",
+      "input": "source_snapshot_ref, import_plan_ref",
+      "postcondition": "只读源，幂等mapper、quarantine"
+    },
+    {
+      "name": "rules.publish",
+      "owner": "P02",
+      "capability": "rules.publish",
+      "input": "draft_ref, impact_preview_ref",
+      "postcondition": "规则revision及适用任务生效时点"
+    },
+    {
+      "name": "knowledge.record_use",
+      "owner": "P08",
+      "capability": "system.ingest",
+      "input": "knowledge_ref, source_use_key, use_kind, context_ref",
+      "postcondition": "检索/注入/采用分开留事件"
+    },
+    {
+      "name": "knowledge.record_outcome",
+      "owner": "P08",
+      "capability": "system.ingest",
+      "input": "source_outcome_key, use_ref, verified_result_ref",
+      "postcondition": "幂等评分反馈，不相信文本自评"
+    },
+    {
+      "name": "knowledge.promote",
+      "owner": "P08",
+      "capability": "knowledge.share",
+      "input": "knowledge_ref, reviewed_scope, human_decision_ref",
+      "postcondition": "shared异步复制与来源/hash对账"
+    },
+    {
+      "name": "dataset.build",
+      "owner": "P09",
+      "capability": "dataset.export",
+      "input": "policy_ref, source_as_of, purpose_ref, split_spec",
+      "postcondition": "筛选/清洗/审核候选manifest"
+    },
+    {
+      "name": "dataset.export",
+      "owner": "P09",
+      "capability": "dataset.export",
+      "input": "reviewed_dataset_ref, sink_id, human_decision_ref",
+      "postcondition": "不覆盖旧dataset"
+    },
+    {
+      "name": "artifacts.plan_cleanup",
+      "owner": "P09",
+      "capability": "project.admin",
+      "input": "retention_policy_ref, as_of_seq",
+      "postcondition": "只生成清理计划，不自动删除"
+    },
+    {
+      "name": "task.create",
+      "owner": "P02",
+      "capability": "design.write",
+      "input": "title, goal, requirement_refs, mode",
+      "postcondition": "draft Task，稳定ID与project归属"
+    },
+    {
+      "name": "design.confirm",
+      "owner": "P02",
+      "capability": "design.write",
+      "input": "draft_ref, decision_ref",
+      "postcondition": "确认设计current；不可选不存在的方案"
+    },
+    {
+      "name": "rules.save",
+      "owner": "P02",
+      "capability": "rules.publish",
+      "input": "ruleset_id?, data_rules, reason",
+      "postcondition": "严格数据式草稿规则，不执行Python"
+    },
+    {
+      "name": "environment.probe",
+      "owner": "P03",
+      "capability": "attempt.execute",
+      "input": "task_ref, execution_root_ref, requirement_refs, recipe_refs",
+      "postcondition": "真实受控探测，持久EnvironmentSnapshot，不自动安装"
+    },
+    {
+      "name": "approval.revoke",
+      "owner": "P04",
+      "capability": "approval.decide",
+      "input": "approval_id, snapshot_digest, reason",
+      "postcondition": "human撤销；apply-start后仅取消请求/对账"
+    },
+    {
+      "name": "verification.record_review",
+      "owner": "P04",
+      "capability": "verification.review",
+      "input": "verification_ref, check_id, candidate_digest, result, evidence_refs, reason",
+      "postcondition": "human检查，精确绑定候选及recipe，旧报告不覆盖"
+    },
+    {
+      "name": "decision.record",
+      "owner": "P04",
+      "capability": "human＋按action复核对应能力",
+      "input": "subject_kind/ref/digest, action, target_scope/ref, decision, reason",
+      "postcondition": "restore/share/export专用人类决定，目标/用途严格匹配"
+    },
+    {
+      "name": "dataset.review",
+      "owner": "P09",
+      "capability": "dataset.export",
+      "input": "dataset_ref, sample_reviews, reason",
+      "postcondition": "human样本质量审核，产生reviewed dataset revision"
+    },
+    {
+      "name": "rules.preview",
+      "owner": "P02",
+      "capability": "rules.publish",
+      "input": "draft_ref, source_as_of",
+      "postcondition": "持久影响预览，发布时复核版本"
+    }
+  ],
+  "queries": [
+    {
+      "name": "project.overview",
+      "owner": "P06",
+      "result": "phase/blockers/变化/缺口/完整度"
+    },
+    {
+      "name": "project.timeline",
+      "owner": "P06",
+      "result": "revision/audit/申请/交付历史"
+    },
+    {
+      "name": "project.trace",
+      "owner": "P06",
+      "result": "typed双向关联图"
+    },
+    {
+      "name": "requirements.coverage",
+      "owner": "P06",
+      "result": "零链接分母/关联与验收覆盖"
+    },
+    {
+      "name": "attempts.compare",
+      "owner": "P06",
+      "result": "同条件/不可比/失败保留/成本完整度"
+    },
+    {
+      "name": "approvals.queue",
+      "owner": "P06",
+      "result": "长期审批snapshot/digest/status"
+    },
+    {
+      "name": "environment.report",
+      "owner": "P06",
+      "result": "要求/已装/版本/路径/missing/unknown/检查时点"
+    },
+    {
+      "name": "archive.status",
+      "owner": "P06",
+      "result": "主库、Session flush、各sink回执"
+    },
+    {
+      "name": "command.receipt",
+      "owner": "P01",
+      "result": "按principal/idempotency key补查原receipt"
+    },
+    {
+      "name": "operation.status",
+      "owner": "P04",
+      "result": "长动作当前状态和result_ref"
+    },
+    {
+      "name": "events.read",
+      "owner": "P01",
+      "result": "durable cursor之后完整事务事件"
+    },
+    {
+      "name": "context.resolve",
+      "owner": "P08",
+      "result": "只读预览context manifest；实际注入另记录use"
+    },
+    {
+      "name": "knowledge.search",
+      "owner": "P08",
+      "result": "项目/显式shared、来源/失效/反馈"
+    },
+    {
+      "name": "dataset.preview",
+      "owner": "P09",
+      "result": "样本候选/排除理由/用途/完整度"
+    }
+  ]
+}

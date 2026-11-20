@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/command-envelope.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "jsonrpc": {
+      "const": "2.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "method": {
+      "const": "kernel.command"
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "invocation_context_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        },
+        "command": {
+          "type": "string",
+          "enum": [
+            "project.provision",
+            "project.reconcile",
+            "project.bind",
+            "requirement.save",
+            "requirement.confirm",
+            "design.save",
+            "dispatch.draft",
+            "dispatch.confirm",
+            "dispatch.revoke",
+            "attempt.start",
+            "attempt.cancel",
+            "attempt.settle",
+            "attempt.select",
+            "verification.run",
+            "delivery.request",
+            "approval.decide",
+            "delivery.apply",
+            "delivery.reconcile",
+            "task.close",
+            "task.terminate",
+            "artifact.register",
+            "archive.export",
+            "archive.repair",
+            "backup.create",
+            "restore.plan",
+            "restore.apply",
+            "source.ingest",
+            "legacy.import",
+            "rules.publish",
+            "knowledge.record_use",
+            "knowledge.record_outcome",
+            "knowledge.promote",
+            "dataset.build",
+            "dataset.export",
+            "artifacts.plan_cleanup",
+            "task.create",
+            "design.confirm",
+            "rules.save",
+            "environment.probe",
+            "approval.revoke",
+            "verification.record_review",
+            "decision.record",
+            "dataset.review",
+            "rules.preview"
+          ]
+        },
+        "selector": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/selector"
+        },
+        "expected_heads": {
+          "type": "array",
+          "items": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/expected_head"
+          },
+          "minItems": 0
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "protocol_version",
+        "invocation_context_id",
+        "idempotency_key",
+        "command",
+        "selector",
+        "expected_heads",
+        "payload"
+      ]
+    }
+  },
+  "required": [
+    "jsonrpc",
+    "id",
+    "method",
+    "params"
+  ]
+}

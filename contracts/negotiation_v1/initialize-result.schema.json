@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/negotiation_v1/initialize-result.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": {
+      "enum": [
+        "1.1.0",
+        "2.0.0"
+      ]
+    },
+    "schema_bundle_digest": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+    },
+    "server_instance_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "mode": {
+      "$ref": "https://project-kernel.invalid/design/v1/initialize-result.schema.json#/properties/mode"
+    },
+    "supported_commands": {
+      "$ref": "https://project-kernel.invalid/design/v1/initialize-result.schema.json#/properties/supported_commands"
+    },
+    "supported_queries": {
+      "$ref": "https://project-kernel.invalid/design/v1/initialize-result.schema.json#/properties/supported_queries"
+    },
+    "provider_capabilities": {
+      "$ref": "https://project-kernel.invalid/design/v1/initialize-result.schema.json#/properties/provider_capabilities"
+    },
+    "limits": {
+      "$ref": "https://project-kernel.invalid/design/v1/initialize-result.schema.json#/properties/limits"
+    },
+    "authorized_commands": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+      }
+    },
+    "unavailable_commands": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+      }
+    },
+    "authorized_queries": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+      }
+    },
+    "unavailable_queries": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+      }
+    },
+    "unavailable_command_details": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unavailable_entry"
+      }
+    },
+    "unavailable_query_details": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unavailable_entry"
+      }
+    }
+  },
+  "$defs": {
+    "unavailable_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "reason_code"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        },
+        "reason_code": {
+          "type": "string",
+          "description": "Machine-readable unavailability reason. Known codes: not_authorized (a capability the session lacks), not_configured (an optional provider/feature is off), not_wired (declared but not implemented), requires_profile_root (needs an explicit profile_root)."
+        },
+        "reason": {
+          "type": "string"
+        },
+        "capability": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        }
+      }
+    }
+  },
+  "required": [
+    "protocol_version",
+    "schema_bundle_digest",
+    "server_instance_id",
+    "mode",
+    "supported_commands",
+    "supported_queries",
+    "provider_capabilities",
+    "limits"
+  ]
+}

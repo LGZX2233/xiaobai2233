@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/contracts/execution-flow-dispatch/0.1.0/schema.json",
+  "title": "Project Kernel execution dispatch state",
+  "oneOf": [
+    { "$ref": "#/$defs/batch" },
+    { "$ref": "#/$defs/branch" }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "object_type", "object_id", "revision_id", "digest"],
+      "properties": {
+        "project_id": { "$ref": "#/$defs/id" },
+        "object_type": { "$ref": "#/$defs/id" },
+        "object_id": { "$ref": "#/$defs/id" },
+        "revision_id": { "$ref": "#/$defs/id" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paths", "capabilities"],
+      "properties": {
+        "paths": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "capabilities": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_id", "provider_id", "session_id", "attempt_ref", "execution_handle_id", "attempt_epoch", "execution_root_ref"],
+      "properties": {
+        "host_id": { "$ref": "#/$defs/id" },
+        "provider_id": { "$ref": "#/$defs/id" },
+        "session_id": { "$ref": "#/$defs/id" },
+        "attempt_ref": { "oneOf": [{ "$ref": "#/$defs/ref" }, { "type": "null" }] },
+        "execution_handle_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "attempt_epoch": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "execution_root_ref": { "oneOf": [{ "$ref": "#/$defs/ref" }, { "type": "null" }] }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "idempotency_key", "sequence", "event_type", "principal_id", "host_id", "session_id", "payload_digest", "disposition", "observed_at"],
+      "allOf": [
+        {
+          "if": { "properties": { "event_type": { "const": "send_unknown" } } },
+          "then": { "properties": { "session_id": { "type": "null" } } },
+          "else": { "properties": { "session_id": { "$ref": "#/$defs/id" } } }
+        }
+      ],
+      "properties": {
+        "event_id": { "$ref": "#/$defs/id" },
+        "idempotency_key": { "$ref": "#/$defs/id" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "event_type": { "enum": ["sent", "send_unknown", "acknowledged", "running", "collecting", "settled", "rejected", "cancelled", "cancel_unknown", "timeout", "failed", "unknown"] },
+        "principal_id": { "$ref": "#/$defs/id" },
+        "host_id": { "$ref": "#/$defs/id" },
+        "session_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "payload_digest": { "$ref": "#/$defs/digest" },
+        "disposition": { "enum": ["applied", "late_ignored"] },
+        "observed_at": { "type": "string", "minLength": 1 }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "kind", "batch_id", "created_by", "created_session_id", "task_form_ref", "design_packet_ref", "baseline_ref", "acceptance_ref", "module_refs", "branch_ids", "status", "created_at"],
+      "properties": {
+        "schema_version": { "const": "execution_flow.dispatch.v0.1.0" },
+        "kind": { "const": "DispatchBatch" },
+        "batch_id": { "$ref": "#/$defs/id" },
+        "created_by": { "$ref": "#/$defs/id" },
+        "created_session_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "task_form_ref": { "$ref": "#/$defs/ref" },
+        "design_packet_ref": { "$ref": "#/$defs/ref" },
+        "baseline_ref": { "$ref": "#/$defs/ref" },
+        "acceptance_ref": { "$ref": "#/$defs/ref" },
+        "module_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ref" } },
+        "branch_ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+        "status": { "const": "planned" },
+        "created_at": { "type": "string", "minLength": 1 }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "kind", "branch_id", "batch_id", "batch_ref", "created_by", "owner_principal", "scope", "task_form_ref", "design_packet_ref", "baseline_ref", "acceptance_ref", "module_refs", "status", "send_status", "send_key", "last_sequence", "events", "binding", "cancel_status", "cancel_delivery", "cancel_requested_by", "cancel_requested_at", "created_at", "updated_at"],
+      "properties": {
+        "schema_version": { "const": "execution_flow.dispatch.v0.1.0" },
+        "kind": { "const": "DispatchBranch" },
+        "branch_id": { "$ref": "#/$defs/id" },
+        "batch_id": { "$ref": "#/$defs/id" },
+        "batch_ref": { "$ref": "#/$defs/ref" },
+        "created_by": { "$ref": "#/$defs/id" },
+        "owner_principal": { "$ref": "#/$defs/id" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "task_form_ref": { "$ref": "#/$defs/ref" },
+        "design_packet_ref": { "$ref": "#/$defs/ref" },
+        "baseline_ref": { "$ref": "#/$defs/ref" },
+        "acceptance_ref": { "$ref": "#/$defs/ref" },
+        "module_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ref" } },
+        "status": { "enum": ["planned", "sent", "acknowledged", "running", "collecting", "settled", "rejected", "cancelled", "timeout", "failed", "unknown"] },
+        "send_status": { "enum": ["not_started", "pending", "sent", "unknown"] },
+        "send_key": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "last_sequence": { "type": "integer", "minimum": 0 },
+        "events": { "type": "array", "items": { "$ref": "#/$defs/event" } },
+        "binding": { "oneOf": [{ "$ref": "#/$defs/binding" }, { "type": "null" }] },
+        "attempt_intent_ref": { "$ref": "#/$defs/ref" },
+        "cancel_status": { "enum": ["none", "pending", "confirmed", "unknown"] },
+        "cancel_delivery": { "enum": ["not_requested", "not_configured", "requested"] },
+        "cancel_requested_by": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "cancel_requested_at": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+        "created_at": { "type": "string", "minLength": 1 },
+        "updated_at": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

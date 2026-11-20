@@ -1,0 +1,242 @@
+{
+  "matrix_version": "2.6.0",
+  "protocol_version": "1.1.0",
+  "surface": "headless_machine_adapter",
+  "state_owner": "project_ledger",
+  "input_contracts": {
+    "commands": "v1/command-payloads.schema.json",
+    "queries": "v1/query-payloads.schema.json",
+    "v1_1_commands": "v1_1/command-payloads.schema.json",
+    "v1_1_queries": "v1_1/query-payloads.schema.json",
+    "scopes": "v1/command-catalog.json"
+  },
+  "host_requirements": [
+    "trusted_project_bound_handle",
+    "framed_request_response_transport",
+    "provider_lifecycle",
+    "source_append_and_final_flush"
+  ],
+  "human_entry": "separate_trusted_channel_only",
+  "recovery": {
+    "timeout": "query command.receipt with the original idempotency_key; never auto-reissue a write",
+    "accepted": "intent persisted; query operation.status or project.timeline for the effect",
+    "unknown": "observe or explicitly reconcile; never invent success, failure, source flush or usage",
+    "unavailable": "CAPABILITY_UNAVAILABLE for a configured command lacking its provider; UNSUPPORTED_COMMAND for an omitted entry"
+  },
+  "skills": {
+    "state.read": {
+      "phase": "H1",
+      "status": "adapter_implemented",
+      "trigger": "inspect project state, the capability surface and relevant recorded skills",
+      "queries": [
+        "project.overview",
+        "project.timeline",
+        "requirements.coverage",
+        "capabilities.describe",
+        "skills.relevant",
+        "supervisor.report",
+        "supervisor.events"
+      ],
+      "required_capabilities": [
+        "project.read"
+      ]
+    },
+    "context.read": {
+      "phase": "H1",
+      "status": "adapter_implemented",
+      "trigger": "assemble bounded context from exact project revision refs",
+      "queries": [
+        "context.resolve"
+      ],
+      "required_capabilities": [
+        "project.read"
+      ]
+    },
+    "events.read": {
+      "phase": "H1",
+      "status": "adapter_implemented",
+      "trigger": "resume reading from a persisted event cursor",
+      "queries": [
+        "events.read"
+      ],
+      "required_capabilities": [
+        "project.read"
+      ]
+    },
+    "trace.read": {
+      "phase": "H1",
+      "status": "adapter_implemented",
+      "trigger": "trace an exact revision and its dependencies",
+      "queries": [
+        "project.trace",
+        "evidence.read",
+        "execution.records"
+      ],
+      "required_capabilities": [
+        "project.read"
+      ]
+    },
+    "design.dispatch": {
+      "phase": "H2",
+      "status": "adapter_implemented",
+      "trigger": "create or revise requirements, design, module registrations and a frozen execution packet",
+      "commands": [
+        "task.create",
+        "requirement.save",
+        "requirement.confirm",
+        "design.save",
+        "design.confirm",
+        "rules.save",
+        "rules.preview",
+        "rules.publish",
+        "environment.probe",
+        "dispatch.draft",
+        "dispatch.confirm",
+        "dispatch.revoke",
+        "task.complete_scoped",
+        "resources.save",
+        "module.register",
+        "module.revise",
+        "module.propose"
+      ],
+      "queries": [
+        "environment.report",
+        "module.describe",
+        "module.validate"
+      ],
+      "required_capabilities": [
+        "design.write",
+        "dispatch.confirm",
+        "rules.publish",
+        "attempt.execute",
+        "module.register",
+        "module.propose"
+      ],
+      "example": {
+        "command": "task.create",
+        "idempotency_key": "task-request-1",
+        "payload": {
+          "title": "inspect output",
+          "goal": "verify declared output",
+          "requirement_refs": [],
+          "mode": "test"
+        }
+      }
+    },
+    "execute.verify": {
+      "phase": "H2",
+      "status": "adapter_implemented",
+      "trigger": "start, cancel, settle, independently check a candidate and save its execution-flow contracts",
+      "commands": [
+        "attempt.start",
+        "attempt.cancel",
+        "attempt.settle",
+        "artifact.register",
+        "source.ingest",
+        "verification.run",
+        "attempt.register_candidate",
+        "execution_flow.compare",
+        "execution_flow.capture_root",
+        "execution_flow.check",
+        "execution_flow.task_form.freeze",
+        "execution_flow.dispatch.create",
+        "execution_flow.dispatch.send",
+        "execution_flow.dispatch.reconcile",
+        "execution_flow.host.consume",
+        "execution_flow.baseline.save",
+        "execution_flow.module.save",
+        "execution_flow.acceptance.save",
+        "execution_flow.comparability.save"
+      ],
+      "queries": [
+        "operation.status",
+        "execution_flow.task_workflow"
+      ],
+      "required_capabilities": [
+        "attempt.execute",
+        "verification.review",
+        "project.read",
+        "system.ingest",
+        "design.write",
+        "dispatch.confirm",
+        "execution_flow.contract.write"
+      ],
+      "source_flush": "host supplies authentic source batches; accepted cancellation never implies a stopped process"
+    },
+    "knowledge.curate": {
+      "phase": "H2",
+      "status": "adapter_implemented",
+      "trigger": "record, revise, reuse and grade project knowledge with exact refs",
+      "commands": [
+        "knowledge.record",
+        "knowledge.revise",
+        "knowledge.record_use",
+        "knowledge.record_outcome"
+      ],
+      "queries": [
+        "knowledge.search"
+      ],
+      "required_capabilities": [
+        "knowledge.write",
+        "system.ingest",
+        "project.read"
+      ]
+    },
+    "delivery.review": {
+      "phase": "H3",
+      "status": "adapter_implemented",
+      "trigger": "compare candidates, select, request review and apply an existing human approval",
+      "commands": [
+        "attempt.select",
+        "delivery.request",
+        "delivery.apply",
+        "delivery.reconcile",
+        "task.close",
+        "task.terminate",
+        "archive.export",
+        "archive.repair"
+      ],
+      "queries": [
+        "attempts.compare",
+        "approvals.queue",
+        "archive.status"
+      ],
+      "required_capabilities": [
+        "dispatch.confirm",
+        "delivery.apply",
+        "project.read",
+        "project.admin",
+        "verification.review"
+      ],
+      "approval": "the machine adapter never exposes approval.decide, approval.revoke, decision.record or verification.record_review"
+    },
+    "records.reconcile": {
+      "phase": "H2-H3",
+      "status": "adapter_implemented",
+      "trigger": "recover a receipt, observe an operation after reconnect, or run the backup/restore cycle",
+      "queries": [
+        "command.receipt",
+        "operation.status"
+      ],
+      "required_capabilities": [
+        "project.read",
+        "attempt.execute",
+        "project.admin"
+      ],
+      "commands": [
+        "attempt.reconcile",
+        "backup.create",
+        "restore.plan",
+        "restore.apply"
+      ]
+    }
+  },
+  "remaining": {
+    "records.commit_batch": "v1.1 aggregate write; reachable via the dedicated client.command_batch() method and the kernel_host_commit_batch MCP aggregate tool, not a skill command (it carries no single capability by design)",
+    "sync_trio": "context.sync / records.changed_since / records.get stay off this manifest: the thin client exposes them as dedicated v1.1.0 methods (query_sync, changed_since, get_record) and a generic skill entry would invite a 1.0.0-envelope call the server must refuse",
+    "human_only": "module.adopt and attempt.settle_unobserved ride the trusted human entry, never this machine manifest",
+    "H4": "real framework transports and each host acceptance",
+    "H5": "actual skill reuse and reviewed growth evidence; no automatic skill promotion",
+    "CLEAN-04": "host or OS sandbox enforcement"
+  }
+}

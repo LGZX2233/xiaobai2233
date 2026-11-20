@@ -1,0 +1,12 @@
+{
+  "schema_version": "2.0.0",
+  "canonicalization": "rfc8785",
+  "files": {
+    "context-render-result.schema.json": "f4d2863eee46139777ed3a88d65f04132e91162878b07305e5e5642c5b0525f3",
+    "examples.json": "0937b17f19893969738bb1ec72ff4794941274ac2191cb82899e24107750a5d4",
+    "golden-digests.json": "9c0594b4c74d46a5824197079aa4a79050fd11371cd784ba342ced9e4cc41bc1",
+    "query-envelope.schema.json": "88691e40765f9ce40523fe82c21377b0647fa5d7b68bc15cd9a67f82542f2dff",
+    "query-payloads.schema.json": "ef5f64f7d5f76b7eaa46fa560e7a2009575765136cf8ee571701f921f67196d9",
+    "structure-recipe.schema.json": "31c22f3480789df7e265fb188ff616e0a5298be99aeb149768721766f3383e92"
+  }
+}

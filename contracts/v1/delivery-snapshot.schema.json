@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1/delivery-snapshot.schema.json",
+  "title": "Immutable DeliverySnapshot body (digest excludes shell)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "canonicalization": {
+      "const": "rfc8785"
+    },
+    "evidence_mode": {
+      "type": "string",
+      "enum": [
+        "production",
+        "test"
+      ]
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "task_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "selected_attempt_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "packet_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "requirement_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 1
+    },
+    "design_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 1
+    },
+    "acceptance_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 1
+    },
+    "rule_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 1
+    },
+    "scope_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "input_manifest_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "context_manifest_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "environment_ref": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+    },
+    "verification_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      },
+      "minItems": 1
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "bundle"
+          ]
+        },
+        "target_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        }
+      },
+      "required": [
+        "method",
+        "target_ref"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/artifact_ref"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "canonicalization",
+    "evidence_mode",
+    "project_id",
+    "task_ref",
+    "selected_attempt_ref",
+    "packet_ref",
+    "requirement_refs",
+    "design_refs",
+    "acceptance_refs",
+    "rule_refs",
+    "scope_ref",
+    "input_manifest_ref",
+    "context_manifest_ref",
+    "environment_ref",
+    "verification_refs",
+    "candidate_digest",
+    "delivery",
+    "artifacts"
+  ]
+}

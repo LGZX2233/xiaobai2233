@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v2/context-render-result.schema.json",
+  "title": "Project Kernel v2 context.render query result data (protocol 2.0.0, additive)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "renderer_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "render_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "project_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "task_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "attempt_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "as_of_seq": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/seq"
+    },
+    "token_budget": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "token_estimation": {
+      "type": "string",
+      "enum": [
+        "estimated",
+        "exact"
+      ]
+    },
+    "card": {
+      "type": "string",
+      "minLength": 1
+    },
+    "card_tokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "render_digest": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+    },
+    "basis_digest": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/section"
+      }
+    },
+    "envelope": {
+      "$ref": "#/$defs/render_envelope"
+    },
+    "freshness": {
+      "$ref": "#/$defs/freshness"
+    },
+    "stale_pins": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/stale_pin"
+      }
+    },
+    "unknown_verification_ops": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/unknown_verification_operation"
+      }
+    },
+    "render_meta": {
+      "$ref": "#/$defs/render_meta"
+    },
+    "mandatory_refs": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+      }
+    },
+    "forbidden": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timestamp_in_card": {
+          "const": false
+        },
+        "uuid_in_card": {
+          "const": false
+        }
+      },
+      "required": [
+        "timestamp_in_card",
+        "uuid_in_card"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "renderer_version",
+    "render_id",
+    "project_id",
+    "task_id",
+    "attempt_id",
+    "purpose",
+    "as_of_seq",
+    "token_budget",
+    "token_estimation",
+    "card",
+    "card_tokens",
+    "render_digest",
+    "basis_digest",
+    "sections",
+    "envelope",
+    "freshness"
+  ],
+  "$defs": {
+    "section_id": {
+      "type": "string",
+      "enum": [
+        "header",
+        "task",
+        "requirement",
+        "acceptance",
+        "design",
+        "scope",
+        "verification",
+        "changes",
+        "decisions"
+      ]
+    },
+    "section_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "digest": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+        }
+      },
+      "required": [
+        "object_ref",
+        "digest"
+      ]
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "section_id": {
+          "$ref": "#/$defs/section_id"
+        },
+        "stable": {
+          "type": "boolean"
+        },
+        "tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "target_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cap_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "omitted": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string"
+          }
+        },
+        "refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/section_ref"
+          }
+        },
+        "section_digest": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+        }
+      },
+      "required": [
+        "section_id",
+        "stable",
+        "tokens",
+        "target_tokens",
+        "cap_tokens",
+        "truncated",
+        "omitted",
+        "refs",
+        "section_digest"
+      ]
+    },
+    "render_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "envelope_id": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        },
+        "epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stable_prefix": {
+          "type": "string"
+        },
+        "stable_prefix_digest": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+        },
+        "tail": {
+          "type": "string"
+        },
+        "tail_digest": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/digest"
+        }
+      },
+      "required": [
+        "envelope_id",
+        "epoch",
+        "stable_prefix_digest",
+        "tail_digest"
+      ]
+    },
+    "stale_pin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "object_type": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        },
+        "object_id": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        },
+        "pinned_revision_id": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        },
+        "current_revision_id": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+        }
+      },
+      "required": [
+        "source",
+        "object_type",
+        "object_id",
+        "pinned_revision_id",
+        "current_revision_id"
+      ]
+    },
+    "omitted_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "section": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "section",
+        "reason"
+      ]
+    },
+    "unknown_verification_operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "status": {
+          "const": "unknown"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "object_ref",
+        "status",
+        "message"
+      ]
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stale_refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/stale_pin"
+          }
+        },
+        "omitted_refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/omitted_ref"
+          }
+        },
+        "mandatory_missing": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+          }
+        },
+        "unrecorded_change": {
+          "type": "boolean"
+        },
+        "unknown_verification_ops": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/unknown_verification_operation"
+          }
+        }
+      },
+      "required": [
+        "stale_refs",
+        "omitted_refs",
+        "mandatory_missing",
+        "unrecorded_change",
+        "unknown_verification_ops"
+      ]
+    },
+    "render_meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scale_step": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40
+        },
+        "scale_steps": {
+          "const": 40
+        },
+        "scale": {
+          "type": "string",
+          "pattern": "^(?:[1-9]|[1-3][0-9]|40)/40$"
+        },
+        "resolver_rounds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "min_card_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "card_tokens_128_aligned": {
+          "type": "integer",
+          "minimum": 0,
+          "multipleOf": 128
+        },
+        "sections_requested": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/section_id"
+          }
+        },
+        "sections_rendered": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/section_id"
+          }
+        },
+        "token_estimation": {
+          "type": "string",
+          "enum": [
+            "estimated",
+            "exact"
+          ]
+        }
+      },
+      "required": [
+        "scale_step",
+        "scale_steps",
+        "scale",
+        "resolver_rounds",
+        "min_card_tokens",
+        "card_tokens_128_aligned",
+        "sections_requested",
+        "sections_rendered",
+        "token_estimation"
+      ]
+    }
+  }
+}

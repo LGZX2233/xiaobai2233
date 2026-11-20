@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v1_1/branch-task-form.schema.json",
+  "title": "Immutable branch task form",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "exact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project_id": { "$ref": "#/$defs/id" },
+        "object_type": { "$ref": "#/$defs/id" },
+        "object_id": { "$ref": "#/$defs/id" },
+        "revision_id": { "$ref": "#/$defs/id" },
+        "digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": ["project_id", "object_type", "object_id", "revision_id", "digest"]
+    },
+    "watermark": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ref": { "$ref": "#/$defs/exact_ref" },
+        "pointer": { "const": "current" },
+        "head_version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" }
+      },
+      "required": ["ref", "pointer", "head_version"]
+    },
+    "requirement_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requirement_ref": { "$ref": "#/$defs/exact_ref" },
+        "acceptance_item_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/exact_ref" },
+          "uniqueItems": true
+        },
+        "coverage": { "enum": ["current", "partial", "unknown"] }
+      },
+      "required": ["requirement_ref", "acceptance_item_ids", "source_refs", "coverage"]
+    },
+    "branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": { "$ref": "#/$defs/id" },
+        "goal": { "type": "string", "minLength": 1 },
+        "in_scope": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "owner_principal": { "$ref": "#/$defs/id" }
+      },
+      "required": ["branch_id", "goal", "in_scope", "out_of_scope", "owner_principal"]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "capabilities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        }
+      },
+      "required": ["paths", "capabilities"]
+    },
+    "packet_scope": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "execution_root_ref": { "$ref": "#/$defs/exact_ref" },
+        "network_policy_ref": { "$ref": "#/$defs/exact_ref" },
+        "read_paths": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "write_paths": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "required_sandbox_level": { "enum": ["none", "directory_only", "partial", "os_enforced"] }
+      },
+      "required": ["execution_root_ref", "network_policy_ref", "read_paths", "write_paths", "required_sandbox_level"]
+    },
+    "execution_contract": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "strategy_id": { "$ref": "#/$defs/id" },
+        "budget_ref": { "$ref": "#/$defs/exact_ref" },
+        "execution_root_ref": { "$ref": "#/$defs/exact_ref" },
+        "packet_scope": { "$ref": "#/$defs/packet_scope" },
+        "outputs": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["artifact", "record", "report"] },
+              "required": { "type": "boolean" },
+              "description": { "type": "string", "minLength": 1 }
+            },
+            "required": ["path", "kind", "required", "description"]
+          }
+        },
+        "stop_conditions": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "properties": {
+              "condition": { "type": "string", "minLength": 1 },
+              "return_to": { "enum": ["design", "execution", "closeout"] }
+            },
+            "required": ["condition", "return_to"]
+          }
+        },
+        "failure_return": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "failure_to": { "enum": ["design", "execution"] },
+            "unknown_to": { "const": "execution" },
+            "unknown_policy": { "const": "observe_original_no_replay" },
+            "required_evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+          },
+          "required": ["failure_to", "unknown_to", "unknown_policy", "required_evidence"]
+        }
+      },
+      "required": ["strategy_id", "budget_ref", "execution_root_ref", "packet_scope", "outputs", "stop_conditions", "failure_return"]
+    },
+    "associations": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "skill_refs": { "type": "array", "items": { "$ref": "#/$defs/exact_ref" }, "uniqueItems": true },
+        "rule_refs": { "type": "array", "items": { "$ref": "#/$defs/exact_ref" }, "uniqueItems": true },
+        "package_refs": { "type": "array", "items": { "$ref": "#/$defs/exact_ref" }, "uniqueItems": true }
+      },
+      "required": ["skill_refs", "rule_refs", "package_refs"]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field_path": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["source", "inherited", "user_input"] },
+        "source_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/exact_ref" },
+          "uniqueItems": true
+        },
+        "note": { "type": "string", "minLength": 1 }
+      },
+      "required": ["field_path", "kind", "source_refs", "note"],
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "enum": ["source", "inherited"] } }, "required": ["kind"] },
+          "then": { "properties": { "source_refs": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field_path": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "blocking": { "type": "boolean" },
+        "source_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/exact_ref" },
+          "uniqueItems": true
+        }
+      },
+      "required": ["field_path", "reason", "blocking", "source_refs"]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "branch_task_form.v1.0.0" },
+    "form_id": { "$ref": "#/$defs/id" },
+    "created_by": { "$ref": "#/$defs/id" },
+    "task_ref": { "$ref": "#/$defs/exact_ref" },
+    "design_packet_ref": { "$ref": "#/$defs/exact_ref" },
+    "baseline_ref": { "$ref": "#/$defs/exact_ref" },
+    "acceptance_ref": { "$ref": "#/$defs/exact_ref" },
+    "module_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/exact_ref" },
+      "uniqueItems": true
+    },
+    "source_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/exact_ref" },
+      "uniqueItems": true
+    },
+    "requirement_mapping": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/requirement_mapping" }
+    },
+    "branch": { "$ref": "#/$defs/branch" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "execution_contract": { "$ref": "#/$defs/execution_contract" },
+    "associations": { "$ref": "#/$defs/associations" },
+    "source_watermarks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/watermark" },
+      "uniqueItems": true
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/provenance" }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/unknown" }
+    }
+  },
+  "required": [
+    "schema_version",
+    "form_id",
+    "created_by",
+    "task_ref",
+    "design_packet_ref",
+    "baseline_ref",
+    "acceptance_ref",
+    "module_refs",
+    "source_refs",
+    "requirement_mapping",
+    "branch",
+    "scope",
+    "execution_contract",
+    "associations",
+    "source_watermarks",
+    "provenance",
+    "unknowns"
+  ]
+}

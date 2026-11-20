@@ -1,0 +1,396 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/design/v2/structure-recipe.schema.json",
+  "title": "Project Kernel v2 structure_recipe revision payload (protocol 2.0.0, additive)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "recipe_id": {
+      "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/id"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "path_allowlist",
+        "tests_frozen",
+        "import_direction",
+        "no_new_files",
+        "forbidden_patterns",
+        "api_surface"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "deny",
+        "require_human",
+        "warn"
+      ]
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "params": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/path_allowlist_params"
+        },
+        {
+          "$ref": "#/$defs/tests_frozen_params"
+        },
+        {
+          "$ref": "#/$defs/import_direction_params"
+        },
+        {
+          "$ref": "#/$defs/no_new_files_params"
+        },
+        {
+          "$ref": "#/$defs/forbidden_patterns_params"
+        },
+        {
+          "$ref": "#/$defs/api_surface_params"
+        }
+      ]
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "recipe_id",
+    "kind",
+    "severity",
+    "required",
+    "params",
+    "reason"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "path_allowlist"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "$ref": "#/$defs/path_allowlist_params"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "tests_frozen"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "$ref": "#/$defs/tests_frozen_params"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "import_direction"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "$ref": "#/$defs/import_direction_params"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "no_new_files"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "$ref": "#/$defs/no_new_files_params"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "forbidden_patterns"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "$ref": "#/$defs/forbidden_patterns_params"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "api_surface"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "$ref": "#/$defs/api_surface_params"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "path_allowlist_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allow": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source": {
+                  "const": "packet.scope.write_paths"
+                }
+              },
+              "required": [
+                "source"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "paths": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "required": [
+                "paths"
+              ]
+            }
+          ]
+        },
+        "ignore": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "baseline_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        }
+      },
+      "required": [
+        "allow",
+        "baseline_ref"
+      ]
+    },
+    "tests_frozen_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protected": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "baseline_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "authorization_refs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+          }
+        }
+      },
+      "required": [
+        "protected",
+        "baseline_ref"
+      ]
+    },
+    "import_direction_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path_glob": {
+                "type": "string",
+                "minLength": 1
+              },
+              "forbidden_prefixes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "path_glob",
+              "forbidden_prefixes"
+            ]
+          }
+        }
+      },
+      "required": [
+        "rules"
+      ]
+    },
+    "no_new_files_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "baseline_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "allowed_prefixes": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "max_new_files": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "baseline_ref"
+      ]
+    },
+    "forbidden_patterns_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "baseline_ref": {
+          "$ref": "https://project-kernel.invalid/design/v1/common.schema.json#/$defs/object_ref"
+        },
+        "patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "pattern": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "pattern"
+                ]
+              }
+            ]
+          }
+        },
+        "ignore": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "baseline_ref",
+        "patterns"
+      ]
+    },
+    "api_surface_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required_symbols": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "required": [
+        "required_symbols"
+      ]
+    }
+  }
+}

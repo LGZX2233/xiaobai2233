@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-kernel.invalid/contracts/execution-flow/0.1.0/schema.json",
+  "title": "Project Kernel execution flow contracts",
+  "oneOf": [
+    { "$ref": "#/$defs/baseline" },
+    { "$ref": "#/$defs/handoff" },
+    { "$ref": "#/$defs/module" },
+    { "$ref": "#/$defs/acceptance" },
+    { "$ref": "#/$defs/comparability" }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "object_type", "object_id", "revision_id", "digest"],
+      "properties": {
+        "project_id": { "$ref": "#/$defs/id" },
+        "object_type": { "$ref": "#/$defs/id" },
+        "object_id": { "$ref": "#/$defs/id" },
+        "revision_id": { "$ref": "#/$defs/id" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "watermark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "pointer", "head_version"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/ref" },
+        "pointer": { "type": "string", "minLength": 1 },
+        "head_version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" }
+      }
+    },
+    "base": {
+      "type": "object",
+      "required": ["schema_version", "contract_id", "owner", "scope", "capabilities"],
+      "properties": {
+        "schema_version": { "const": "execution_flow.v0.1.0" },
+        "owner": { "$ref": "#/$defs/id" },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["project_id", "paths"],
+          "properties": {
+            "project_id": { "$ref": "#/$defs/id" },
+            "paths": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+          }
+        },
+        "capabilities": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }
+      }
+    },
+    "baseline": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "required": ["kind", "baseline_id", "sources", "watermarks", "module_refs", "acceptance_ref", "environment", "provider", "fixtures_digest", "model", "prompt_digest", "runbook_digest", "tool_capability_digest", "sandbox", "budget_digest", "unknown_rules"],
+          "properties": {
+            "kind": { "const": "BaselineSet" },
+            "contract_id": { "$ref": "#/$defs/id" },
+            "baseline_id": { "$ref": "#/$defs/id" },
+            "captured_at": { "type": "string", "minLength": 1 },
+            "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ref" } },
+            "watermarks": { "type": "array", "items": { "$ref": "#/$defs/watermark" } },
+            "module_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ref" } },
+            "acceptance_ref": { "$ref": "#/$defs/ref" },
+            "environment": { "type": "object" },
+            "provider": { "type": "object", "required": ["provider_id"], "properties": { "provider_id": { "$ref": "#/$defs/id" } } },
+            "fixtures_digest": { "$ref": "#/$defs/digest" },
+            "model": { "type": "object", "required": ["model_id"], "properties": { "model_id": { "$ref": "#/$defs/id" } } },
+            "prompt_digest": { "$ref": "#/$defs/digest" },
+            "runbook_digest": { "$ref": "#/$defs/digest" },
+            "tool_capability_digest": { "$ref": "#/$defs/digest" },
+            "sandbox": { "type": "object", "required": ["level"], "properties": { "level": { "$ref": "#/$defs/id" } } },
+            "budget_digest": { "$ref": "#/$defs/digest" },
+            "unknown_rules": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          }
+        }
+      ]
+    },
+    "handoff": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "required": ["kind", "handoff_id", "stage", "baseline_ref", "acceptance_ref", "source_watermark", "unknown_rules", "expected_heads"],
+          "properties": {
+            "kind": { "const": "HandoffContract" },
+            "contract_id": { "$ref": "#/$defs/id" },
+            "handoff_id": { "$ref": "#/$defs/id" },
+            "stage": { "enum": ["design", "execution", "closeout"] },
+            "baseline_ref": { "$ref": "#/$defs/ref" },
+            "acceptance_ref": { "$ref": "#/$defs/ref" },
+            "source_watermark": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" },
+            "unknown_rules": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+            "expected_heads": { "type": "array", "items": { "$ref": "#/$defs/watermark" } }
+          }
+        }
+      ]
+    },
+    "module": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "required": ["kind", "module_id", "responsibilities", "data_ownership", "public_interfaces", "side_effects", "allowed_dependencies", "forbidden_dependencies", "paths", "required_checks"],
+          "properties": {
+            "kind": { "const": "ModuleContract" },
+            "contract_id": { "$ref": "#/$defs/id" },
+            "module_id": { "$ref": "#/$defs/id" },
+            "responsibilities": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+            "data_ownership": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+            "public_interfaces": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "side_effects": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "allowed_dependencies": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+            "forbidden_dependencies": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+            "paths": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+            "required_checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["check_id", "checker_ref", "checker_version"],
+                "properties": {
+                  "check_id": { "$ref": "#/$defs/id" },
+                  "checker_ref": { "$ref": "#/$defs/ref" },
+                  "checker_version": { "$ref": "#/$defs/id" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "acceptance": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "required": ["kind", "acceptance_id", "acceptance_version", "items"],
+          "properties": {
+            "kind": { "const": "AcceptanceBundle" },
+            "contract_id": { "$ref": "#/$defs/id" },
+            "acceptance_id": { "$ref": "#/$defs/id" },
+            "acceptance_version": { "$ref": "#/$defs/id" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["item_id", "required", "checker_ref", "checker_version", "required_evidence", "status"],
+                "properties": {
+                  "item_id": { "$ref": "#/$defs/id" },
+                  "required": { "type": "boolean" },
+                  "checker_ref": { "$ref": "#/$defs/ref" },
+                  "checker_version": { "$ref": "#/$defs/id" },
+                  "required_evidence": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+                  "status": { "enum": ["pass", "fail", "unknown", "not_run"] },
+                  "gap_reason": { "type": "string" }
+                },
+                "allOf": [
+                  { "if": { "properties": { "status": { "enum": ["unknown", "not_run", "fail"] } }, "required": ["status"] }, "then": { "required": ["gap_reason"] } }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "comparability": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "required": ["kind", "profile_id", "task_ref", "baseline_ref", "acceptance_ref", "environment_digest", "provider_model_digest", "prompt_runbook_digest", "tool_capability_digest", "input_digest", "budget_digest"],
+          "properties": {
+            "kind": { "const": "ComparabilityProfile" },
+            "contract_id": { "$ref": "#/$defs/id" },
+            "profile_id": { "$ref": "#/$defs/id" },
+            "task_ref": { "$ref": "#/$defs/ref" },
+            "baseline_ref": { "$ref": "#/$defs/ref" },
+            "acceptance_ref": { "$ref": "#/$defs/ref" },
+            "environment_digest": { "$ref": "#/$defs/digest" },
+            "provider_model_digest": { "$ref": "#/$defs/digest" },
+            "prompt_runbook_digest": { "$ref": "#/$defs/digest" },
+            "tool_capability_digest": { "$ref": "#/$defs/digest" },
+            "input_digest": { "$ref": "#/$defs/digest" },
+            "budget_digest": { "$ref": "#/$defs/digest" }
+          }
+        }
+      ]
+    }
+  }
+}
